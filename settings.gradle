@@ -1,0 +1,5 @@
+rootProject.name = 'mixmicro-core'
+include 'scheduler'
+include 'mthread'
+include 'core'
+
