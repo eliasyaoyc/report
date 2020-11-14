@@ -25,7 +25,14 @@ Example Mixmicro applications can be found in the [Mixmicro example repository](
 
 To build from source checkout the code and run:
 
+
+First: git clone source from github:
 ```
-./gradlew
+https://github.com/mixmicro/mixmicro-core.git
 ```
 
+Second: build
+```
+mvn clean install
+```
+if you want to build with regular `mvn` command, you will need Maven v3.5.0 or above.
