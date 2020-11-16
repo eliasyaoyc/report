@@ -18,34 +18,18 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.exceptions;
+package xyz.vopen.framework.mixmicro.core.context.exceptions;
 
 /**
- * {@link DependencyInjectionException} represents a runtime failure to perform dependency
- * injection.
+ * {@link NoSuchMessageException} Thrown if an error occurs locating a message.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2020/11/16
  */
-public class DependencyInjectionException extends BeanCreationException {
-  private static final long serialVersionUID = -1551453328338349365L;
+public class NoSuchMessageException extends BeanContextException {
+  private static final long serialVersionUID = 6677987627768552925L;
 
-  public DependencyInjectionException() {}
-
-  public DependencyInjectionException(String message) {
-    super(message);
-  }
-
-  public DependencyInjectionException(String message, Throwable cause) {
-    super(message, cause);
-  }
-
-  public DependencyInjectionException(Throwable cause) {
-    super(cause);
-  }
-
-  public DependencyInjectionException(
-      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-    super(message, cause, enableSuppression, writableStackTrace);
+  public NoSuchMessageException(String code) {
+    super("No message exists for the given code: " + code);
   }
 }

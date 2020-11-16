@@ -18,7 +18,7 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.exceptions;
+package xyz.vopen.framework.mixmicro.core.context.exceptions;
 
 /**
  * {@link BeanCreationException} A base class for exceptions that occured during bean creation.

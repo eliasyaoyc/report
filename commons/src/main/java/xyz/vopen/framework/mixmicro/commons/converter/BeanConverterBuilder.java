@@ -18,18 +18,14 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.exceptions;
+package xyz.vopen.framework.mixmicro.commons.converter;
 
 /**
- * {@link NoSuchMessageException} Thrown if an error occurs locating a message.
+ * {@link BeanConverterBuilder}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2020/11/16
  */
-public class NoSuchMessageException extends BeanContextException {
-  private static final long serialVersionUID = 6677987627768552925L;
+public class BeanConverterBuilder {
 
-  public NoSuchMessageException(String code) {
-    super("No message exists for the given code: " + code);
-  }
 }

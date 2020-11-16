@@ -18,32 +18,31 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.exceptions;
+package xyz.vopen.framework.mixmicro.core.context.exceptions;
 
 /**
- * {@link BeanContextException} An exception that occurs loading the context.
+ * {@link ConfigurationException} An exception that occurs during configuration setup.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2020/11/16
  */
-public class BeanContextException extends RuntimeException {
-  private static final long serialVersionUID = -5613629630836549679L;
+public class ConfigurationException extends RuntimeException {
 
-  public BeanContextException() {}
+  public ConfigurationException() {}
 
-  public BeanContextException(String message) {
+  public ConfigurationException(String message) {
     super(message);
   }
 
-  public BeanContextException(String message, Throwable cause) {
+  public ConfigurationException(String message, Throwable cause) {
     super(message, cause);
   }
 
-  public BeanContextException(Throwable cause) {
+  public ConfigurationException(Throwable cause) {
     super(cause);
   }
 
-  public BeanContextException(
+  public ConfigurationException(
       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }

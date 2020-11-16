@@ -75,6 +75,16 @@
       </dependency>
 
       <!-- Core Dependency  -->
+      <dependency>
+        <groupId>xyz.vopen.framework</groupId>
+        <artifactId>mixmicro-commons</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>xyz.vopen.framework</groupId>
+        <artifactId>mixmicro-core</artifactId>
+        <version>${revision}</version>
+      </dependency>
 
       <dependency>
         <groupId>com.google.guava</groupId>

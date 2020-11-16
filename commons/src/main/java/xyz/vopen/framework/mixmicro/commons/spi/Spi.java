@@ -18,32 +18,14 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.exceptions;
+package xyz.vopen.framework.mixmicro.commons.spi;
 
 /**
- * {@link ConfigurationException} An exception that occurs during configuration setup.
+ * {@link Spi}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2020/11/16
  */
-public class ConfigurationException extends RuntimeException {
+public interface Spi {
 
-  public ConfigurationException() {}
-
-  public ConfigurationException(String message) {
-    super(message);
-  }
-
-  public ConfigurationException(String message, Throwable cause) {
-    super(message, cause);
-  }
-
-  public ConfigurationException(Throwable cause) {
-    super(cause);
-  }
-
-  public ConfigurationException(
-      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-    super(message, cause, enableSuppression, writableStackTrace);
-  }
 }
