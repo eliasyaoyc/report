@@ -18,17 +18,33 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.inject;
+package xyz.vopen.framework.mixmicro.core.exceptions;
 
 /**
- * {@link BeanDefinition} Defines a bean definition and its requirements. A bean definition must
- * have a singled injectable constructor or a no-args constructor.
+ * {@link CircularDependencyException} Represent a circular dependency failure.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/16
  */
-public interface BeanDefinition<T> {
+public class CircularDependencyException extends DependencyInjectionException {
+  private static final long serialVersionUID = -3551895076096253660L;
 
-  /** @return The produced bean type */
-  Class<T> getBeanType();
+  public CircularDependencyException() {}
+
+  public CircularDependencyException(String message) {
+    super(message);
+  }
+
+  public CircularDependencyException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  public CircularDependencyException(Throwable cause) {
+    super(cause);
+  }
+
+  public CircularDependencyException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
+  }
 }

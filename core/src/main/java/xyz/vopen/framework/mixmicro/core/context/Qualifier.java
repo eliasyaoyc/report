@@ -18,17 +18,14 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.inject;
+package xyz.vopen.framework.mixmicro.core.context;
 
 /**
- * {@link BeanDefinition} Defines a bean definition and its requirements. A bean definition must
- * have a singled injectable constructor or a no-args constructor.
+ * {@link Qualifier}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/16
  */
-public interface BeanDefinition<T> {
+public interface Qualifier<T> {
 
-  /** @return The produced bean type */
-  Class<T> getBeanType();
 }

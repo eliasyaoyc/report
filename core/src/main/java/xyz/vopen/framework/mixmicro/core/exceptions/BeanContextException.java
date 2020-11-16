@@ -18,17 +18,33 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.inject;
+package xyz.vopen.framework.mixmicro.core.exceptions;
 
 /**
- * {@link BeanDefinition} Defines a bean definition and its requirements. A bean definition must
- * have a singled injectable constructor or a no-args constructor.
+ * {@link BeanContextException} An exception that occurs loading the context.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/16
  */
-public interface BeanDefinition<T> {
+public class BeanContextException extends RuntimeException {
+  private static final long serialVersionUID = -5613629630836549679L;
 
-  /** @return The produced bean type */
-  Class<T> getBeanType();
+  public BeanContextException() {}
+
+  public BeanContextException(String message) {
+    super(message);
+  }
+
+  public BeanContextException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  public BeanContextException(Throwable cause) {
+    super(cause);
+  }
+
+  public BeanContextException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
+  }
 }
