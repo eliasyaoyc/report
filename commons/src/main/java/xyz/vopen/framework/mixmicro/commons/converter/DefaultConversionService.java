@@ -18,16 +18,20 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.context;
+package xyz.vopen.framework.mixmicro.commons.converter;
 
-import xyz.vopen.framework.mixmicro.core.LifeCycle;
+import java.util.Optional;
 
 /**
- * {@link BeanContext}
+ * {@link DefaultConversionService}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/17
  */
-public interface BeanContext extends LifeCycle<BeanContext>,BeanDefinitionRegistry,BeanLocator {
+public class DefaultConversionService implements ConversionService<DefaultConversionService> {
 
+  @Override
+  public <T> Optional<T> convert(Object object, Class<T> targetType, ConversionContext context) {
+    return Optional.empty();
+  }
 }

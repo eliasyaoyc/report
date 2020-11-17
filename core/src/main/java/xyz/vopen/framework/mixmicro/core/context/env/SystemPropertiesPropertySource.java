@@ -18,16 +18,28 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.context;
-
-import xyz.vopen.framework.mixmicro.core.LifeCycle;
+package xyz.vopen.framework.mixmicro.core.context.env;
 
 /**
- * {@link BeanContext}
+ * {@link SystemPropertiesPropertySource} Loads properties from system properties.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/17
  */
-public interface BeanContext extends LifeCycle<BeanContext>,BeanDefinitionRegistry,BeanLocator {
+public class SystemPropertiesPropertySource extends MapPropertySource {
 
+  /** Constant for system properties source. */
+  public static final String NAME = "system";
+
+  /** The position of the loader. */
+  public static final int POSITION = -100;
+
+  public SystemPropertiesPropertySource() {
+    super(NAME, System.getProperties());
+  }
+
+  @Override
+  public int getOrder() {
+    return POSITION;
+  }
 }

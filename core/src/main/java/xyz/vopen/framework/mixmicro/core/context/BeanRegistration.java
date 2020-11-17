@@ -20,14 +20,12 @@
  */
 package xyz.vopen.framework.mixmicro.core.context;
 
-import xyz.vopen.framework.mixmicro.core.LifeCycle;
-
 /**
- * {@link BeanContext}
+ * {@link BeanRegistration}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/16
  */
-public interface BeanContext extends LifeCycle<BeanContext>,BeanDefinitionRegistry,BeanLocator {
+public class BeanRegistration<T> {
 
 }

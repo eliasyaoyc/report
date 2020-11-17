@@ -18,16 +18,47 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.context;
+package xyz.vopen.framework.mixmicro.core.context.env;
 
-import xyz.vopen.framework.mixmicro.core.LifeCycle;
+import java.util.List;
+import java.util.stream.Stream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * {@link BeanContext}
+ * {@link ClassPathAnnotationScanner}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/17
  */
-public interface BeanContext extends LifeCycle<BeanContext>,BeanDefinitionRegistry,BeanLocator {
+public class ClassPathAnnotationScanner implements AnnotationScanner {
+  private static final Logger LOG = LoggerFactory.getLogger(ClassPathAnnotationScanner.class);
 
+  private final ClassLoader classLoader;
+  private boolean includeJars;
+
+  public ClassPathAnnotationScanner(ClassLoader classLoader) {
+    this.classLoader = classLoader;
+    this.includeJars = true;
+  }
+
+  /**
+   * Scan the given packages.
+   *
+   * @param annotation The annotation to scan for
+   * @param pkg        The package to scan
+   * @return A stream of classes
+   */
+  @Override
+  public Stream<Class> scan(String annotation, String pkg) {
+    if (pkg == null) {
+      return Stream.empty();
+    }
+    List<Class> classes = doScan(annotation, pkg);
+    return classes.stream();
+  }
+
+  protected List<Class> doScan(String annotation,String pkg){
+    return null;
+  }
 }

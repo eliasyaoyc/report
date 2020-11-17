@@ -18,16 +18,43 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.context;
+package xyz.vopen.framework.mixmicro.core.context.env;
 
-import xyz.vopen.framework.mixmicro.core.LifeCycle;
+import xyz.vopen.framework.mixmicro.commons.utils.StringUtils;
 
 /**
- * {@link BeanContext}
+ * {@link DefaultClassPathResourceLoader}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/17
  */
-public interface BeanContext extends LifeCycle<BeanContext>,BeanDefinitionRegistry,BeanLocator {
+public class DefaultClassPathResourceLoader implements ClassPathResourceLoader {
 
+  private final ClassLoader classLoader;
+  private final String basePath;
+
+  public DefaultClassPathResourceLoader(ClassLoader classLoader) {
+    this(classLoader, null);
+  }
+
+  public DefaultClassPathResourceLoader(ClassLoader classLoader, String basePath) {
+    this.classLoader = classLoader;
+    this.basePath = normalize(basePath);
+  }
+
+  @SuppressWarnings("MagicNumber")
+  private static String normalize(String path) {
+    if (path != null) {
+      if (path.startsWith("classpath:")) {
+        path = path.substring(10);
+      }
+      if (path.startsWith("/")) {
+        path = path.substring(1);
+      }
+      if (path.endsWith("/") && StringUtils.isNotEmpty(path)) {
+        path = path + "/";
+      }
+    }
+    return path;
+  }
 }

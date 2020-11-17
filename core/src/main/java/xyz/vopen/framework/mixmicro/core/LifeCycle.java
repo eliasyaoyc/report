@@ -18,16 +18,56 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.context;
+package xyz.vopen.framework.mixmicro.core;
 
-import xyz.vopen.framework.mixmicro.core.LifeCycle;
+import java.io.Closeable;
+import javax.annotation.Nonnull;
 
 /**
- * {@link BeanContext}
+ * An {@link LifeCycle} interface providing a start method and extending {@link Closeable} which
+ * provides a close() method for termination.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/16
  */
-public interface BeanContext extends LifeCycle<BeanContext>,BeanDefinitionRegistry,BeanLocator {
+public interface LifeCycle<T extends LifeCycle> extends Closeable, AutoCloseable {
 
+  /** @return Whether the component is running. */
+  boolean isRunning();
+
+  /**
+   * Starts the lifecycle component.
+   *
+   * @return This lifecycle component.
+   */
+  default @Nonnull T start() {
+    return (T) this;
+  }
+
+  /**
+   * Stops the lifecycle component.
+   *
+   * @return This lifecycle component.
+   */
+  default @Nonnull T stop() {
+    return (T) this;
+  }
+
+  /** Delegates to {@link #stop()}. */
+  @Override
+  default void close() {
+    stop();
+  }
+
+  /**
+   * Refresh the current life cycle object. Effectively this calls {@link #stop()} followed by
+   * {@link #start()}/
+   *
+   * @return This lifecycle component.
+   */
+  default @Nonnull T refresh() {
+    stop();
+    start();
+    return (T) this;
+  }
 }

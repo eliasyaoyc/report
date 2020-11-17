@@ -18,16 +18,32 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.context;
-
-import xyz.vopen.framework.mixmicro.core.LifeCycle;
+package xyz.vopen.framework.mixmicro.core;
 
 /**
- * {@link BeanContext}
+ * {@link Ordered}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/17
  */
-public interface BeanContext extends LifeCycle<BeanContext>,BeanDefinitionRegistry,BeanLocator {
+public interface Ordered {
 
+  /**
+   * Constant for the highest precedence value.
+   *
+   * @see Integer#MIN_VALUE
+   */
+  int HIGHEST_PRECEDENCE = Integer.MIN_VALUE;
+
+  /**
+   * Constant for the lowest precedence value.
+   *
+   * @see Integer#MAX_VALUE
+   */
+  int LOWEST_PRECEDENCE = Integer.MAX_VALUE;
+
+  /** @return The order of the object. Defaults to zero(no order). */
+  default int getOrder() {
+    return 0;
+  }
 }

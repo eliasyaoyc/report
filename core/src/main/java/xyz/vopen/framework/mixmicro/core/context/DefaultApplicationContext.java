@@ -20,14 +20,37 @@
  */
 package xyz.vopen.framework.mixmicro.core.context;
 
-import xyz.vopen.framework.mixmicro.core.LifeCycle;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import xyz.vopen.framework.mixmicro.core.context.env.Environment;
 
 /**
- * {@link BeanContext}
+ * {@link DefaultApplicationContext}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/17
  */
-public interface BeanContext extends LifeCycle<BeanContext>,BeanDefinitionRegistry,BeanLocator {
+public class DefaultApplicationContext extends DefaultBeanContext implements ApplicationContext {
 
+  public DefaultApplicationContext(@Nonnull ApplicationContextConfiguration configuration) {}
+
+  @Override
+  public @Nonnull Environment getEnvironment() {
+    return null;
+  }
+
+  @Override
+  public @Nonnull ApplicationContext start() {
+    return null;
+  }
+
+  @Override
+  public @Nonnull <T> BeanDefinitionRegistry registerSingleton(
+      @Nonnull Class<T> type, @Nonnull T singleton, @Nullable Qualifier<T> qualifier) {
+    return null;
+  }
+
+  public synchronized @Nonnull ApplicationContext stop() {
+    return (ApplicationContext) super.stop();
+  }
 }

@@ -18,16 +18,28 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.context;
+package xyz.vopen.framework.mixmicro.commons.reflect;
 
-import xyz.vopen.framework.mixmicro.core.LifeCycle;
+import java.util.Optional;
+import javax.annotation.Nonnull;
 
 /**
- * {@link BeanContext}
+ * {@link InstantiationUtils} Utility methods for instantiating objects.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/17
  */
-public interface BeanContext extends LifeCycle<BeanContext>,BeanDefinitionRegistry,BeanLocator {
+public class InstantiationUtils {
 
+  /**
+   * Try to instantiate the given class using the most optimal strategy first trying the {@code
+   * BeanIntrospector} and if no bean is present falling back to reflection.
+   *
+   * @param type
+   * @param <T>
+   * @return
+   */
+  public static @Nonnull <T> Optional<T> tryInstantiate(@Nonnull Class<T> type) {
+    return Optional.ofNullable(null);
+  }
 }

@@ -18,16 +18,19 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.context;
-
-import xyz.vopen.framework.mixmicro.core.LifeCycle;
+package xyz.vopen.framework.mixmicro.core.inject;
 
 /**
- * {@link BeanContext}
+ * {@link ProxyBeanDefinition} Mark interface for a {@link BeanDefinition} that is an AOP proxy.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/16
  */
-public interface BeanContext extends LifeCycle<BeanContext>,BeanDefinitionRegistry,BeanLocator {
+public interface ProxyBeanDefinition<T> extends BeanDefinition<T> {
 
+  /** @return The target type. */
+  Class<BeanDefinition<T>> getTargetDefinitionType();
+
+  /** @return The target type. */
+  Class<T> getTargetType();
 }

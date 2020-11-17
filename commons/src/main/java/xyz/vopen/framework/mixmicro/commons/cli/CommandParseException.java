@@ -18,16 +18,33 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.context;
-
-import xyz.vopen.framework.mixmicro.core.LifeCycle;
+package xyz.vopen.framework.mixmicro.commons.cli;
 
 /**
- * {@link BeanContext}
+ * {@link CommandParseException} Exception that is thrown in command line parsing fails.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/17
  */
-public interface BeanContext extends LifeCycle<BeanContext>,BeanDefinitionRegistry,BeanLocator {
+public class CommandParseException extends RuntimeException {
+  private static final long serialVersionUID = 889730314048933950L;
 
+  public CommandParseException() {}
+
+  public CommandParseException(String message) {
+    super(message);
+  }
+
+  public CommandParseException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  public CommandParseException(Throwable cause) {
+    super(cause);
+  }
+
+  public CommandParseException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
+  }
 }

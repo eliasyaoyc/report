@@ -18,16 +18,36 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.context;
+package xyz.vopen.framework.mixmicro.core.context.env;
 
-import xyz.vopen.framework.mixmicro.core.LifeCycle;
+import javax.annotation.Nonnull;
 
 /**
- * {@link BeanContext}
+ * {@link ClassPathResourceLoader}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/17
  */
-public interface BeanContext extends LifeCycle<BeanContext>,BeanDefinitionRegistry,BeanLocator {
+public interface ClassPathResourceLoader extends ResourceLoader {
 
+  /**
+   * Return the default {@link ClassPathResourceLoader} for the given class loader.
+   *
+   * @param classLoader The classloader.
+   * @return The default classloader.
+   */
+  static ClassPathResourceLoader defaultLoader(@Nonnull ClassLoader classLoader) {
+    if (classLoader == null) {
+      classLoader = Thread.currentThread().getContextClassLoader();
+    }
+    if (classLoader == null) {
+      classLoader = ClassPathResourceLoader.class.getClassLoader();
+    }
+
+    if (classLoader == null) {
+      classLoader = ClassLoader.getSystemClassLoader();
+    }
+
+    return new DefaultClassPathResourceLoader(classLoader);
+  }
 }
