@@ -20,385 +20,227 @@
  */
 package xyz.vopen.framework.mixmicro.core.context;
 
-import static xyz.vopen.framework.mixmicro.core.context.env.SystemPropertiesPropertySource.POSITION;
-
 import com.google.common.base.Preconditions;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
+import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import xyz.vopen.framework.mixmicro.commons.utils.StringUtils;
-import xyz.vopen.framework.mixmicro.core.LifeCycle;
+import xyz.vopen.framework.mixmicro.commons.converter.ConversionService;
+import xyz.vopen.framework.mixmicro.core.context.env.ClassPathResourceLoader;
 import xyz.vopen.framework.mixmicro.core.context.env.Environment;
-import xyz.vopen.framework.mixmicro.core.context.env.PropertySource;
-import xyz.vopen.framework.mixmicro.core.context.env.SystemPropertiesPropertySource;
+import xyz.vopen.framework.mixmicro.core.context.env.RuntimeConfiguredEnvironment;
+import xyz.vopen.framework.mixmicro.core.inject.BeanConfiguration;
+import xyz.vopen.framework.mixmicro.core.inject.BeanDefinitionReference;
 
 /**
- * An {@link ApplicationContext} a {@link BeanContext} and adds the concepts of configuration,
- * environments and runtimes.
- *
- * <p>The {@link ApplicationContext} is the main entry point for starting and running Micronaut
- * applications. It can be thought of as a container object for all dependency injected objects.
- *
- * <p>The {@link ApplicationContext} can be started via the {@link #run()} method. For example:
+ * <p>An {@link ApplicationContext} extends a {@link BeanContext} and adds the concepts of configuration, environments and
+ *   runtimes.</p>
+ * <p>
+ * <p>The {@link ApplicationContext} is the main entry point for starting and running Micronaut applications. It
+ * can be thought of as a container object for all dependency injected objects.</p>
+ * <p>
+ * <p>The {@link ApplicationContext} can be started via the {@link #run()} method. For example:</p>
  *
  * <pre class="code">
  *     ApplicationContext context = ApplicationContext.run();
  * </pre>
  *
- * <p>Alternatively, the {@link #builder()} method can be used to customize the {@code
- * ApplicationContext} using the {@link ApplicationContextBuilder} interface prior to running. For
- * example:
- *
+ * <p>Alternatively, the {@link #builder()} method can be used to customize the {@code ApplicationContext} using the {@link ApplicationContextBuilder} interface
+ * prior to running. For example:</p>
  * <pre class="code">
  *     ApplicationContext context = ApplicationContext.builder().environments("test").start();
  * </pre>
  *
- * <p>The {@link #getEnvironment()} method can be used to obtain a reference to the application
- * {@link Environment}, which contains the loaded configuration and active environment names.
+ * <p>The {@link #getEnvironment()} method can be used to obtain a reference to the application {@link Environment}, which contains the loaded configuration
+ * and active environment names.</p>
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/17
  */
-public interface ApplicationContext extends BeanContext {
+public class ApplicationContext extends BeanContext {
+  private final ConversionService conversionService;
+  private final ClassPathResourceLoader resourceLoader;
+  private Environment environment;
 
-  /** @return The application environment. */
-  @Nonnull
-  Environment getEnvironment();
-
-  /**
-   * Starts the application context.
-   *
-   * @return The ApplicationContext.
-   */
-  @Override
-  @Nonnull
-  ApplicationContext start();
+  private Iterable<BeanConfiguration> resolvedConfigurations;
+  private List<BeanDefinitionReference> resolvedBeanReferences;
 
   /**
-   * Stops the application context;
+   * Construct a new ApplicationContext for the given environment name.
    *
-   * @return The ApplicationContext.
+   * @param environmentNames of environment.
    */
-  @Override
-  @Nonnull
-  BeanContext stop();
+  public ApplicationContext(@Nonnull String... environmentNames) {
+    this(
+        new ApplicationContextConfiguration() {
+          @Override
+          public @Nonnull List<String> getEnvironments() {
+            Preconditions.checkNotNull(environmentNames, "EnvironmentNames is empty.");
+            return Arrays.asList(environmentNames);
+          }
+        });
+  }
 
-  @Override
-  @Nonnull
-  <T> BeanDefinitionRegistry registerSingleton(
+  /**
+   * Construct a new ApplicationContext for the given environment name and classloader.
+   *
+   * @param environmentNames of environment.
+   * @param resourceLoader class loader
+   */
+  public ApplicationContext(
+      @Nonnull ClassPathResourceLoader resourceLoader, @Nonnull String... environmentNames) {
+    this(
+        new ApplicationContextConfiguration() {
+          @Override
+          public @Nonnull ClassPathResourceLoader getResourceLoader() {
+            Preconditions.checkNotNull(resourceLoader, "ClassPathResourceLoader is empty.");
+            return resourceLoader;
+          }
+
+          @Override
+          public @Nonnull ClassLoader getClassLoader() {
+            return getResourceLoader().getClassLoader();
+          }
+
+          @Override
+          public List<String> getEnvironments() {
+            Preconditions.checkNotNull(environmentNames, "EnvironmentNames is empty.");
+            return Arrays.asList(environmentNames);
+          }
+        });
+  }
+
+  /**
+   * Construct a new ApplicationContext for the given applicationContextConfiguration.
+   *
+   * @param configuration The application context configuration.
+   */
+  public ApplicationContext(@Nonnull ApplicationContextConfiguration configuration) {
+    super(configuration);
+    this.conversionService = createConversionService();
+    this.resourceLoader = configuration.getResourceLoader();
+    this.environment = createEnvironment(configuration);
+  }
+
+  /**
+   * Registers a new singleton bean at runtime. This method expects that the bean definition data
+   * will have been compiled ahead of time.
+   *
+   * <p>
+   *
+   * <p>If bean definition data is found the method will perform dependency injection on the
+   * instance followed by invoking any {@link javax.annotation.PostConstruct} hooks.
+   *
+   * <p>
+   *
+   * <p>If no bean definition data is found the bean is registered as is.
+   *
+   * @param type The bean type
+   * @param singleton The singleton bean
+   * @param qualifier The bean qualifier
+   * @param inject Whether the singleton should be injected (defaults to true)
+   * @param <T> The concrete type
+   * @return This bean context
+   */
+  public @Nonnull <T> ApplicationContext registerSingleton(
       @Nonnull Class<T> type,
       @Nonnull T singleton,
       @Nullable Qualifier<T> qualifier,
-      boolean inject);
-
-  @Override
-  @Nonnull
-  default <T> BeanDefinitionRegistry registerSingleton(
-      @Nonnull Class<T> type, @Nonnull T singleton, @Nullable Qualifier<T> qualifier) {
-    return registerSingleton(type, singleton, qualifier, true);
+      boolean inject) {
+    return (ApplicationContext) super.registerSingleton(type, singleton, qualifier, inject);
   }
 
-  @Override
-  default @Nonnull <T> BeanDefinitionRegistry registerSingleton(
-      @Nonnull Class<T> type, @Nonnull T singleton) {
-    return registerSingleton(type, singleton, null, true);
+  public @Nonnull <T> ApplicationContext registerSingleton(@Nonnull Class<T> type,){
+
   }
 
-  @Override
-  default @Nonnull ApplicationContext registerSingleton(@Nonnull Object singleton, boolean inject) {
-    return (ApplicationContext) BeanContext.super.registerSingleton(singleton, inject);
-  }
-
-  @Override
-  default @Nonnull ApplicationContext registerSingleton(@Nonnull Object singleton) {
-    Preconditions.checkNotNull(singleton, "Singleton object is empty.");
-    Class type = singleton.getClass();
-    return (ApplicationContext) registerSingleton(type, singleton);
-  }
-
-  /**
-   * Allow configuration the {@link Environment}.
-   *
-   * @param consumer The consumer.
-   * @return This context.
-   */
-  default @Nonnull ApplicationContext environment(@Nonnull Consumer<Environment> consumer) {
-    Preconditions.checkNotNull(consumer, "Consumer object is empty.");
-    consumer.accept(getEnvironment());
-    return this;
-  }
-
-  /**
-   * Run the ApplicationContext. This method will instantiate a new {@link ApplicationContext} and
-   * call {@link #start()}.
-   *
-   * @param environments The environments to use.
-   * @return The running {@link ApplicationContext}.
-   */
-  static @Nonnull ApplicationContext run(@Nonnull String... environments) {
-    Preconditions.checkNotNull(environments, "Environments is empty.");
-    return build(environments).start();
-  }
-
-  /**
-   * Run the {@link ApplicationContext}. This method will instantiate a new {@link
-   * ApplicationContext} and call {@link #start()}.
-   *
-   * @return The running {@link ApplicationContext}
-   */
-  static @Nonnull ApplicationContext run() {
-    return run(StringUtils.EMPTY_STRING_ARRAY);
-  }
-
-  /**
-   * Runt the {@link ApplicationContext} with the given type.Returning an instance of the type. Note
-   * this method should not be used.
-   *
-   * <p>If the {@link ApplicationContext} requires graceful shutdown unless the returned bean takes
-   * responsibility for shutting down the context.
-   *
-   * @param properties Additional properties.
-   * @param environments The environment names.
-   * @return The running {@link ApplicationContext}.
-   */
-  static @Nonnull ApplicationContext run(
-      @Nonnull Map<String, Object> properties, @Nonnull String... environments) {
-    Preconditions.checkNotNull(environments, "Environments is empty.");
-    Preconditions.checkNotNull(properties, "Properties is empty.");
-    PropertySource propertySource =
-        PropertySource.of(PropertySource.CONTEXT, properties, POSITION + 100);
-    return run(propertySource, environments);
-  }
-
-  /**
-   * Run the {@link ApplicationContext} with the given type. Returning an instance of the type. Note
-   * this method should not be used.
-   *
-   * <p>If the {@link ApplicationContext} requires graceful shutdown unless the returned bean takes
-   * responsibility for shutting down the context.
-   *
-   * @param properties Additional properties
-   * @param environments The environment names
-   * @return The running {@link ApplicationContext}
-   */
-  static @Nonnull ApplicationContext run(
-      @Nonnull PropertySource properties, @Nonnull String... environments) {
-    Preconditions.checkNotNull(environments, "Environments is empty.");
-    Preconditions.checkNotNull(properties, "Properties is empty.");
-    return build(environments).propertySources(properties).start();
-  }
-
-  /**
-   * Run the {@link ApplicationContext} with the given type. Returning an instance of the type. Note
-   * this method should not be used.
-   *
-   * <p>If the {@link ApplicationContext} requires graceful shutdown unless the returned bean takes
-   * responsibility for shutting down the context.
-   *
-   * @param type The type of the bean to run
-   * @param environments The environments to use
-   * @param <T> The type
-   * @return The running bean
-   */
-  static @Nonnull <T extends AutoCloseable> T run(
-      @Nonnull Class<T> type, @Nonnull String... environments) {
-    Preconditions.checkNotNull(type, "Class type is empty.");
-    Preconditions.checkNotNull(environments, "Environments is empty.");
-    return run(type, Collections.emptyMap(), environments);
-  }
-
-  /**
-   * Run the {@link ApplicationContext} with the given type. Returning an instance of the type. Note
-   * this method should not be used.
-   *
-   * <p>If the {@link ApplicationContext} requires graceful shutdown unless the returned bean takes
-   * responsibility for shutting down the context.
-   *
-   * @param type The type of the bean to run
-   * @param properties Additional properties
-   * @param environments The environment names
-   * @param <T> The type
-   * @return The running bean
-   */
-  static @Nonnull <T extends AutoCloseable> T run(
-      @Nonnull Class<T> type,
-      @Nonnull Map<String, Object> properties,
-      @Nonnull String... environments) {
-    Preconditions.checkNotNull(environments, "Environments is empty.");
-    Preconditions.checkNotNull(properties, "Properties is empty.");
-    Preconditions.checkNotNull(type, "Class type is empty.");
-    PropertySource propertySource =
-        PropertySource.of(
-            PropertySource.CONTEXT, properties, SystemPropertiesPropertySource.POSITION + 100);
-    return run(type, propertySource, environments);
-  }
-
-  /**
-   * Run the {@link ApplicationContext} with the given type. Returning an instance of the type. Note
-   * this method should not be used.
-   *
-   * <p>If the {@link ApplicationContext} requires graceful shutdown unless the returned bean takes
-   * responsibility for shutting down the context.
-   *
-   * @param type The environment to use
-   * @param propertySource Additional properties
-   * @param environments The environment names
-   * @param <T> The type
-   * @return The running {@link BeanContext}
-   */
-  static @Nonnull <T extends AutoCloseable> T run(
-      @Nonnull Class<T> type,
-      @Nonnull PropertySource propertySource,
-      @Nonnull String... environments) {
-    Preconditions.checkNotNull(environments, "Environments is empty.");
-    Preconditions.checkNotNull(propertySource, "Properties is empty.");
-    Preconditions.checkNotNull(type, "Class type is empty.");
-
-    T bean =
-        build(environments).mainClass(type).propertySources(propertySource).start().getBean(type);
-    if (bean instanceof LifeCycle) {
-      LifeCycle lifeCycle = (LifeCycle) bean;
-      if (!lifeCycle.isRunning()) {
-        lifeCycle.start();
-      }
+  protected @Nonnull Iterable<BeanConfiguration> resolveBeanConfigurations() {
+    if (resolvedConfigurations != null) {
+      return resolvedConfigurations;
     }
-    return bean;
+    return super.resolveBeanConfigurations();
+  }
+
+  protected @Nonnull List<BeanDefinitionReference> resolveBeanDefinitionReferences() {
+    if (resolvedBeanReferences != null) {
+      return resolvedBeanReferences;
+    }
+    return super.resolveBeanDefinitionReferences();
   }
 
   /**
-   * Run the {@link BeanContext}. This method will instantiate a new {@link BeanContext} and call
-   * {@link #start()}
+   * Creates the default environment for the given environment name.
    *
-   * @param classLoader The classloader to use
-   * @param environments The environments to use
-   * @return The running {@link ApplicationContext}
+   * @param configuration The application context configuration
+   * @return The environment instance
    */
-  static @Nonnull ApplicationContext run(
-      @Nonnull ClassLoader classLoader, @Nonnull String... environments) {
-    Preconditions.checkNotNull(environments, "Environments is empty.");
-    Preconditions.checkNotNull(classLoader, "ClassLoader is empty.");
-    return builder(classLoader, environments).start();
-  }
-
-  // =====================   Builder  =====================
-
-  /**
-   * Build a {@link ApplicationContext}.
-   *
-   * @param environments The environments to use
-   * @return The built, but not yet running {@link ApplicationContext}
-   */
-  static @Nonnull ApplicationContextBuilder build(@Nonnull String... environments) {
-    return builder(environments);
+  protected @Nonnull Environment createEnvironment(
+      @Nonnull ApplicationContextConfiguration configuration) {
+    return new RuntimeConfiguredEnvironment(configuration);
   }
 
   /**
-   * Build a {@link ApplicationContext}.
+   * Creates the default conversion service.
    *
-   * @param properties The properties
-   * @param environments The environments to use
-   * @return The built, but not yet running {@link ApplicationContext}
+   * @return The conversion service
    */
-  static @Nonnull ApplicationContextBuilder build(
-      @Nonnull Map<String, Object> properties, @Nonnull String... environments) {
-    return builder(properties, environments);
+  protected @Nonnull ConversionService createConversionService() {
+    return ConversionService.SHARED;
   }
 
-  /**
-   * Build a {@link ApplicationContext}.
-   *
-   * @param environments The environments to use
-   * @return The built, but not yet running {@link ApplicationContext}.
-   */
-  static @Nonnull ApplicationContextBuilder builder(@Nonnull String... environments) {
-    Preconditions.checkNotNull(environments, "Environments is empty.");
-    return new DefaultApplicationContextBuilder().environments(environments);
+  public @Nonnull ConversionService<?> getConversionService() {
+    return conversionService;
   }
 
-  /**
-   * Build a {@link ApplicationContext}.
-   *
-   * @param properties The properties
-   * @param environments The environments to use
-   * @return The built, but not yet running {@link ApplicationContext}
-   */
-  static @Nonnull ApplicationContextBuilder builder(
-      @Nonnull Map<String, Object> properties, @Nonnull String... environments) {
-    Preconditions.checkNotNull(environments, "Environments is empty.");
-    Preconditions.checkNotNull(properties, "Properties is empty.");
-    return new DefaultApplicationContextBuilder().properties(properties).environments(environments);
+  public @Nonnull Environment getEnvironment() {
+    return environment;
   }
 
-  /**
-   * Build a {@link ApplicationContext}.
-   *
-   * @return The built, but not yet running {@link ApplicationContext}
-   */
-  static @Nonnull ApplicationContextBuilder build() {
-    return builder();
+  public synchronized @Nonnull
+  ApplicationContext start() {
+    startEnvironment();
+    return (ApplicationContext) super.start();
   }
 
-  /**
-   * Build a {@link ApplicationContext}.
-   *
-   * @return The built, but not yet running {@link ApplicationContext}
-   */
-  static @Nonnull ApplicationContextBuilder builder() {
-    return new DefaultApplicationContextBuilder();
+  public synchronized @Nonnull
+  ApplicationContext stop() {
+    return (ApplicationContext) super.stop();
   }
 
-  /**
-   * Build a {@link ApplicationContext}.
-   *
-   * @param classLoader The classloader to use
-   * @param environments The environment to use
-   * @return The built, but not yet running {@link ApplicationContext}
-   */
-  static @Nonnull ApplicationContextBuilder build(
-      @Nonnull ClassLoader classLoader, @Nonnull String... environments) {
-    return builder(classLoader, environments);
+  public boolean containsProperty(String name) {
+    return getEnvironment().containsProperty(name);
   }
 
-  /**
-   * Build a {@link ApplicationContext}.
-   *
-   * @param mainClass The main class of the application
-   * @param environments The environment to use
-   * @return The built, but not yet running {@link ApplicationContext}
-   */
-  static @Nonnull ApplicationContextBuilder build(
-      @Nonnull Class mainClass, @Nonnull String... environments) {
-    return builder(mainClass, environments);
+  public boolean containsProperties(String name) {
+    return getEnvironment().containsProperties(name);
   }
 
-  /**
-   * Build a {@link ApplicationContext}.
-   *
-   * @param classLoader The classloader to use
-   * @param environments The environment to use
-   * @return The built, but not yet running {@link ApplicationContext}
-   */
-  static @Nonnull ApplicationContextBuilder builder(
-      @Nonnull ClassLoader classLoader, @Nonnull String... environments) {
-    Preconditions.checkNotNull(environments, "Environments is empty.");
-    Preconditions.checkNotNull(classLoader, "ClassLoader is empty.");
-    return builder(environments).classLoader(classLoader);
+  public <T> Optional<T> getProperty(String name, ArgumentConversionContext<T> conversionContext) {
+    return getEnvironment().getProperty(name, conversionContext);
   }
 
-  /**
-   * Build a {@link ApplicationContext}.
-   *
-   * @param mainClass The main class of the application
-   * @param environments The environment to use
-   * @return The built, but not yet running {@link ApplicationContext}
-   */
-  static @Nonnull ApplicationContextBuilder builder(
-      @Nonnull Class mainClass, @Nonnull String... environments) {
-    Preconditions.checkNotNull(environments, "Environments is empty.");
-    Preconditions.checkNotNull(mainClass, "MainClass is empty.");
+  public @Nonnull Collection<String> getPropertyEntries(@Nonnull String name) {
+    return environment.getPropertyEntries(name);
+  }
 
-    return builder(environments).mainClass(mainClass);
+  public @Nonnull Map<String, Object> getProperties(
+      @Nullable String name, @Nonnull StringConvention keyFormat) {
+    return getEnvironment().getProperties(name, keyFormat);
+  }
+
+  protected void registerConfiguration(BeanConfiguration configuration) {
+    if (getEnvironment().isActive(configuration)) {
+      super.registerConfiguration(configuration);
+    }
+  }
+
+  /** Start the Environment */
+  protected void startEnvironment() {
+    Environment environment = getEnvironment();
+    environment.start();
+    registerSingleton(Environment.class, environment);
   }
 }

@@ -18,24 +18,27 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.inject;
+package xyz.vopen.framework.mixmicro.core.inject.qualifiers;
+
+import javax.annotation.Nonnull;
+import xyz.vopen.framework.mixmicro.core.Named;
+import xyz.vopen.framework.mixmicro.core.context.Qualifier;
 
 /**
- * {@link BeanConfiguration}
+ * {@link NameQualifier}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/16
+ * @version ${project.version} - 2020/11/18
  */
-public interface BeanConfiguration extends BeanContextConditional {
+class NameQualifier<T> implements Qualifier<T>, Named {
+  private final String name;
 
-  /** @return The package name this configuration. */
-  String getName();
+  NameQualifier(@Nonnull String name) {
+    this.name = name;
+  }
 
-  /**
-   * Check whether the specified bean definition class is within this bean configuration.
-   *
-   * @param beanDefinitionReference The bean definition class
-   * @return True if it is.
-   */
-  boolean isWithin(BeanDefinitionReference beanDefinitionReference);
+  @Override
+  public @Nonnull String getName() {
+    return name;
+  }
 }

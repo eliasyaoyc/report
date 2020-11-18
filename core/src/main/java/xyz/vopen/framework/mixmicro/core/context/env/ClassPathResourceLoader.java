@@ -30,6 +30,9 @@ import javax.annotation.Nonnull;
  */
 public interface ClassPathResourceLoader extends ResourceLoader {
 
+  /** @return The underlying classloader used by this {@link ClassPathResourceLoader}. */
+  ClassLoader getClassLoader();
+
   /**
    * Return the default {@link ClassPathResourceLoader} for the given class loader.
    *

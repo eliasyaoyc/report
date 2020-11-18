@@ -20,12 +20,88 @@
  */
 package xyz.vopen.framework.mixmicro.core.context.env;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import xyz.vopen.framework.mixmicro.commons.converter.ConversionContext;
+import xyz.vopen.framework.mixmicro.core.inject.BeanConfiguration;
+
 /**
  * {@link DefaultEnvironment}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2020/11/16
  */
-public class DefaultEnvironment implements Environment{
+public class DefaultEnvironment implements Environment {
 
+  @Override
+  public Set<String> getActiveNames() {
+    return null;
+  }
+
+  @Override
+  public Collection<PropertySource> getPropertySources() {
+    return null;
+  }
+
+  @Override
+  public Environment addPropertySource(PropertySource propertySource) {
+    return null;
+  }
+
+  @Override
+  public Environment removePropertySource(PropertySource propertySource) {
+    return null;
+  }
+
+  @Override
+  public Environment addPackage(String pkg) {
+    return null;
+  }
+
+  @Override
+  public Environment addConfigurationExcludes(String... names) {
+    return null;
+  }
+
+  @Override
+  public Environment addConfigurationIncludes(String... names) {
+    return null;
+  }
+
+  @Override
+  public Collection<String> getPackages() {
+    return null;
+  }
+
+  @Override
+  public PropertyPlaceholderResolver getPlaceholderResolver() {
+    return null;
+  }
+
+  @Override
+  public Map<String, Object> refreshAndDiff() {
+    return null;
+  }
+
+  @Override
+  public boolean isActive(BeanConfiguration configuration) {
+    return false;
+  }
+
+  @Override
+  public Collection<PropertySourceLoader> getPropertySourceLoaders() {
+    return null;
+  }
+
+  @Override
+  public <T> Optional<T> convert(Object object, Class<T> targetType, ConversionContext context) {
+    return Optional.empty();
+  }
+
+  @Override
+  public boolean isRunning() {
+    return false;
+  }
 }

@@ -20,6 +20,14 @@
  */
 package xyz.vopen.framework.mixmicro.core.inject;
 
+import java.lang.annotation.Annotation;
+import java.util.Optional;
+import javax.annotation.Nullable;
+import xyz.vopen.framework.mixmicro.core.Named;
+import xyz.vopen.framework.mixmicro.core.context.BeanContext;
+import xyz.vopen.framework.mixmicro.core.context.BeanResolutionContext;
+import xyz.vopen.framework.mixmicro.core.context.Qualifier;
+
 /**
  * {@link BeanDefinition} Defines a bean definition and its requirements. A bean definition must
  * have a singled injectable constructor or a no-args constructor.
@@ -29,6 +37,53 @@ package xyz.vopen.framework.mixmicro.core.inject;
  */
 public interface BeanDefinition<T> {
 
+  /** Attributed used to store a dynamic bean name. */
+  String NAMED_ATTRIBUTED = Named.class.getName();
+
+  /** @return The scope of the bean. */
+  Optional<Class<? extends Annotation>> getScope();
+
+  /** @return Whether the scope is singleton. */
+  boolean isSingleton();
+
+  /** @return Is this definition provided by another bean */
+  boolean isProvided();
+
+  /** @return Whether the bean declared with */
+  boolean isIterable();
+
   /** @return The produced bean type */
   Class<T> getBeanType();
+
+  /** @return The type that declares this definition, null if not applicable. */
+  Optional<Class<?>> getDeclaringType();
+
+  /** @return The class name */
+  String getName();
+
+  /**
+   * Inject the given bean with the context.
+   *
+   * @param context The context.
+   * @param bean The bean
+   * @return The injected bean.
+   */
+  T inject(BeanContext context, T bean);
+
+  /**
+   * Inject the given bean with the context.
+   *
+   * @param resolutionContext The resolution context
+   * @param beanContext The context.
+   * @param bean The bean
+   * @return The injected bean.
+   */
+  T inject(BeanResolutionContext resolutionContext, BeanContext beanContext, T bean);
+
+  /** @return Method that can be overridden to resolve a dynamic qualifier */
+  default @Nullable Qualifier<T> resolveDynamicQualifier() {
+    return null;
+  }
+
+  Class getTypeParameters();
 }

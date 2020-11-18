@@ -18,24 +18,37 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.inject;
+package xyz.vopen.framework.mixmicro.core.inject.qualifiers;
+
+import xyz.vopen.framework.mixmicro.core.context.Qualifier;
 
 /**
- * {@link BeanConfiguration}
+ * {@link Qualifiers}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/16
+ * @version ${project.version} - 2020/11/18
  */
-public interface BeanConfiguration extends BeanContextConditional {
-
-  /** @return The package name this configuration. */
-  String getName();
+public class Qualifiers {
 
   /**
-   * Check whether the specified bean definition class is within this bean configuration.
+   * Build a qualifier for the given generic type arguments.
    *
-   * @param beanDefinitionReference The bean definition class
-   * @return True if it is.
+   * @param typeArguments The generic type arguments
+   * @param <T> The component type
+   * @return The qualifier
    */
-  boolean isWithin(BeanDefinitionReference beanDefinitionReference);
+  public static <T> Qualifier<T> byTypeArguments(Class... typeArguments) {
+    return new TypeArgumentQualifier<>(typeArguments);
+  }
+
+  /**
+   * Build a qualifier for the given name.
+   *
+   * @param name The name
+   * @param <T> The component type
+   * @return The qualifier
+   */
+  public static <T> Qualifier byName(String name) {
+    return new NameQualifier<>(name);
+  }
 }

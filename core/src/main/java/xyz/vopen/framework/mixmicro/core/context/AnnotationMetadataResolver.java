@@ -18,24 +18,40 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.inject;
+package xyz.vopen.framework.mixmicro.core.context;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import xyz.vopen.framework.mixmicro.commons.annotation.AnnotationMetadata;
 
 /**
- * {@link BeanConfiguration}
+ * {@link AnnotationMetadataResolver} for types capable of resolving {@link AnnotationMetadata}.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/16
+ * @version ${project.version} - 2020/11/17
  */
-public interface BeanConfiguration extends BeanContextConditional {
+public interface AnnotationMetadataResolver {
 
-  /** @return The package name this configuration. */
-  String getName();
+  /** The default resolver. */
+  AnnotationMetadataResolver DEFAULT = new AnnotationMetadataResolver() {};
 
   /**
-   * Check whether the specified bean definition class is within this bean configuration.
+   * Resolve the {@link AnnotationMetadata} for the given object.
    *
-   * @param beanDefinitionReference The bean definition class
-   * @return True if it is.
+   * @param type The type.
+   * @return The {@link AnnotationMetadata}.
    */
-  boolean isWithin(BeanDefinitionReference beanDefinitionReference);
+  default @Nonnull AnnotationMetadata resolveMetadata(@Nullable Class<?> type) {
+    return AnnotationMetadata.EMPTY_METADATA;
+  }
+
+  /**
+   * Resolve the {@link AnnotationMetadata} for the given object.
+   *
+   * @param object The object.
+   * @return The {@link AnnotationMetadata}.
+   */
+  default @Nonnull AnnotationMetadata resolveMetadata(Object object) {
+    return resolveMetadata(object != null ? object.getClass() : null);
+  }
 }

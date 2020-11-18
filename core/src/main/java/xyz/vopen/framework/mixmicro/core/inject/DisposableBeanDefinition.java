@@ -20,22 +20,15 @@
  */
 package xyz.vopen.framework.mixmicro.core.inject;
 
+import xyz.vopen.framework.mixmicro.core.context.BeanContext;
+
 /**
- * {@link BeanConfiguration}
+ * {@link DisposableBeanDefinition}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/16
+ * @version ${project.version} - 2020/11/17
  */
-public interface BeanConfiguration extends BeanContextConditional {
+public interface DisposableBeanDefinition {
 
-  /** @return The package name this configuration. */
-  String getName();
-
-  /**
-   * Check whether the specified bean definition class is within this bean configuration.
-   *
-   * @param beanDefinitionReference The bean definition class
-   * @return True if it is.
-   */
-  boolean isWithin(BeanDefinitionReference beanDefinitionReference);
+  void dispose(BeanContext context, Object bean);
 }
