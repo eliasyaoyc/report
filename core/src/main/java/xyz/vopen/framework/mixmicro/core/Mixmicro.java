@@ -20,13 +20,8 @@
  */
 package xyz.vopen.framework.mixmicro.core;
 
-import java.util.Arrays;
-import xyz.vopen.framework.mixmicro.core.inject.Injector;
-import xyz.vopen.framework.mixmicro.core.inject.InjectorCreator;
-
 /**
- * {@link Mixmicro} The entry point to the Mixmicro framework. Creates {@link Injector}s from {@link
- * Module}s.
+ * {@link Mixmicro} The entry point to the Mixmicro framework.
  *
  * <p>Mixmicro supports a model of development that draws clear boundaries between APIs,
  * Implementations of these APIs,Modules which configure these implementations,and finally
@@ -57,49 +52,17 @@ import xyz.vopen.framework.mixmicro.core.inject.InjectorCreator;
 public final class Mixmicro {
   private Mixmicro() {}
 
-  /**
-   * Creates an injector for the given set of modules. This is equivalent to calling {@link
-   * #createInjector(Stage, Module...)} with Stage.DEVELOPMENT.
-   *
-   * @param modules
-   * @return {@link Injector}
-   */
-  public static Injector createInjector(Module... modules) {
-    return createInjector(Arrays.asList(modules));
+  // =====================   Builder  =====================
+  public MixmicroBuilder builder() {
+    return new MixmicroBuilder();
   }
 
-  /**
-   * Creates an injector for the given set of modules. This is equivalent to calling {@link
-   * #createInjector(Stage, Iterable)} with Stage.DEVELOPMENT.
-   *
-   * @param modules
-   * @return {@link Injector}
-   */
-  public static Injector createInjector(Iterable<? extends Module> modules) {
-    return createInjector(Stage.DEVELOPMENT, modules);
-  }
+  public static class MixmicroBuilder {
 
-  /**
-   * Creates an injector for the given set of modules, in a given development stage.
-   *
-   * @param stage
-   * @param modules
-   * @throws CreateException if one or more errors occur during injector construction.
-   * @return {@link Injector}
-   */
-  public static Injector createInjector(Stage stage, Module... modules) {
-    return createInjector(stage, Arrays.asList(modules));
-  }
 
-  /**
-   * Creates an injector for the given set of modules,in a given development stage.
-   *
-   * @param stage
-   * @param modules
-   * @throws CreateException if one or more errors occur during injector construction.
-   * @return {@link Injector}
-   */
-  public static Injector createInjector(Stage stage, Iterable<? extends Module> modules) {
-    return new InjectorCreator().stage(stage).addModules(modules).build();
+
+    public Mixmicro build() {
+      return new Mixmicro();
+    }
   }
 }

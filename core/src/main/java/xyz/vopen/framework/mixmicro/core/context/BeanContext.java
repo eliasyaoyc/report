@@ -109,8 +109,9 @@ public class BeanContext
     implements LifeCycle<BeanContext>,
         BeanLocator,
         BeanDefinitionRegistry,
-        ApplicationEventPublisher,
-        AnnotationMetadataResolver {
+        ApplicationEventPublisher
+//    , AnnotationMetadataResolver
+{
   private static final Logger LOG = LoggerFactory.getLogger(BeanContext.class);
 
   private static final String SCOPED_PROXY_ANN = "";
@@ -153,7 +154,7 @@ public class BeanContext
       CollectionUtils.setOf(
           BeanDefinitionRegistry.class,
           BeanContext.class,
-          AnnotationMetadataResolver.class,
+//          AnnotationMetadataResolver.class,
           BeanLocator.class,
           ApplicationEventPublisher.class,
           ApplicationContext.class,
@@ -389,7 +390,6 @@ public class BeanContext
         getBeanDefinitions(BeanCreatedEventListener.class);
     final HashMap<Class, List<BeanCreatedEventListener>> beanCreatedListeners =
         new HashMap<>(beanCreatedDefinitions.size());
-
   }
 
   /**
@@ -457,8 +457,9 @@ public class BeanContext
           continue reference;
         }
       }
-//      final AnnotationMetadata annotationMetadata = beanDefinitionReference.getAnnotationMetadata();
-//      Class[] indexes = annotationMetadata.classValues(INDEXES_TYPE);
+      //      final AnnotationMetadata annotationMetadata =
+      // beanDefinitionReference.getAnnotationMetadata();
+      //      Class[] indexes = annotationMetadata.classValues(INDEXES_TYPE);
       if (isEagerInit(beanDefinitionReference)) {
         contextScopeBeans.add(beanDefinitionReference);
       }
@@ -475,10 +476,11 @@ public class BeanContext
    * @return True if it is.
    */
   private boolean isEagerInit(BeanDefinitionReference beanDefinitionReference) {
-//    return beanDefinitionReference.isContextScope()
-//        || (eagerInitSingletons || beanDefinitionReference.isSingleton())
-//        || (eagerInitStereotypesPresent
-//            || beanDefinitionReference.getAnnotationMetadata().hasStereotype(eagerInitStereotypes));
+    //    return beanDefinitionReference.isContextScope()
+    //        || (eagerInitSingletons || beanDefinitionReference.isSingleton())
+    //        || (eagerInitStereotypesPresent
+    //            ||
+    // beanDefinitionReference.getAnnotationMetadata().hasStereotype(eagerInitStereotypes));
     return false;
   }
 
@@ -597,17 +599,17 @@ public class BeanContext
       return Collections.emptyList();
     }
 
-//    List result =
-//        singletonObjects.values().stream()
-//            .filter(
-//                registration -> {
-//                  BeanDefinition beanDefinition = registration.beanDefinition;
-//                  return qualifier.reduce(
-//                      beanDefinition.getBeanType(),
-//                      Stream.of(beanDefinition).findFirst().isPresent());
-//                })
-//            .collect(Collectors.toList());
-//    return result;
+    //    List result =
+    //        singletonObjects.values().stream()
+    //            .filter(
+    //                registration -> {
+    //                  BeanDefinition beanDefinition = registration.beanDefinition;
+    //                  return qualifier.reduce(
+    //                      beanDefinition.getBeanType(),
+    //                      Stream.of(beanDefinition).findFirst().isPresent());
+    //                })
+    //            .collect(Collectors.toList());
+    //    return result;
     return null;
   }
 
@@ -771,13 +773,13 @@ public class BeanContext
   }
 
   // =====================  AnnotationMetadataResolver  =====================
-//  @Override
-//  public @Nonnull AnnotationMetadata resolveMetadata(@Nullable Class<?> type) {
-//    if (type == null) {
-//      return AnnotationMetadata.EMPTY_METADATA;
-//    }
-//    return null;
-//  }
+  //  @Override
+  //  public @Nonnull AnnotationMetadata resolveMetadata(@Nullable Class<?> type) {
+  //    if (type == null) {
+  //      return AnnotationMetadata.EMPTY_METADATA;
+  //    }
+  //    return null;
+  //  }
 
   // =====================   Utility class   =====================
 
