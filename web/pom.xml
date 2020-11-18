@@ -13,4 +13,16 @@
   <artifactId>mixmicro-web</artifactId>
   <name>Mixmicro Web Module</name>
 
+
+  <dependencies>
+    <dependency>
+      <groupId>xyz.vopen.framework</groupId>
+      <artifactId>mixmicro-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-all</artifactId>
+    </dependency>
+  </dependencies>
 </project>
