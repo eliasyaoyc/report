@@ -36,4 +36,8 @@ import javax.inject.Qualifier;
 @Qualifier
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Primary {}
+public @interface Primary {
+
+  /** The simple name of this annotation. */
+  String SIMPLE_NAME = Primary.class.getSimpleName();
+}

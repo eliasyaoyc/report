@@ -20,12 +20,61 @@
  */
 package xyz.vopen.framework.mixmicro.core.context;
 
+import java.util.Objects;
+import xyz.vopen.framework.mixmicro.core.inject.BeanDefinition;
+import xyz.vopen.framework.mixmicro.core.inject.BeanIdentifier;
+
 /**
- * {@link BeanRegistration}
+ * {@link BeanRegistration} A bean registration is an association between a {@link BeanDefinition}
+ * and a created bean,typically a {@link javax.inject.Singleton}.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2020/11/16
  */
 public class BeanRegistration<T> {
 
+  final BeanIdentifier identifier;
+  final BeanDefinition<T> beanDefinition;
+  final T bean;
+
+  public BeanRegistration(BeanIdentifier identifier, BeanDefinition<T> beanDefinition, T bean) {
+    this.identifier = identifier;
+    this.beanDefinition = beanDefinition;
+    this.bean = bean;
+  }
+
+  public BeanIdentifier getIdentifier() {
+    return identifier;
+  }
+
+  public BeanDefinition<T> getBeanDefinition() {
+    return beanDefinition;
+  }
+
+  public T getBean() {
+    return bean;
+  }
+
+  @Override
+  public String toString() {
+    return "BeanRegistration: " + bean;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    BeanRegistration<?> that = (BeanRegistration<?>) o;
+    return Objects.equals(identifier, that.identifier) &&
+        Objects.equals(beanDefinition, that.beanDefinition);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(identifier, beanDefinition);
+  }
 }

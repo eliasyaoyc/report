@@ -18,24 +18,16 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.inject;
+package xyz.vopen.framework.mixmicro.core;
+
+import javax.annotation.Nonnull;
 
 /**
- * {@link BeanConfiguration}
+ * {@link Named}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/16
+ * @version ${project.version} - 2020/11/17
  */
-public interface BeanConfiguration extends BeanContextConditional {
-
-  /** @return The package name this configuration. */
-  String getName();
-
-  /**
-   * Check whether the specified bean definition class is within this bean configuration.
-   *
-   * @param beanDefinitionReference The bean definition class
-   * @return True if it is.
-   */
-  boolean isWithin(BeanDefinitionReference beanDefinitionReference);
+public interface Named {
+  @Nonnull String getName();
 }

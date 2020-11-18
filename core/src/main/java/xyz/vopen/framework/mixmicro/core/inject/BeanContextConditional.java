@@ -18,39 +18,24 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.context;
+package xyz.vopen.framework.mixmicro.core.inject;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import xyz.vopen.framework.mixmicro.core.context.env.Environment;
+import xyz.vopen.framework.mixmicro.core.context.BeanContext;
+import xyz.vopen.framework.mixmicro.core.context.BeanResolutionContext;
 
 /**
- * {@link DefaultApplicationContext}
+ * {@link BeanContextConditional}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2020/11/17
  */
-public class DefaultApplicationContext extends DefaultBeanContext implements ApplicationContext {
+@FunctionalInterface
+public interface BeanContextConditional {
 
-  public DefaultApplicationContext(@Nonnull ApplicationContextConfiguration configuration) {}
-
-  @Override
-  public @Nonnull Environment getEnvironment() {
-    return null;
+  default boolean isEnabled(@Nonnull BeanContext context) {
+    return isEnabled(context, null);
   }
 
-  @Override
-  public @Nonnull ApplicationContext start() {
-    return null;
-  }
-
-  @Override
-  public @Nonnull <T> BeanDefinitionRegistry registerSingleton(
-      @Nonnull Class<T> type, @Nonnull T singleton, @Nullable Qualifier<T> qualifier) {
-    return null;
-  }
-
-  public synchronized @Nonnull ApplicationContext stop() {
-    return (ApplicationContext) super.stop();
-  }
+  boolean isEnabled(@Nonnull BeanContext context, @Nonnull BeanResolutionContext resolutionContext);
 }

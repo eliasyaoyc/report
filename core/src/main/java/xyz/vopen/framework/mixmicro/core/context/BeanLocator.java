@@ -26,12 +26,13 @@ import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import xyz.vopen.framework.mixmicro.commons.reflect.InstantiationUtils;
+import xyz.vopen.framework.mixmicro.core.annotation.Bean;
 import xyz.vopen.framework.mixmicro.core.context.exceptions.NoSuchBeanException;
 import xyz.vopen.framework.mixmicro.core.context.exceptions.NoUniqueBeanException;
 import xyz.vopen.framework.mixmicro.core.inject.BeanDefinition;
 
 /**
- * {@link BeanLocator}
+ * {@link BeanLocator} Core interface for locating and discovering {@link Bean} instance.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2020/11/17

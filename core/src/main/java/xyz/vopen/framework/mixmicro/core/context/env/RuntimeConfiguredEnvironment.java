@@ -20,6 +20,8 @@
  */
 package xyz.vopen.framework.mixmicro.core.context.env;
 
+import xyz.vopen.framework.mixmicro.core.context.ApplicationContextConfiguration;
+
 /**
  * {@link RuntimeConfiguredEnvironment} Runtime configuration environment.
  *
@@ -28,4 +30,7 @@ package xyz.vopen.framework.mixmicro.core.context.env;
  */
 public class RuntimeConfiguredEnvironment extends DefaultEnvironment {
 
+
+  public RuntimeConfiguredEnvironment(ApplicationContextConfiguration configuration){
+  }
 }

@@ -20,12 +20,51 @@
  */
 package xyz.vopen.framework.mixmicro.core.inject;
 
+import xyz.vopen.framework.mixmicro.core.context.BeanContext;
+
 /**
  * {@link BeanDefinitionReference}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2020/11/16
  */
-public class BeanDefinitionReference<T> {
+public interface BeanDefinitionReference<T> extends BeanType {
 
+  /** @return The class name of the backing {@link BeanDefinition}. */
+  String getBeanDefinitionName();
+
+  /**
+   * Loads the bean definition.
+   *
+   * @return The loaded component definition or null if it shouldn't be loaded.
+   */
+  BeanDefinition<T> load();
+
+  /**
+   * Loads the bean definition for the current {@link BeanContext}.
+   *
+   * @param context The bean context
+   * @return The loaded bean definition or null if it shouldn't be loaded.
+   */
+  BeanDefinition<T> load(BeanContext context);
+
+  /** @return Is the underlying bean type present on the classpath. */
+  boolean isPresent();
+
+  /** @return Whether this class is context scope. */
+  boolean isContextScope();
+
+  /** @return Is this bean a singleton. */
+  default boolean isSingleton() {
+    //    AnnotationMetadata am = getAnnotationMetadata();
+    //    return am.hasDeclaredStereotype(Singleton.class)
+    //        || am.classValue(DefaultScope.class).map(t -> t == Singleton.class).orElse(false);
+    return false;
+  }
+
+  /** @return Is this bean a configuration properties. */
+  default boolean isConfigurationProperties() {
+    //    return getAnnotationMetadata().hasDeclaredStereotype(ConfigurationReader.class);
+    return true;
+  }
 }
