@@ -18,14 +18,41 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.commons.converter;
+package xyz.vopen.framework.mixmicro.core.context.converter;
+
+import java.util.Optional;
 
 /**
- * {@link BeanConverterBuilder}
+ * {@link ConversionService}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/16
+ * @version ${project.version} - 2020/11/17
  */
-public class BeanConverterBuilder {
+public interface ConversionService<Impl extends ConversionService> {
+  ConversionService<?> SHARED = new DefaultConversionService();
 
+  /**
+   * Attempts to convert the given object to the given target type. If conversion fails or is not
+   * possible an empty {@link Optional} is returned.
+   *
+   * @param o The object to convert
+   * @param targetType The target type
+   * @param <T> The generic type
+   * @return The optional
+   */
+  default <T> Optional<T> convert(Object o, Class<T> targetType) {
+    return convert(o, targetType, ConversionContext.DEFAULT);
+  }
+
+  /**
+   * Attempts to convert the given object to the given target type. If conversion fails or is not
+   * possible an empty {@link Optional} is returned.
+   *
+   * @param object The object to convert
+   * @param targetType The target type
+   * @param context The conversion context
+   * @param <T> The generic type
+   * @return The optional
+   */
+  <T> Optional<T> convert(Object object, Class<T> targetType, ConversionContext context);
 }

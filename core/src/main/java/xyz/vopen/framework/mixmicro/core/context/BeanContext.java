@@ -109,9 +109,8 @@ public class BeanContext
     implements LifeCycle<BeanContext>,
         BeanLocator,
         BeanDefinitionRegistry,
-        ApplicationEventPublisher
-//    , AnnotationMetadataResolver
-{
+        ApplicationEventPublisher,
+        AnnotationMetadataResolver {
   private static final Logger LOG = LoggerFactory.getLogger(BeanContext.class);
 
   private static final String SCOPED_PROXY_ANN = "";
@@ -154,7 +153,7 @@ public class BeanContext
       CollectionUtils.setOf(
           BeanDefinitionRegistry.class,
           BeanContext.class,
-//          AnnotationMetadataResolver.class,
+          //          AnnotationMetadataResolver.class,
           BeanLocator.class,
           ApplicationEventPublisher.class,
           ApplicationContext.class,

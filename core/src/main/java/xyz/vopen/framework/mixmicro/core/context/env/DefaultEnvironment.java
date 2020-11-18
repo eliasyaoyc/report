@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import xyz.vopen.framework.mixmicro.commons.converter.ConversionContext;
+import xyz.vopen.framework.mixmicro.core.context.converter.ConversionContext;
 import xyz.vopen.framework.mixmicro.core.inject.BeanConfiguration;
 
 /**
