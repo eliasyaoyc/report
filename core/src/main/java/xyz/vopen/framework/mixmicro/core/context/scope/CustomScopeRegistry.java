@@ -18,14 +18,35 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core;
+package xyz.vopen.framework.mixmicro.core.context.scope;
+
+import java.lang.annotation.Annotation;
+import java.util.Optional;
 
 /**
- * {@link BeanIntrospector}
+ * {@link CustomScopeRegistry} An interface for a registry of {@link CustomScope} instances.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/17
+ * @version ${project.version} - 2020/11/18
  */
-public interface BeanIntrospector {
+public interface CustomScopeRegistry {
 
+  /**
+   * Find a custom scope for the given annotation
+   *
+   * @param annotationName of the annotation.
+   * @return The custom scope.
+   */
+  Optional<CustomScope> findScope(String annotationName);
+
+  /**
+   * Find a custom scope for the given annotation.
+   *
+   * @param scopeAnnotation The scope annotation
+   * @return The custom scope
+   */
+  default Optional<CustomScope> findScope(Class<? extends Annotation> scopeAnnotation) {
+    String name = scopeAnnotation.getName();
+    return findScope(name);
+  }
 }
