@@ -18,35 +18,45 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.annotation;
+package xyz.vopen.framework.mixmicro.core.context.annotations;
 
+import java.lang.annotation.Annotation;
 import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
 /**
- * {@link Bean} Used to configure a bean. Typically used in conjunction with {@link Factory}
- *
- * <pre class="code">
- * &#064;Factory
- * public class MyFactory{
- *   &#064;Bean
- *   public MyBean myBean(){
- *     // create the bean.
- *   }
- * }
- * </pre>
+ * {@link Replaces} Allows a bean to specify that it replaces another bean. Note that the bean to be
+ * replaced cannot be an {@link Underlay} bean.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2020/11/14
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
-public @interface Bean {
+public @interface Replaces {
+  /** @return The bean type that this bean replaces */
+  @AliasFor(member = "bean")
+  Class value() default void.class;
 
-  /** @return The method to invoke to destroy the bean */
-  String preDestroy() default "";
+  /** @return The bean type that this bean replaces */
+  @AliasFor(member = "value")
+  Class bean() default void.class;
+
+  /** @return The declaring bean type */
+  Class factory() default void.class;
+
+  /**
+   * The name of the qualifiers of the bean that should be replaced.
+   *
+   * @return The qualifier
+   */
+  Class<? extends Annotation>[] qualifier() default {};
+
+  /**
+   * The name of the qualifiers of the bean that should be replaced.
+   *
+   * @return The qualifier
+   */
+  String named() default "";
 }

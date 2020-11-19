@@ -20,20 +20,12 @@
  */
 package xyz.vopen.framework.mixmicro.core.annotation;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import javax.inject.Scope;
-
 /**
- * {@link Prototype}
+ * {@link EmptyAnnotationMetadata}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/13
+ * @version ${project.version} - 2020/11/19
  */
-@Scope
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Prototype {
+public class EmptyAnnotationMetadata implements AnnotationMetadata{
 
 }

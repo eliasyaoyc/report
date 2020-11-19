@@ -20,10 +20,29 @@
  */
 package xyz.vopen.framework.mixmicro.core.inject;
 
+import javax.inject.Singleton;
+import xyz.vopen.framework.mixmicro.core.annotation.AnnotationMetadata;
+import xyz.vopen.framework.mixmicro.core.annotation.AnnotationMetadataProvider;
 import xyz.vopen.framework.mixmicro.core.context.BeanContext;
+import xyz.vopen.framework.mixmicro.core.context.annotations.ConfigurationReader;
+import xyz.vopen.framework.mixmicro.core.context.annotations.DefaultScope;
 
 /**
- * {@link BeanDefinitionReference}
+ * {@link BeanDefinitionReference} provides a reference to a {@link BeanDefinition} thus allowing
+ * for soft loading of bean definitions without loading the actual types.
+ *
+ * <p>This interface implements {@link AnnotationMetadataProvider} thus allowing bean metadata to be
+ * introspected safely without loading the class or the annotations themselves.
+ *
+ * <p>The actual bean will be loaded upon calling the {@link #load()} method. Note that consumers of
+ * this interface should call {@link #isPresent()} prior to loading to ensure an error dose not
+ * occur.
+ *
+ * <p>This class can also decide whether to abort loading the definition by returning null.
+ *
+ * <p>This interface extends the {@link BeanType} interface which is shared between {@link
+ * BeanDefinition} and this type. In addition a reference can be enabled or disabled (see {@link
+ * BeanContextConditional#isEnabled(BeanContext)}).
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2020/11/16
@@ -56,15 +75,13 @@ public interface BeanDefinitionReference<T> extends BeanType {
 
   /** @return Is this bean a singleton. */
   default boolean isSingleton() {
-    //    AnnotationMetadata am = getAnnotationMetadata();
-    //    return am.hasDeclaredStereotype(Singleton.class)
-    //        || am.classValue(DefaultScope.class).map(t -> t == Singleton.class).orElse(false);
-    return false;
+    AnnotationMetadata am = getAnnotationMetadata();
+    return am.hasDeclaredStereotype(Singleton.class)
+        || am.classValue(DefaultScope.class).map(t -> t == Singleton.class).orElse(false);
   }
 
   /** @return Is this bean a configuration properties. */
   default boolean isConfigurationProperties() {
-    //    return getAnnotationMetadata().hasDeclaredStereotype(ConfigurationReader.class);
-    return true;
+    return getAnnotationMetadata().hasDeclaredStereotype(ConfigurationReader.class);
   }
 }

@@ -18,15 +18,20 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.context;
+package xyz.vopen.framework.mixmicro.core.context.annotations;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
- * {@link AnnotationMetadata}
+ * {@link Underlay} scope represents a bean that cannot be overridden or replaced because it is
+ * critical to the functioning of the system.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/18
+ * @version ${project.version} - 2020/11/14
  */
-public interface AnnotationMetadata {
-
-  AnnotationMetadata EMPTY_METADATA = new AnnotationMetadata() {};
-}
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Bean
+public @interface Underlay {}

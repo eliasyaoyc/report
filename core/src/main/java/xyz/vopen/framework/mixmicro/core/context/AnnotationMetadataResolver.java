@@ -22,6 +22,7 @@ package xyz.vopen.framework.mixmicro.core.context;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import xyz.vopen.framework.mixmicro.core.annotation.AnnotationMetadata;
 
 /**
  * {@link AnnotationMetadataResolver} for types capable of resolving {@link AnnotationMetadata}.

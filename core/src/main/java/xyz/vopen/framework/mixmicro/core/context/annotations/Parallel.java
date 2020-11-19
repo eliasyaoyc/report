@@ -18,24 +18,32 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.annotation;
+package xyz.vopen.framework.mixmicro.core.context.annotations;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import jdk.jfr.Experimental;
 
 /**
- * {@link Indexes} Allows {@link Indexed} to be repeatable.
+ * {@link Parallel}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/18
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE})
-public @interface Indexes {
-  /** @return A group of indexes */
-  Indexed[] value() default {};
+@Target({ElementType.METHOD, ElementType.TYPE, ElementType.ANNOTATION_TYPE})
+@Experimental
+public @interface Parallel {
+
+  /**
+   * The default behaviour is to shutdown the context if an error occurs on initialization. Can be
+   * set false if shutdown is not required.
+   *
+   * @return Whether to shutdown the application if an error occurs.
+   */
+  boolean shutdownOnError() default true;
 }

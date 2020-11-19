@@ -18,7 +18,7 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.annotation;
+package xyz.vopen.framework.mixmicro.core.context.annotations;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -27,14 +27,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * {@link Requires} Expresses a requirement for a bean for {@link Configuration}.
+ * {@link Inject}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/12
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.PACKAGE,ElementType.TYPE,ElementType.ANNOTATION_TYPE,ElementType.METHOD})
-public @interface Requires {
+@Target({ElementType.FIELD, ElementType.CONSTRUCTOR, ElementType.METHOD})
+public @interface Inject {
 
+  String value() default "";
 }

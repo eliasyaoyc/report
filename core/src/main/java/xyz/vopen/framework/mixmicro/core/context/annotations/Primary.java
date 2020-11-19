@@ -18,45 +18,26 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.annotation;
+package xyz.vopen.framework.mixmicro.core.context.annotations;
 
-import java.lang.annotation.Annotation;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import javax.inject.Qualifier;
 
 /**
- * {@link Replaces} Allows a bean to specify that it replaces another bean. Note that the bean to be
- * replaced cannot be an {@link Underlay} bean.
+ * {@link Primary} A {@link Qualifier} that indicate that this bean is the primary bean that should
+ * be selected in the case of multiple possible interface implementations.
  *
+ * @see Qualifier
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/13
  */
+@Qualifier
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Replaces {
-  /** @return The bean type that this bean replaces */
-  @AliasFor(member = "bean")
-  Class value() default void.class;
+public @interface Primary {
 
-  /** @return The bean type that this bean replaces */
-  @AliasFor(member = "value")
-  Class bean() default void.class;
-
-  /** @return The declaring bean type */
-  Class factory() default void.class;
-
-  /**
-   * The name of the qualifiers of the bean that should be replaced.
-   *
-   * @return The qualifier
-   */
-  Class<? extends Annotation>[] qualifier() default {};
-
-  /**
-   * The name of the qualifiers of the bean that should be replaced.
-   *
-   * @return The qualifier
-   */
-  String named() default "";
+  /** The simple name of this annotation. */
+  String SIMPLE_NAME = Primary.class.getSimpleName();
 }

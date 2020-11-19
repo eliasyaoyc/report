@@ -20,7 +20,8 @@
  */
 package xyz.vopen.framework.mixmicro.core.inject;
 
-import xyz.vopen.framework.mixmicro.core.annotation.Primary;
+import xyz.vopen.framework.mixmicro.core.annotation.AnnotationMetadataProvider;
+import xyz.vopen.framework.mixmicro.core.context.annotations.Primary;
 
 /**
  * {@link BeanType} A reference to a bean. Implemented by bother {@link BeanDefinitionReference} and
@@ -37,6 +38,7 @@ public interface BeanType<T> extends AnnotationMetadataProvider, BeanContextCond
   /** @return The underlying bean type. */
   Class<T> getBeanType();
 
+  /** @return The class name. */
   default String getName() {
     return getBeanType().getName();
   }

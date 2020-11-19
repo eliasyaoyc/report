@@ -20,12 +20,23 @@
  */
 package xyz.vopen.framework.mixmicro.core.annotation;
 
+import javax.annotation.Nonnull;
+
 /**
- * {@link Spi}
+ * {@link AnnotationMetadataProvider} An interface for a type that provides {@link
+ * AnnotationMetadata}.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/12
+ * @version ${project.version} - 2020/11/18
  */
-public @interface Spi {
+public interface AnnotationMetadataProvider extends AnnotationSource {
 
+  /**
+   * Supplies the metadata. Defaults to {@link AnnotationMetadata#EMPTY_METADATA}.
+   *
+   * @return
+   */
+  default @Nonnull AnnotationMetadata getAnnotationMetadata() {
+    return AnnotationMetadata.EMPTY_METADATA;
+  }
 }

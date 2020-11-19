@@ -18,56 +18,35 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.annotation;
+package xyz.vopen.framework.mixmicro.core.context.annotations;
 
 import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import javax.inject.Singleton;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
 
 /**
- * {@link Factory}
+ * {@link Configuration}
  *
- * <p>A factory is a {@link Singleton} that produces one or many other bean implementations.
- *
- * <p>Each produced bean is defined by method that is annotated with {@link Bean}
- *
- * <pre class="code">
- * &#064;Factory
- * public class MyFactory {
- *
- *     &#064;Bean
- *     public MyBean myBean() {
- *         // create the bean
- *     }
- * }</pre>
- *
- * <p>Methods defined within the body of the class that are annotated with {@link Bean} will be
- * exposed as beans.
- *
- * <p>You can use a {@link javax.inject.Scope} annotation to control the scope the bean is exposed
- * within. For example for a singleton instance you can annotation the method with {@link
- * Singleton}.
- *
- * <p>Methods annotated with {@link Bean} can accept arguments and Micronaut will attempt to inject
- * those arguments from existing beans or values. For example:
+ * <p>A configuration is a grouping of bean definitions under a package. A configuration can have
+ * requirements applied to it with {@link Requires} such that the entire configuration only loads of
+ * the requirements are met. For example consider the following {@code package-info.java} file:
  *
  * <pre class="code">
- * &#064;Factory
- * public class MyFactory {
+ * &#064;Configuration
+ * &#064;Requires(classes = Cluster.class)
+ * package io.micronaut.configuration.cassandra;
  *
- *     &#064;Bean
- *     public MyBean myBean(&#064;Value("foo.bar") String myValue) {
- *         // create the bean
- *     }
- * }</pre>
+ * import com.datastax.driver.core.Cluster;
+ * import io.micronaut.context.annotation.Configuration;
+ * import io.micronaut.context.annotation.Requires;
+ * </pre>
  *
- * @see Bean
- * @see Configuration
+ * <p>In the example above the {@link Requires} annotation ensures all beans contained within the
+ * package are loaded only if the {@code Cluster} class is present on the classpath.
+ *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2020/11/14
  */
-@Singleton
-@Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface Factory {}
+@Target(ElementType.PACKAGE)
+public @interface Configuration {}

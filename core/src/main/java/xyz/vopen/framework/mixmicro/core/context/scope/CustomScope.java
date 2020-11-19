@@ -23,7 +23,7 @@ package xyz.vopen.framework.mixmicro.core.context.scope;
 import java.lang.annotation.Annotation;
 import java.util.Optional;
 import xyz.vopen.framework.mixmicro.core.Provider;
-import xyz.vopen.framework.mixmicro.core.annotation.Indexed;
+import xyz.vopen.framework.mixmicro.core.context.annotations.Indexed;
 import xyz.vopen.framework.mixmicro.core.context.BeanContext;
 import xyz.vopen.framework.mixmicro.core.context.BeanRegistration;
 import xyz.vopen.framework.mixmicro.core.context.BeanResolutionContext;

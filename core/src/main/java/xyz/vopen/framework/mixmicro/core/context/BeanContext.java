@@ -59,12 +59,13 @@ import xyz.vopen.framework.mixmicro.core.LifeCycle;
 import xyz.vopen.framework.mixmicro.core.Named;
 import xyz.vopen.framework.mixmicro.core.OrderUtil;
 import xyz.vopen.framework.mixmicro.core.Provider;
-import xyz.vopen.framework.mixmicro.core.annotation.Bean;
-import xyz.vopen.framework.mixmicro.core.annotation.Context;
-import xyz.vopen.framework.mixmicro.core.annotation.Indexes;
-import xyz.vopen.framework.mixmicro.core.annotation.Parallel;
-import xyz.vopen.framework.mixmicro.core.annotation.Primary;
-import xyz.vopen.framework.mixmicro.core.annotation.Replaces;
+import xyz.vopen.framework.mixmicro.core.annotation.AnnotationMetadata;
+import xyz.vopen.framework.mixmicro.core.context.annotations.Bean;
+import xyz.vopen.framework.mixmicro.core.context.annotations.Context;
+import xyz.vopen.framework.mixmicro.core.context.annotations.Indexes;
+import xyz.vopen.framework.mixmicro.core.context.annotations.Parallel;
+import xyz.vopen.framework.mixmicro.core.context.annotations.Primary;
+import xyz.vopen.framework.mixmicro.core.context.annotations.Replaces;
 import xyz.vopen.framework.mixmicro.core.context.env.ClassPathResourceLoader;
 import xyz.vopen.framework.mixmicro.core.context.env.PropertyResolver;
 import xyz.vopen.framework.mixmicro.core.context.env.ResourceLoader;
@@ -379,16 +380,20 @@ public class BeanContext
         configurationEnabled.entrySet();
 
     reference:
+
+    // all the reference of beans.
     for (BeanDefinitionReference beanDefinitionReference : beanDefinitionReferences) {
+      // 1. exclude disabled bean.
       for (Entry<BeanConfiguration, Boolean> entry : configurationEnabledEntries) {
         if (entry.getKey().isWithin(beanDefinitionReference) && !entry.getValue()) {
           beanDefinitionsClasses.remove(beanDefinitionReference);
           continue reference;
         }
       }
-      //      final AnnotationMetadata annotationMetadata =
-      // beanDefinitionReference.getAnnotationMetadata();
-      //      Class[] indexes = annotationMetadata.classValues(INDEXES_TYPE);
+
+      final AnnotationMetadata annotationMetadata = beanDefinitionReference.getAnnotationMetadata();
+      Class[] indexes = annotationMetadata.classValues(INDEXES_TYPE);
+
       if (isEagerInit(beanDefinitionReference)) {
         contextScopeBeans.add(beanDefinitionReference);
       }

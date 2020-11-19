@@ -18,16 +18,28 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.commons.reflect;
+package xyz.vopen.framework.mixmicro.core.context.annotations;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Repeatable;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * {@link ReflectionUtils} Utility methods for reflection related tasks.
+ * {@link Indexed} that can be used on types where there may be many implementations of a particular
+ * interface. This triggers building of an index internal to the bean context that speeds up bean
+ * lookups by type.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/16
+ * @version ${project.version} - 2020/11/14
  */
-public class ReflectionUtils {
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE, ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+@Repeatable(value = Indexes.class)
+public @interface Indexed {
 
-  /** Constant for empty class array. */
-  public static final Class[] EMPTY_CLASS_ARRAY = new Class[0];
+  Class<?> value();
 }
