@@ -18,39 +18,16 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core;
+package xyz.vopen.framework.mixmicro.core.inject.visitor;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import xyz.vopen.framework.mixmicro.core.Ordered;
 
 /**
- * {@link Mixmicro} The entry point to run the Mixmicro application.
- *
- * <pre>
- *   public class FooApplication{
- *     public static void main(String[] args){
- *
- *     }
- *   }
- * </pre>
+ * {@link TypeElementVisitor}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/12
+ * @version ${project.version} - 2020/11/19
  */
-public final class Mixmicro {
-  private static final Logger LOG = LoggerFactory.getLogger(Mixmicro.class);
+public interface TypeElementVisitor<C,E> extends Ordered {
 
-  Mixmicro() {}
-
-  // =====================   Builder  =====================
-  public MixmicroBuilder builder() {
-    return new MixmicroBuilder();
-  }
-
-  public static class MixmicroBuilder {
-
-    public Mixmicro build() {
-      return new Mixmicro();
-    }
-  }
 }
