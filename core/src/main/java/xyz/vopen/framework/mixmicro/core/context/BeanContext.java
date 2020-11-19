@@ -393,9 +393,33 @@ public class BeanContext
 
       final AnnotationMetadata annotationMetadata = beanDefinitionReference.getAnnotationMetadata();
       Class[] indexes = annotationMetadata.classValues(INDEXES_TYPE);
+      if (indexes.length > 0) {
+        for (int i = 0; i < indexes.length; i++) {
+          Class indexedType = indexes[i];
+          resolveTypeIndex(indexedType).add(beanDefinitionReference);
+        }
+      } else {
+        if (annotationMetadata.hasStereotype(ADAPTER_TYPE)) {
+          final Class aClass =
+              annotationMetadata
+                  .classValue(ADAPTER_TYPE, AnnotationMetadata.VALUE_MEMBER)
+                  .orElse(null);
+          if (indexedTypes.contains(aClass)) {
+            resolveTypeIndex(aClass).add(beanDefinitionReference);
+          }
+        }
+      }
 
+      // context scope.
       if (isEagerInit(beanDefinitionReference)) {
         contextScopeBeans.add(beanDefinitionReference);
+        // parallel
+      } else if (annotationMetadata.hasDeclaredStereotype(PARALLEL_TYPE)) {
+        parallelBeans.add(beanDefinitionReference);
+      }
+
+      if (beanDefinitionReference.requiresMethodProcessing()) {
+        processedBeans.add(beanDefinitionReference);
       }
     }
 
@@ -501,6 +525,15 @@ public class BeanContext
     //            ||
     // beanDefinitionReference.getAnnotationMetadata().hasStereotype(eagerInitStereotypes));
     return false;
+  }
+
+  private @Nonnull Collection<BeanDefinitionReference> resolveTypeIndex(Class<?> indexedType) {
+    return beanIndex.computeIfAbsent(
+        indexedType,
+        aClass -> {
+          indexedTypes.add(indexedType);
+          return Lists.newArrayListWithCapacity(20);
+        });
   }
 
   // =====================   BeanDefinitionRegistry  =====================
