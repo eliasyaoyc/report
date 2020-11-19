@@ -41,8 +41,7 @@ public interface AnnotationMetadataResolver {
    * @return The {@link AnnotationMetadata}.
    */
   default @Nonnull AnnotationMetadata resolveMetadata(@Nullable Class<?> type) {
-    //    return AnnotationMetadata.EMPTY_METADATA;
-    return null;
+    return AnnotationMetadata.EMPTY_METADATA;
   }
 
   /**

@@ -69,6 +69,7 @@ import xyz.vopen.framework.mixmicro.core.context.env.ClassPathResourceLoader;
 import xyz.vopen.framework.mixmicro.core.context.env.PropertyResolver;
 import xyz.vopen.framework.mixmicro.core.context.env.ResourceLoader;
 import xyz.vopen.framework.mixmicro.core.context.env.ValueResolver;
+import xyz.vopen.framework.mixmicro.core.context.processor.ExecutableMethodProcessor;
 import xyz.vopen.framework.mixmicro.core.event.ApplicationEventListener;
 import xyz.vopen.framework.mixmicro.core.event.ApplicationEventPublisher;
 import xyz.vopen.framework.mixmicro.core.event.BeanCreatedEventListener;
@@ -122,14 +123,27 @@ public class BeanContext
   private static final String INDEXES_TYPE = Indexes.class.getName();
   private static final String REPLACES_ANN = Replaces.class.getName();
 
+  // =====================   LifeCycle  =====================
   protected final AtomicBoolean running = new AtomicBoolean(false);
   protected final AtomicBoolean initializing = new AtomicBoolean(false);
   protected final AtomicBoolean terminating = new AtomicBoolean(false);
 
-  final Map<BeanKey, BeanRegistration> singletonObjects = new ConcurrentHashMap<>(100);
-  final Map<BeanIdentifier, Object> singlesInCreation = new ConcurrentHashMap<>(5);
-  final Map<BeanKey, Provider<Object>> scopedProxies = new ConcurrentHashMap<>(20);
+  /** Store the scope of singleton object. */
+  final Map<BeanKey, BeanRegistration /* Bean unique key, BeanRegistration */> singletonObjects =
+      new ConcurrentHashMap<>(100);
 
+  /** Store the scope of singleton object that in creation */
+  final Map<BeanIdentifier, Object> singlesInCreation = new ConcurrentHashMap<>(5);
+
+  /** Store the bean that need to proxied. */
+  final Map<BeanKey, Provider<Object> /* Bean unique key, Provider */> scopedProxies =
+      new ConcurrentHashMap<>(20);
+
+  /**
+   * Store all listener.
+   *
+   * @see ApplicationEventListener
+   */
   Set<Map.Entry<Class, List<BeanInitializedEventListener>>> beanInitializedEventListeners;
 
   private final Collection<BeanDefinitionReference> beanDefinitionsClasses =
@@ -153,7 +167,7 @@ public class BeanContext
       CollectionUtils.setOf(
           BeanDefinitionRegistry.class,
           BeanContext.class,
-          //          AnnotationMetadataResolver.class,
+          AnnotationMetadataResolver.class,
           BeanLocator.class,
           ApplicationEventPublisher.class,
           ApplicationContext.class,
@@ -344,6 +358,67 @@ public class BeanContext
     return this;
   }
 
+  private void readAllBeanConfigurations() {
+    Iterable<BeanConfiguration> beanConfigurations = resolveBeanConfigurations();
+    for (BeanConfiguration beanConfiguration : beanConfigurations) {
+      registerConfiguration(beanConfiguration);
+    }
+  }
+
+  private void readAllBeanDefinitionClasses() {
+    List<BeanDefinitionReference> contextScopeBeans = Lists.newArrayListWithCapacity(20);
+    List<BeanDefinitionReference> processedBeans = Lists.newArrayListWithCapacity(10);
+    List<BeanDefinitionReference> parallelBeans = Lists.newArrayListWithCapacity(10);
+    List<BeanDefinitionReference> beanDefinitionReferences = resolveBeanDefinitionReferences();
+    beanDefinitionsClasses.addAll(beanDefinitionReferences);
+
+    Map<BeanConfiguration, Boolean> configurationEnabled =
+        beanConfigurations.values().stream()
+            .collect(Collectors.toMap(Function.identity(), bc -> bc.isEnabled(this)));
+    final Set<Entry<BeanConfiguration, Boolean>> configurationEnabledEntries =
+        configurationEnabled.entrySet();
+
+    reference:
+    for (BeanDefinitionReference beanDefinitionReference : beanDefinitionReferences) {
+      for (Entry<BeanConfiguration, Boolean> entry : configurationEnabledEntries) {
+        if (entry.getKey().isWithin(beanDefinitionReference) && !entry.getValue()) {
+          beanDefinitionsClasses.remove(beanDefinitionReference);
+          continue reference;
+        }
+      }
+      //      final AnnotationMetadata annotationMetadata =
+      // beanDefinitionReference.getAnnotationMetadata();
+      //      Class[] indexes = annotationMetadata.classValues(INDEXES_TYPE);
+      if (isEagerInit(beanDefinitionReference)) {
+        contextScopeBeans.add(beanDefinitionReference);
+      }
+    }
+
+    initializeEventListeners();
+    initializeContext(contextScopeBeans, processedBeans, parallelBeans);
+  }
+
+  /** Initialize the event listeners. */
+  protected void initializeEventListeners() {
+    final Collection<BeanDefinition<BeanCreatedEventListener>> beanCreatedDefinitions =
+        getBeanDefinitions(BeanCreatedEventListener.class);
+    final HashMap<Class, List<BeanCreatedEventListener>> beanCreatedListeners =
+        new HashMap<>(beanCreatedDefinitions.size());
+  }
+
+  /**
+   * Initialize the context with the given {@link Context} scope bean.
+   *
+   * @param contextScopeBeans The context scope beans that need to initialized with Bean context.
+   * @param processedBeans The beans that require {@link ExecutableMethodProcessor} handling
+   *     (scheduling related)
+   * @param parallelBeans The parallel bean definitions that loaded in parallelism
+   */
+  protected void initializeContext(
+      @Nonnull List<BeanDefinitionReference> contextScopeBeans,
+      @Nonnull List<BeanDefinitionReference> processedBeans,
+      @Nonnull List<BeanDefinitionReference> parallelBeans) {}
+
   /**
    * Resolves the {@link BeanDefinitionReference} class instance. Default implementation uses
    * ServiceLoader pattern.
@@ -383,33 +458,6 @@ public class BeanContext
         .collect(Collectors.toList());
   }
 
-  /** Initialize the event listeners. */
-  protected void initializeEventListeners() {
-    final Collection<BeanDefinition<BeanCreatedEventListener>> beanCreatedDefinitions =
-        getBeanDefinitions(BeanCreatedEventListener.class);
-    final HashMap<Class, List<BeanCreatedEventListener>> beanCreatedListeners =
-        new HashMap<>(beanCreatedDefinitions.size());
-  }
-
-  /**
-   * Initialize the context with the given {@link Context} scope bean.
-   *
-   * @param contextScopeBeans The context scope beans.
-   * @param processedBeans The beans that require {@link ExecutableMethodProcessor} handling
-   * @param parallelBeans The parallel bean definitions.
-   */
-  protected void initializeContext(
-      @Nonnull List<BeanDefinitionReference> contextScopeBeans,
-      @Nonnull List<BeanDefinitionReference> processedBeans,
-      @Nonnull List<BeanDefinitionReference> parallelBeans) {}
-
-  private void readAllBeanConfigurations() {
-    Iterable<BeanConfiguration> beanConfigurations = resolveBeanConfigurations();
-    for (BeanConfiguration beanConfiguration : beanConfigurations) {
-      registerConfiguration(beanConfiguration);
-    }
-  }
-
   /**
    * Registers an active configuration.
    *
@@ -434,39 +482,6 @@ public class BeanContext
       T createdBean,
       Qualifier<T> qualifier,
       boolean singleCandidate) {}
-
-  private void readAllBeanDefinitionClasses() {
-    List<BeanDefinitionReference> contextScopeBeans = Lists.newArrayListWithCapacity(20);
-    List<BeanDefinitionReference> processedBeans = Lists.newArrayListWithCapacity(10);
-    List<BeanDefinitionReference> parallelBeans = Lists.newArrayListWithCapacity(10);
-    List<BeanDefinitionReference> beanDefinitionReferences = resolveBeanDefinitionReferences();
-    beanDefinitionsClasses.addAll(beanDefinitionReferences);
-
-    Map<BeanConfiguration, Boolean> configurationEnabled =
-        beanConfigurations.values().stream()
-            .collect(Collectors.toMap(Function.identity(), bc -> bc.isEnabled(this)));
-    final Set<Entry<BeanConfiguration, Boolean>> configurationEnabledEntries =
-        configurationEnabled.entrySet();
-
-    reference:
-    for (BeanDefinitionReference beanDefinitionReference : beanDefinitionReferences) {
-      for (Entry<BeanConfiguration, Boolean> entry : configurationEnabledEntries) {
-        if (entry.getKey().isWithin(beanDefinitionReference) && !entry.getValue()) {
-          beanDefinitionsClasses.remove(beanDefinitionReference);
-          continue reference;
-        }
-      }
-      //      final AnnotationMetadata annotationMetadata =
-      // beanDefinitionReference.getAnnotationMetadata();
-      //      Class[] indexes = annotationMetadata.classValues(INDEXES_TYPE);
-      if (isEagerInit(beanDefinitionReference)) {
-        contextScopeBeans.add(beanDefinitionReference);
-      }
-    }
-
-    initializeEventListeners();
-    initializeContext(contextScopeBeans, processedBeans, parallelBeans);
-  }
 
   /**
    * Determine whether the {@link BeanDefinitionReference} initialize advance.

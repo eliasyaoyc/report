@@ -18,15 +18,14 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.context;
+package xyz.vopen.framework.mixmicro.core.context.processor;
 
 /**
- * {@link AnnotationMetadata}
+ * {@link ExecutableMethodProcessor}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/18
+ * @version ${project.version} - 2020/11/19
  */
-public interface AnnotationMetadata {
+public interface ExecutableMethodProcessor {
 
-  AnnotationMetadata EMPTY_METADATA = new AnnotationMetadata() {};
 }

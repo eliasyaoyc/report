@@ -22,14 +22,27 @@ package xyz.vopen.framework.mixmicro.core;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import xyz.vopen.framework.mixmicro.core.context.ApplicationContext;
+import xyz.vopen.framework.mixmicro.core.context.env.CommandLinePropertySource;
 
 /**
- * {@link Mixmicro} The entry point to run the Mixmicro application.
+ * {@link Mixmicro} The entry point to run the Mixmicro application that can be used to bootstrap
+ * and launch a Mixmicro Application from a Java main method. By default class will perform the
+ * following steps to bootstrap your application.
+ *
+ * <ul>
+ *   <li>Create an appropriate {@link ApplicationContext} instance (depending on your classpath)
+ *   <li>Register a {@link CommandLinePropertySource} to expose command line arguments as Mixmicro
+ *       properties.
+ *   <li>Refresh the application context, loading all singleton beans and eager beans
+ * </ul>
+ *
+ * <p>Example:
  *
  * <pre>
  *   public class FooApplication{
  *     public static void main(String[] args){
- *
+ *         MixmicroApplication.run(FooApplication.class,args);
  *     }
  *   }
  * </pre>
@@ -40,7 +53,16 @@ import org.slf4j.LoggerFactory;
 public final class Mixmicro {
   private static final Logger LOG = LoggerFactory.getLogger(Mixmicro.class);
 
-  Mixmicro() {}
+  private static ApplicationContext applicationContext;
+
+  Mixmicro() {
+    applicationContext = new ApplicationContext();
+  }
+
+  public static Mixmicro run() {
+    applicationContext.start();
+    return new Mixmicro();
+  }
 
   // =====================   Builder  =====================
   public MixmicroBuilder builder() {

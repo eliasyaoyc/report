@@ -22,10 +22,7 @@ package xyz.vopen.framework.mixmicro.core.context;
 
 import com.google.common.base.Preconditions;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import xyz.vopen.framework.mixmicro.core.context.converter.ConversionService;
@@ -36,26 +33,32 @@ import xyz.vopen.framework.mixmicro.core.inject.BeanConfiguration;
 import xyz.vopen.framework.mixmicro.core.inject.BeanDefinitionReference;
 
 /**
- * <p>An {@link ApplicationContext} extends a {@link BeanContext} and adds the concepts of configuration, environments and
- *   runtimes.</p>
+ * An {@link ApplicationContext} extends a {@link BeanContext} and adds the concepts of
+ * configuration, environments and runtimes.
+ *
  * <p>
- * <p>The {@link ApplicationContext} is the main entry point for starting and running Micronaut applications. It
- * can be thought of as a container object for all dependency injected objects.</p>
+ *
+ * <p>The {@link ApplicationContext} is the main entry point for starting and running Micronaut
+ * applications. It can be thought of as a container object for all dependency injected objects.
+ *
  * <p>
- * <p>The {@link ApplicationContext} can be started via the {@link #run()} method. For example:</p>
+ *
+ * <p>The {@link ApplicationContext} can be started via the {@link #run()} method. For example:
  *
  * <pre class="code">
  *     ApplicationContext context = ApplicationContext.run();
  * </pre>
  *
- * <p>Alternatively, the {@link #builder()} method can be used to customize the {@code ApplicationContext} using the {@link ApplicationContextBuilder} interface
- * prior to running. For example:</p>
+ * <p>Alternatively, the {@link #builder()} method can be used to customize the {@code
+ * ApplicationContext} using the {@link ApplicationContextBuilder} interface prior to running. For
+ * example:
+ *
  * <pre class="code">
  *     ApplicationContext context = ApplicationContext.builder().environments("test").start();
  * </pre>
  *
- * <p>The {@link #getEnvironment()} method can be used to obtain a reference to the application {@link Environment}, which contains the loaded configuration
- * and active environment names.</p>
+ * <p>The {@link #getEnvironment()} method can be used to obtain a reference to the application
+ * {@link Environment}, which contains the loaded configuration and active environment names.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2020/11/17
@@ -125,6 +128,10 @@ public class ApplicationContext extends BeanContext {
     this.environment = createEnvironment(configuration);
   }
 
+  public ApplicationContext run() {
+    return null;
+  }
+
   /**
    * Registers a new singleton bean at runtime. This method expects that the bean definition data
    * will have been compiled ahead of time.
@@ -153,8 +160,18 @@ public class ApplicationContext extends BeanContext {
     return (ApplicationContext) super.registerSingleton(type, singleton, qualifier, inject);
   }
 
-  public @Nonnull <T> ApplicationContext registerSingleton(@Nonnull Class<T> type,){
+  public @Nonnull <T> ApplicationContext registerSingleton(
+      @Nonnull Class<T> type, @Nonnull T singleton, @Nullable Qualifier<T> qualifier) {
+    return registerSingleton(type, singleton, qualifier, true);
+  }
 
+  public @Nonnull <T> ApplicationContext registerSingleton(
+      @Nonnull Class<T> type, @Nonnull T singleton) {
+    return registerSingleton(type, singleton, null, true);
+  }
+
+  public @Nonnull ApplicationContext registerSingleton(@Nonnull Object singleton, boolean inject) {
+    return (ApplicationContext) super.registerSingleton(singleton, inject);
   }
 
   protected @Nonnull Iterable<BeanConfiguration> resolveBeanConfigurations() {
@@ -199,37 +216,36 @@ public class ApplicationContext extends BeanContext {
     return environment;
   }
 
-  public synchronized @Nonnull
-  ApplicationContext start() {
+  public synchronized @Nonnull ApplicationContext start() {
     startEnvironment();
     return (ApplicationContext) super.start();
   }
 
-  public synchronized @Nonnull
-  ApplicationContext stop() {
+  public synchronized @Nonnull ApplicationContext stop() {
     return (ApplicationContext) super.stop();
   }
 
-  public boolean containsProperty(String name) {
-    return getEnvironment().containsProperty(name);
-  }
+  //  public boolean containsProperty(String name) {
+  //    return getEnvironment().containsProperty(name);
+  //  }
 
-  public boolean containsProperties(String name) {
-    return getEnvironment().containsProperties(name);
-  }
+  //  public boolean containsProperties(String name) {
+  //    return getEnvironment().containsProperties(name);
+  //  }
 
-  public <T> Optional<T> getProperty(String name, ArgumentConversionContext<T> conversionContext) {
-    return getEnvironment().getProperty(name, conversionContext);
-  }
+  //  public <T> Optional<T> getProperty(String name, ArgumentConversionContext<T>
+  // conversionContext) {
+  //    return getEnvironment().getProperty(name, conversionContext);
+  //  }
 
-  public @Nonnull Collection<String> getPropertyEntries(@Nonnull String name) {
-    return environment.getPropertyEntries(name);
-  }
+  //  public @Nonnull Collection<String> getPropertyEntries(@Nonnull String name) {
+  //    return environment.getPropertyEntries(name);
+  //  }
 
-  public @Nonnull Map<String, Object> getProperties(
-      @Nullable String name, @Nonnull StringConvention keyFormat) {
-    return getEnvironment().getProperties(name, keyFormat);
-  }
+  //  public @Nonnull Map<String, Object> getProperties(
+  //      @Nullable String name, @Nonnull StringConvention keyFormat) {
+  //    return getEnvironment().getProperties(name, keyFormat);
+  //  }
 
   protected void registerConfiguration(BeanConfiguration configuration) {
     if (getEnvironment().isActive(configuration)) {
@@ -243,4 +259,10 @@ public class ApplicationContext extends BeanContext {
     environment.start();
     registerSingleton(Environment.class, environment);
   }
+
+  public static ApplicationContextBuilder builder() {
+    return new ApplicationContextBuilder();
+  }
+  // =====================   Builder  =====================
+  public static class ApplicationContextBuilder {}
 }
