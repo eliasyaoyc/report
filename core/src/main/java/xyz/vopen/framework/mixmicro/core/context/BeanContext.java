@@ -22,6 +22,8 @@ package xyz.vopen.framework.mixmicro.core.context;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import java.io.Closeable;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
@@ -29,6 +31,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -70,6 +73,8 @@ import xyz.vopen.framework.mixmicro.core.context.env.ClassPathResourceLoader;
 import xyz.vopen.framework.mixmicro.core.context.env.PropertyResolver;
 import xyz.vopen.framework.mixmicro.core.context.env.ResourceLoader;
 import xyz.vopen.framework.mixmicro.core.context.env.ValueResolver;
+import xyz.vopen.framework.mixmicro.core.context.exceptions.BeanContextException;
+import xyz.vopen.framework.mixmicro.core.context.processor.AnnotationProcessor;
 import xyz.vopen.framework.mixmicro.core.context.processor.ExecutableMethodProcessor;
 import xyz.vopen.framework.mixmicro.core.event.ApplicationEventListener;
 import xyz.vopen.framework.mixmicro.core.event.ApplicationEventPublisher;
@@ -81,7 +86,9 @@ import xyz.vopen.framework.mixmicro.core.inject.BeanConfiguration;
 import xyz.vopen.framework.mixmicro.core.inject.BeanDefinition;
 import xyz.vopen.framework.mixmicro.core.inject.BeanDefinitionReference;
 import xyz.vopen.framework.mixmicro.core.inject.BeanIdentifier;
+import xyz.vopen.framework.mixmicro.core.inject.BeanType;
 import xyz.vopen.framework.mixmicro.core.inject.DisposableBeanDefinition;
+import xyz.vopen.framework.mixmicro.core.inject.ProxyBeanDefinition;
 import xyz.vopen.framework.mixmicro.core.inject.qualifiers.Qualifiers;
 
 /**
@@ -418,6 +425,7 @@ public class BeanContext
         parallelBeans.add(beanDefinitionReference);
       }
 
+      // the bean whether needed to process.
       if (beanDefinitionReference.requiresMethodProcessing()) {
         processedBeans.add(beanDefinitionReference);
       }
@@ -432,7 +440,60 @@ public class BeanContext
     final Collection<BeanDefinition<BeanCreatedEventListener>> beanCreatedDefinitions =
         getBeanDefinitions(BeanCreatedEventListener.class);
     final HashMap<Class, List<BeanCreatedEventListener>> beanCreatedListeners =
-        new HashMap<>(beanCreatedDefinitions.size());
+        Maps.newHashMapWithExpectedSize(beanCreatedDefinitions.size());
+
+    beanCreatedListeners.put(
+        AnnotationProcessor.class, Arrays.asList(new AnnotationProcessorListener()));
+    for (BeanDefinition<BeanCreatedEventListener> beanCreatedDefinition : beanCreatedDefinitions) {
+      try (BeanResolutionContext context = newResolutionContext(beanCreatedDefinition, null)) {
+        final BeanCreatedEventListener listener;
+        final Qualifier qualifier = beanCreatedDefinition.getDeclaredQualifier();
+        if (beanCreatedDefinition.isSingleton()) {
+          listener =
+              createAndRegisterSingleton(
+                  context, beanCreatedDefinition, beanCreatedDefinition.getBeanType(), qualifier);
+        } else {
+          listener =
+              doCreateBean(
+                  context, beanCreatedDefinition, BeanCreatedEventListener.class, qualifier);
+        }
+        beanCreatedDefinition.getTypeParameters();
+      }
+    }
+
+    for (List<BeanCreatedEventListener> listenerList : beanCreatedListeners.values()) {
+      OrderUtil.sort(listenerList);
+    }
+
+    final Map<Class, List<BeanInitializedEventListener>> beanInitializedListeners =
+        Maps.newHashMapWithExpectedSize(beanCreatedDefinitions.size());
+    final Collection<BeanDefinition<BeanInitializedEventListener>> beanInitializedDefinitions =
+        getBeanDefinitions(BeanInitializedEventListener.class);
+    for (BeanDefinition<BeanInitializedEventListener> beanInitializedDefinition :
+        beanInitializedDefinitions) {
+      try (BeanResolutionContext context = newResolutionContext(beanInitializedDefinition, null)) {
+        final Qualifier qualifier = beanInitializedDefinition.getDeclaredQualifier();
+        final BeanInitializedEventListener listener;
+        if (beanInitializedDefinition.isSingleton()) {
+          listener =
+              createAndRegisterSingleton(
+                  context,
+                  beanInitializedDefinition,
+                  beanInitializedDefinition.getBeanType(),
+                  qualifier);
+        } else {
+          doCreateBean(
+              context, beanInitializedDefinition, BeanInitializedEventListener.class, qualifier);
+        }
+      }
+    }
+
+    for (List<BeanInitializedEventListener> listenerList : beanInitializedListeners.values()) {
+      OrderUtil.sort(listenerList);
+    }
+
+    this.beanCreationEventListeners = beanCreatedListeners.entrySet();
+    this.beanInitializedEventListeners = beanInitializedListeners.entrySet();
   }
 
   /**
@@ -448,13 +509,49 @@ public class BeanContext
       @Nonnull List<BeanDefinitionReference> processedBeans,
       @Nonnull List<BeanDefinitionReference> parallelBeans) {}
 
+  private <T> T createAndRegisterSingleton(
+      BeanResolutionContext resolutionContext,
+      BeanDefinition<T> definition,
+      Class<T> beanType,
+      Qualifier<T> qualifier) {
+    synchronized (singletonObjects) {
+      return createAndRegisterSingletonInternal(resolutionContext, definition, beanType, qualifier);
+    }
+  }
+
+  private <T> T createAndRegisterSingletonInternal(
+      BeanResolutionContext resolutionContext,
+      BeanDefinition<T> definition,
+      Class<T> beanType,
+      Qualifier<T> qualifier) {
+    return null;
+  }
+
+  /**
+   * @param resolutionContext The bean resolution context
+   * @param definition The bean definition
+   * @param beanType The bean type
+   * @param qualifier The qualifier
+   * @param args The argument values
+   * @param <T> The bean generic type.
+   * @return
+   */
+  protected @Nonnull <T> T doCreateBean(
+      @Nonnull BeanResolutionContext resolutionContext,
+      @Nonnull BeanDefinition<T> definition,
+      @Nonnull Class<T> beanType,
+      @Nullable Qualifier<T> qualifier,
+      @Nullable Object... args) {
+    return null;
+  }
+
   /**
    * Resolves the {@link BeanDefinitionReference} class instance. Default implementation uses
    * ServiceLoader pattern.
    *
    * @return The bean definition classes.
    */
-  protected @Nonnull List<BeanDefinitionReference> resolveBeanDefinitionReferences() {
+  private @Nonnull List<BeanDefinitionReference> resolveBeanDefinitionReferences() {
     final SoftServiceLoader<BeanDefinitionReference> definitions =
         SoftServiceLoader.load(BeanDefinitionReference.class, classLoader);
     List<ServiceDefinition<BeanDefinitionReference>> list = Lists.newArrayListWithCapacity(300);
@@ -466,6 +563,32 @@ public class BeanContext
         .map(ServiceDefinition::load)
         .filter(BeanDefinitionReference::isPresent)
         .collect(Collectors.toList());
+  }
+
+  private @Nonnull BeanResolutionContext newResolutionContext(
+      BeanDefinition<?> beanDefinition, @Nullable BeanResolutionContext currentContext) {
+    if (currentContext == null) {
+      return new AbstractBeanResolutionContext(this, beanDefinition) {
+
+        @Override
+        public <T> void addInFlightBean(BeanIdentifier beanIdentifier, T instance) {
+          singlesInCreation.put(beanIdentifier, instance);
+        }
+
+        @Override
+        public void removeInFlightBean(BeanIdentifier beanIdentifier) {
+          singlesInCreation.remove(beanIdentifier);
+        }
+
+        @Nullable
+        @Override
+        public <T> T getInFlightBean(BeanIdentifier beanIdentifier) {
+          return (T) singlesInCreation.get(beanIdentifier);
+        }
+      };
+    } else {
+      return currentContext;
+    }
   }
 
   /**
@@ -554,6 +677,19 @@ public class BeanContext
   /**
    * Find bean candidates for the given type
    *
+   * @param beanType The bean type
+   * @param filter A bean definition to filter out
+   * @param <T> The bean generic type
+   * @return The candidates
+   */
+  protected @Nonnull <T> Collection<BeanDefinition<T>> findBeanCandidates(
+      @Nonnull Class<T> beanType, @Nullable BeanDefinition<?> filter) {
+    return findBeanCandidates(null, beanType, filter, true);
+  }
+
+  /**
+   * Find bean candidates for the given type
+   *
    * @param resolutionContext The current resolution context
    * @param beanType The bean type
    * @param filter A bean definition to filter out
@@ -571,8 +707,115 @@ public class BeanContext
       LOG.debug("Finding candidate beans for type: {}", beanType);
     }
 
-    return null;
+    // first traverse component definition classes and loa candidates.
+    Collection<BeanDefinitionReference> beanDefinitionsClasses;
+
+    if (indexedTypes.contains(beanType)) {
+      beanDefinitionsClasses = beanIndex.get(beanType);
+      if (beanDefinitionsClasses == null) {
+        beanDefinitionsClasses = Collections.emptyList();
+      }
+    } else {
+      beanDefinitionsClasses = this.beanDefinitionsClasses;
+    }
+
+    if (!beanDefinitionsClasses.isEmpty()) {
+      Stream<BeanDefinition<T>> candidateStream =
+          beanDefinitionsClasses.stream()
+              .filter(
+                  reference -> {
+                    Class<?> candidateType = reference.getBeanType();
+                    final boolean isCandidate =
+                        candidateType != null
+                            && (beanType.isAssignableFrom(candidateType)
+                                || beanType == candidateType);
+                    return isCandidate && reference.isEnabled(this, resolutionContext);
+                  })
+              .map(
+                  ref -> {
+                    BeanDefinition<T> loadedBean;
+                    try {
+                      loadedBean = ref.load(this);
+                    } catch (Throwable e) {
+                      throw new BeanContextException(
+                          "Error loading bean [" + ref.getName() + "]: " + e.getMessage(), e);
+                    }
+                    return loadedBean;
+                  });
+
+      if (filter != null) {
+        candidateStream = candidateStream.filter(candidate -> !candidate.equals(filter));
+      }
+
+      Set<BeanDefinition<T>> candidates =
+          candidateStream
+              .filter(candidate -> candidate.isEnabled(this, resolutionContext))
+              .collect(Collectors.toSet());
+
+      if (!candidates.isEmpty()) {
+        if (filterProxied) {
+          filterProxiedTypes(candidates, true, false);
+        }
+        filterReplacedBeans(resolutionContext, candidates);
+      }
+
+      if (LOG.isDebugEnabled()) {
+        LOG.debug("Resolved bean candidates {} for type: {}", candidates, beanType);
+      }
+      return candidates;
+    } else {
+      if (LOG.isDebugEnabled()) {
+        LOG.debug("No bean candidates found for type: {}", beanType);
+      }
+      return Collections.emptyList();
+    }
   }
+
+  @SuppressWarnings("unchecked")
+  private <T> Collection<BeanDefinition<T>> findBeanCandidatesInternal(
+      BeanResolutionContext resolutionContext, Class<T> beanType) {
+    Collection beanDefinitions = beanCandidateCache.get(beanType);
+    if (beanDefinitions == null) {
+      beanDefinitions = findBeanCandidates(resolutionContext, beanType, null, true);
+      beanCandidateCache.put(beanType, beanDefinitions);
+    }
+    return beanDefinitions;
+  }
+
+  private <T> void filterProxiedTypes(
+      Collection<BeanDefinition<T>> candidates, boolean filterProxied, boolean filterDelegates) {
+    int count = candidates.size();
+    Set<Class> proxiedTypes = Sets.newHashSetWithExpectedSize(count);
+    Iterator<BeanDefinition<T>> i = candidates.iterator();
+    Collection<BeanDefinition<T>> delegates =
+        filterDelegates ? Lists.newArrayListWithCapacity(count) : Collections.emptyList();
+    while (i.hasNext()) {
+      BeanDefinition<T> candidadte = i.next();
+      if (candidadte instanceof ProxyBeanDefinition) {
+
+      } else if (candidadte instanceof BeanDefinitionDelegate) {
+
+      }
+    }
+
+    if (filterDelegates) {
+      candidates.addAll(delegates);
+    }
+
+    if (!proxiedTypes.isEmpty()) {
+      candidates.removeIf(
+          candidate -> {
+            if (candidate instanceof BeanDefinitionDelegate) {
+              return true;
+            } else {
+              return proxiedTypes.contains(candidate.getClass());
+            }
+          });
+    }
+  }
+
+  private <T> void filterReplacedBeans(
+      BeanResolutionContext resolutionContext, Collection<? extends BeanType<T>> candidates) {}
 
   private <T> boolean isCandidatePresent(Class<T> beanType, Qualifier<T> qualifier) {
     Collection<BeanDefinition<T>> beanCandidates = findBeanCandidates(null, beanType, null, true);
@@ -615,7 +858,8 @@ public class BeanContext
   @Nonnull
   @Override
   public <T> Collection<BeanDefinition<T>> getBeanDefinitions(@Nonnull Class<T> beanType) {
-    return null;
+    Collection<BeanDefinition<T>> candidates = findBeanCandidatesInternal(null, beanType);
+    return Collections.unmodifiableCollection(candidates);
   }
 
   @Nonnull

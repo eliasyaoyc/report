@@ -21,8 +21,11 @@
 package xyz.vopen.framework.mixmicro.core.inject;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Modifier;
+import java.util.Collection;
 import java.util.Optional;
 import javax.annotation.Nullable;
+import javax.naming.Name;
 import xyz.vopen.framework.mixmicro.core.Named;
 import xyz.vopen.framework.mixmicro.core.context.BeanContext;
 import xyz.vopen.framework.mixmicro.core.context.BeanResolutionContext;
@@ -35,7 +38,7 @@ import xyz.vopen.framework.mixmicro.core.context.Qualifier;
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2020/11/14
  */
-public interface BeanDefinition<T> {
+public interface BeanDefinition<T> extends Name, BeanType<T> {
 
   /** Attributed used to store a dynamic bean name. */
   String NAMED_ATTRIBUTED = Named.class.getName();
@@ -58,7 +61,11 @@ public interface BeanDefinition<T> {
   /** @return The type that declares this definition, null if not applicable. */
   Optional<Class<?>> getDeclaringType();
 
+  /** @return All required components for this entity definition. */
+  Collection<Class> getRequiredComponents();
+
   /** @return The class name */
+  @Override
   String getName();
 
   /**
@@ -79,6 +86,29 @@ public interface BeanDefinition<T> {
    * @return The injected bean.
    */
   T inject(BeanResolutionContext resolutionContext, BeanContext beanContext, T bean);
+
+  /**
+   * Whether this bean definition represents a proxy.
+   *
+   * @return True if it represents a proxy.
+   */
+  default boolean isProxy() {
+    return this instanceof ProxyBeanDefinition;
+  }
+
+  /** @return Whether the bean definition is abstract. */
+  default boolean isAbstract() {
+    return Modifier.isAbstract(getBeanType().getModifiers());
+  }
+
+  /**
+   * Resolve the declared qualifier for this bean.
+   *
+   * @return The qualifier or null if this isn't one.
+   */
+  default @Nullable Qualifier<T> getDeclaredQualifier() {
+    return null;
+  }
 
   /** @return Method that can be overridden to resolve a dynamic qualifier */
   default @Nullable Qualifier<T> resolveDynamicQualifier() {
