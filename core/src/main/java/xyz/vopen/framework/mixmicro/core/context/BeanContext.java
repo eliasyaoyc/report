@@ -62,13 +62,12 @@ import xyz.vopen.framework.mixmicro.core.LifeCycle;
 import xyz.vopen.framework.mixmicro.core.Named;
 import xyz.vopen.framework.mixmicro.core.OrderUtil;
 import xyz.vopen.framework.mixmicro.core.Provider;
-import xyz.vopen.framework.mixmicro.core.annotation.AnnotationMetadata;
-import xyz.vopen.framework.mixmicro.api.annotations.Bean;
-import xyz.vopen.framework.mixmicro.api.annotations.Context;
-import xyz.vopen.framework.mixmicro.api.annotations.Indexes;
-import xyz.vopen.framework.mixmicro.api.annotations.Parallel;
-import xyz.vopen.framework.mixmicro.api.annotations.Primary;
-import xyz.vopen.framework.mixmicro.api.annotations.Replaces;
+import xyz.vopen.framework.mixmicro.core.annotations.Bean;
+import xyz.vopen.framework.mixmicro.core.annotations.Context;
+import xyz.vopen.framework.mixmicro.core.annotations.Indexes;
+import xyz.vopen.framework.mixmicro.core.annotations.Parallel;
+import xyz.vopen.framework.mixmicro.core.annotations.Primary;
+import xyz.vopen.framework.mixmicro.core.annotations.Replaces;
 import xyz.vopen.framework.mixmicro.core.context.env.ClassPathResourceLoader;
 import xyz.vopen.framework.mixmicro.core.context.env.PropertyResolver;
 import xyz.vopen.framework.mixmicro.core.context.env.ResourceLoader;
@@ -82,6 +81,7 @@ import xyz.vopen.framework.mixmicro.core.event.BeanCreatedEventListener;
 import xyz.vopen.framework.mixmicro.core.event.BeanInitializedEventListener;
 import xyz.vopen.framework.mixmicro.core.event.ShutdownEvent;
 import xyz.vopen.framework.mixmicro.core.event.StartupEvent;
+import xyz.vopen.framework.mixmicro.core.inject.AnnotationMetadata;
 import xyz.vopen.framework.mixmicro.core.inject.BeanConfiguration;
 import xyz.vopen.framework.mixmicro.core.inject.BeanDefinition;
 import xyz.vopen.framework.mixmicro.core.inject.BeanDefinitionReference;
@@ -107,7 +107,7 @@ import xyz.vopen.framework.mixmicro.core.inject.qualifiers.Qualifiers;
  *   <li>BeanLocator: locating and discovering the {@link Bean} instances. (core interface)
  *   <li>BeanDefinitionRegistry: register {@link Bean} instances. (core interface)
  *   <li>ApplicationEventPublisher: publisher event.
- *   <li>AnnotationMetadataResolver: Resolve the {@link AnnotationMetadata}.
+ *   <li>AnnotationMetadataResolver: Resolve the {@code AnnotationMetadata}.
  *   <li>MutableAttributeHolder: mutating attributes.
  * </ul>
  *
@@ -567,7 +567,7 @@ public class BeanContext
    *
    * @return The bean definition classes.
    */
-  private @Nonnull List<BeanDefinitionReference> resolveBeanDefinitionReferences() {
+  protected  @Nonnull List<BeanDefinitionReference> resolveBeanDefinitionReferences() {
     final SoftServiceLoader<BeanDefinitionReference> definitions =
         SoftServiceLoader.load(BeanDefinitionReference.class, classLoader);
     List<ServiceDefinition<BeanDefinitionReference>> list = Lists.newArrayListWithCapacity(300);

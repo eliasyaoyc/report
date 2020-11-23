@@ -20,30 +20,12 @@
  */
 package xyz.vopen.framework.mixmicro.core.inject;
 
-
-import xyz.vopen.framework.mixmicro.core.annotations.Primary;
-
 /**
- * {@link BeanType} A reference to a bean. Implemented by bother {@link BeanDefinitionReference} and
- * {@link BeanDefinition}.
+ * {@link EmptyAnnotationMetadata}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/18
+ * @version ${project.version} - 2020/11/23
  */
-public interface BeanType<T> extends AnnotationMetadataProvider, BeanContextConditional {
+final class EmptyAnnotationMetadata implements AnnotationMetadata {
 
-  /** @return Whether the bean definition is the {@link Primary}. */
-  boolean isPrimary();
-
-  /** @return The underlying bean type. */
-  Class<T> getBeanType();
-
-  /** @return The class name. */
-  default String getName() {
-    return getBeanType().getName();
-  }
-
-  default boolean requiresMethodProcessing() {
-    return false;
-  }
 }
