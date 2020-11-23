@@ -18,39 +18,26 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.context.annotations;
+package xyz.vopen.framework.mixmicro.core.annotations;
 
 import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.inject.Qualifier;
 
 /**
- * {@link ConfigurationReader} A meta configuration for use with other annotations to indicates that
- * the annotation reads configuration.
+ * {@link Primary} A {@link Qualifier} that indicate that this bean is the primary bean that should
+ * be selected in the case of multiple possible interface implementations.
  *
+ * @see Qualifier
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/17
+ * @version ${project.version} - 2020/11/13
  */
+@Qualifier
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.ANNOTATION_TYPE)
-public @interface ConfigurationReader {
-  /**
-   * The prefix to use when resolving properties. The prefix should be defined in kebab case.
-   * Example: my-app.foo.
-   *
-   * @return The configuration entry to read
-   */
-  String value() default "";
+public @interface Primary {
 
-  /** @return The prefix to use */
-  String prefix() default "";
-
-  /** @return The names of the properties to include */
-  String[] includes() default {};
-
-  /** @return The names of the properties to exclude */
-  String[] excludes() default {};
+  /** The simple name of this annotation. */
+  String SIMPLE_NAME = Primary.class.getSimpleName();
 }

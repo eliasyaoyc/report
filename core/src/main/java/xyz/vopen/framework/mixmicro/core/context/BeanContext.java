@@ -63,12 +63,12 @@ import xyz.vopen.framework.mixmicro.core.Named;
 import xyz.vopen.framework.mixmicro.core.OrderUtil;
 import xyz.vopen.framework.mixmicro.core.Provider;
 import xyz.vopen.framework.mixmicro.core.annotation.AnnotationMetadata;
-import xyz.vopen.framework.mixmicro.core.context.annotations.Bean;
-import xyz.vopen.framework.mixmicro.core.context.annotations.Context;
-import xyz.vopen.framework.mixmicro.core.context.annotations.Indexes;
-import xyz.vopen.framework.mixmicro.core.context.annotations.Parallel;
-import xyz.vopen.framework.mixmicro.core.context.annotations.Primary;
-import xyz.vopen.framework.mixmicro.core.context.annotations.Replaces;
+import xyz.vopen.framework.mixmicro.api.annotations.Bean;
+import xyz.vopen.framework.mixmicro.api.annotations.Context;
+import xyz.vopen.framework.mixmicro.api.annotations.Indexes;
+import xyz.vopen.framework.mixmicro.api.annotations.Parallel;
+import xyz.vopen.framework.mixmicro.api.annotations.Primary;
+import xyz.vopen.framework.mixmicro.api.annotations.Replaces;
 import xyz.vopen.framework.mixmicro.core.context.env.ClassPathResourceLoader;
 import xyz.vopen.framework.mixmicro.core.context.env.PropertyResolver;
 import xyz.vopen.framework.mixmicro.core.context.env.ResourceLoader;
@@ -439,6 +439,8 @@ public class BeanContext
   protected void initializeEventListeners() {
     final Collection<BeanDefinition<BeanCreatedEventListener>> beanCreatedDefinitions =
         getBeanDefinitions(BeanCreatedEventListener.class);
+
+    // process created event listener.
     final HashMap<Class, List<BeanCreatedEventListener>> beanCreatedListeners =
         Maps.newHashMapWithExpectedSize(beanCreatedDefinitions.size());
 
@@ -458,6 +460,9 @@ public class BeanContext
                   context, beanCreatedDefinition, BeanCreatedEventListener.class, qualifier);
         }
         beanCreatedDefinition.getTypeParameters();
+        beanCreatedListeners
+            .computeIfAbsent(null, aClass -> Lists.newArrayListWithCapacity(10))
+            .add(listener);
       }
     }
 
@@ -465,10 +470,13 @@ public class BeanContext
       OrderUtil.sort(listenerList);
     }
 
-    final Map<Class, List<BeanInitializedEventListener>> beanInitializedListeners =
-        Maps.newHashMapWithExpectedSize(beanCreatedDefinitions.size());
+    // process initialized event listeners.
     final Collection<BeanDefinition<BeanInitializedEventListener>> beanInitializedDefinitions =
         getBeanDefinitions(BeanInitializedEventListener.class);
+
+    final Map<Class, List<BeanInitializedEventListener>> beanInitializedListeners =
+        Maps.newHashMapWithExpectedSize(beanInitializedDefinitions.size());
+
     for (BeanDefinition<BeanInitializedEventListener> beanInitializedDefinition :
         beanInitializedDefinitions) {
       try (BeanResolutionContext context = newResolutionContext(beanInitializedDefinition, null)) {
@@ -482,9 +490,17 @@ public class BeanContext
                   beanInitializedDefinition.getBeanType(),
                   qualifier);
         } else {
-          doCreateBean(
-              context, beanInitializedDefinition, BeanInitializedEventListener.class, qualifier);
+          listener =
+              doCreateBean(
+                  context,
+                  beanInitializedDefinition,
+                  BeanInitializedEventListener.class,
+                  qualifier);
         }
+
+        beanInitializedListeners
+            .computeIfAbsent(null, aClass -> Lists.newArrayListWithCapacity(10))
+            .add(listener);
       }
     }
 

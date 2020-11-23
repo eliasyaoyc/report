@@ -18,22 +18,27 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.context.annotations;
+package xyz.vopen.framework.mixmicro.core.annotations;
 
+import java.lang.annotation.Annotation;
 import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import javax.inject.Scope;
+import java.lang.annotation.Target;
 
 /**
- * {@link Prototype}
+ * {@link DefaultScope} A meta annotation that can be applied to another annotation to specify a
+ * fallback scope of no scope is specified by the user for a bean.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/13
+ * @version ${project.version} - 2020/11/19
  */
-@Scope
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Prototype {
+@Target(ElementType.ANNOTATION_TYPE)
+public @interface DefaultScope {
 
+  /** @return The default scope to use. */
+  Class<? extends Annotation> value();
 }

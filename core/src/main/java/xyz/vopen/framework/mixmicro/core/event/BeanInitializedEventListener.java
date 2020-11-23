@@ -22,7 +22,7 @@ package xyz.vopen.framework.mixmicro.core.event;
 
 import java.util.EventListener;
 import javax.inject.Provider;
-import xyz.vopen.framework.mixmicro.core.context.annotations.Indexed;
+import xyz.vopen.framework.mixmicro.api.annotations.Indexed;
 
 /**
  * {@link BeanInitializedEventListener}

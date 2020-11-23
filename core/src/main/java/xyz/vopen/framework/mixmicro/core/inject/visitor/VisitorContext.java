@@ -26,6 +26,9 @@ package xyz.vopen.framework.mixmicro.core.inject.visitor;
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2020/11/19
  */
-public interface VisitorContext extends ClassWriterOutputVisitor{
-
+public interface VisitorContext extends ClassWriterOutputVisitor {
+  String MIXMICRO_BASE_OPTION_NAM = "mixmicro";
+  String MIXMICRO_PROCESSING_PROJECT_DIR = "mixmicro.processing.project.dir";
+  String MIXMICRO_PROCESSING_GROUP = "mixmicro.processing.group";
+  String MIXMICRO_PROCESSING_MODULE = "mixmicro.processing.module";
 }

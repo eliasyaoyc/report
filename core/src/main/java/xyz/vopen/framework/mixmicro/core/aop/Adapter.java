@@ -25,8 +25,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import javax.inject.Singleton;
-import xyz.vopen.framework.mixmicro.core.context.annotations.DefaultScope;
 
 /**
  * {@link Adapter}
@@ -37,7 +35,6 @@ import xyz.vopen.framework.mixmicro.core.context.annotations.DefaultScope;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.ANNOTATION_TYPE,ElementType.METHOD})
-@DefaultScope(Singleton.class)
 public @interface Adapter {
 
 }

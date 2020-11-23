@@ -21,7 +21,7 @@
 package xyz.vopen.framework.mixmicro.core.inject;
 
 import xyz.vopen.framework.mixmicro.core.annotation.AnnotationMetadataProvider;
-import xyz.vopen.framework.mixmicro.core.context.annotations.Primary;
+import xyz.vopen.framework.mixmicro.api.annotations.Primary;
 
 /**
  * {@link BeanType} A reference to a bean. Implemented by bother {@link BeanDefinitionReference} and

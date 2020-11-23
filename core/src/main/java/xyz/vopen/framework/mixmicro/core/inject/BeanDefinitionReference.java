@@ -24,8 +24,8 @@ import javax.inject.Singleton;
 import xyz.vopen.framework.mixmicro.core.annotation.AnnotationMetadata;
 import xyz.vopen.framework.mixmicro.core.annotation.AnnotationMetadataProvider;
 import xyz.vopen.framework.mixmicro.core.context.BeanContext;
-import xyz.vopen.framework.mixmicro.core.context.annotations.ConfigurationReader;
-import xyz.vopen.framework.mixmicro.core.context.annotations.DefaultScope;
+import xyz.vopen.framework.mixmicro.api.annotations.ConfigurationReader;
+import xyz.vopen.framework.mixmicro.api.annotations.DefaultScope;
 
 /**
  * {@link BeanDefinitionReference} provides a reference to a {@link BeanDefinition} thus allowing

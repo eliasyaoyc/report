@@ -18,27 +18,32 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.context.annotations;
+package xyz.vopen.framework.mixmicro.core.annotations;
 
-import java.lang.annotation.Annotation;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import jdk.jfr.Experimental;
 
 /**
- * {@link DefaultScope} A meta annotation that can be applied to another annotation to specify a
- * fallback scope of no scope is specified by the user for a bean.
+ * {@link Parallel}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/19
+ * @version ${project.version} - 2020/11/18
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.ANNOTATION_TYPE)
-public @interface DefaultScope {
+@Target({ElementType.METHOD, ElementType.TYPE, ElementType.ANNOTATION_TYPE})
+@Experimental
+public @interface Parallel {
 
-  /** @return The default scope to use. */
-  Class<? extends Annotation> value();
+  /**
+   * The default behaviour is to shutdown the context if an error occurs on initialization. Can be
+   * set false if shutdown is not required.
+   *
+   * @return Whether to shutdown the application if an error occurs.
+   */
+  boolean shutdownOnError() default true;
 }

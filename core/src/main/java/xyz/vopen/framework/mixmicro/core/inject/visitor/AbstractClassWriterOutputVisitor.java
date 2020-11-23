@@ -18,21 +18,14 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.context.annotations;
-
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import javax.inject.Qualifier;
+package xyz.vopen.framework.mixmicro.core.inject.visitor;
 
 /**
- * {@link Secondary} Counter part to {@link Primary} that allows reducing the priority of a given
- * bean for the purposes of dependency injection.
+ * {@link AbstractClassWriterOutputVisitor}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/13
+ * @version ${project.version} - 2020/11/23
  */
-@Qualifier
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Secondary {}
+public class AbstractClassWriterOutputVisitor implements ClassWriterOutputVisitor{
+
+}

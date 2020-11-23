@@ -18,14 +18,21 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.annotation;
+package xyz.vopen.framework.mixmicro.core.annotations;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import javax.inject.Qualifier;
 
 /**
- * {@link EmptyAnnotationMetadata}
+ * {@link Secondary} Counter part to {@link Primary} that allows reducing the priority of a given
+ * bean for the purposes of dependency injection.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/19
+ * @version ${project.version} - 2020/11/13
  */
-public class EmptyAnnotationMetadata implements AnnotationMetadata{
-
-}
+@Qualifier
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Secondary {}

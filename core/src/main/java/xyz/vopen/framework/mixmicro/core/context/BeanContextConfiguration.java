@@ -25,8 +25,8 @@ import java.util.Collections;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.inject.Singleton;
-import xyz.vopen.framework.mixmicro.core.context.annotations.ConfigurationProperties;
-import xyz.vopen.framework.mixmicro.core.context.annotations.ConfigurationReader;
+import xyz.vopen.framework.mixmicro.api.annotations.ConfigurationProperties;
+import xyz.vopen.framework.mixmicro.api.annotations.ConfigurationReader;
 
 /**
  * {@link BeanContextConfiguration} Configuration for the {@link BeanContext}.

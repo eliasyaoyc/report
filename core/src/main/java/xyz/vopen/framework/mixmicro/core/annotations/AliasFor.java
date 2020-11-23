@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package xyz.vopen.framework.mixmicro.core.context.annotations;
+package xyz.vopen.framework.mixmicro.core.annotations;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Documented;
