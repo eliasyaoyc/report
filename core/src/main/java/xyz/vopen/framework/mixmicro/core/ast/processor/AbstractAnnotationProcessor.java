@@ -18,14 +18,39 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.inject.visitor.graal;
+package xyz.vopen.framework.mixmicro.core.ast.processor;
 
-import xyz.vopen.framework.mixmicro.core.inject.visitor.TypeElementVisitor;
+import java.util.Set;
+import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.SourceVersion;
 
 /**
- * {@link GraalTypeElementVisitor} Generates the GraalVM reflect.json file at compilation time.
+ * {@link AbstractAnnotationProcessor} APT base implementation.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/19
+ * @version ${project.version} - 2020/11/24
  */
-public class GraalTypeElementVisitor implements TypeElementVisitor<Object, Object> {}
+public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
+
+  @Override
+  public SourceVersion getSupportedSourceVersion() {
+    SourceVersion sourceVersion = SourceVersion.latestSupported();
+    int ordinal = sourceVersion.ordinal();
+    if (ordinal < SourceVersion.RELEASE_8.ordinal()) {
+      return SourceVersion.RELEASE_8;
+    } else {
+      return sourceVersion;
+    }
+  }
+
+  @Override
+  public Set<String> getSupportedAnnotationTypes() {
+    return super.getSupportedAnnotationTypes();
+  }
+
+  @Override
+  public synchronized void init(ProcessingEnvironment processingEnv) {
+    super.init(processingEnv);
+  }
+}

@@ -18,17 +18,14 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.inject.visitor;
+package xyz.vopen.framework.mixmicro.core.ast.visitor;
 
 /**
- * {@link VisitorContext} Provides
+ * {@link ClassWriterOutputVisitor}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2020/11/19
  */
-public interface VisitorContext extends ClassWriterOutputVisitor {
-  String MIXMICRO_BASE_OPTION_NAM = "mixmicro";
-  String MIXMICRO_PROCESSING_PROJECT_DIR = "mixmicro.processing.project.dir";
-  String MIXMICRO_PROCESSING_GROUP = "mixmicro.processing.group";
-  String MIXMICRO_PROCESSING_MODULE = "mixmicro.processing.module";
+public interface ClassWriterOutputVisitor {
+
 }

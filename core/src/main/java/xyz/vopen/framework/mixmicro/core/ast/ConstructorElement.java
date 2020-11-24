@@ -18,16 +18,14 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.inject.ast;
-
-import xyz.vopen.framework.mixmicro.core.Named;
+package xyz.vopen.framework.mixmicro.core.ast;
 
 /**
- * {@link AnnotatedElement}
+ * {@link ConstructorElement}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2020/11/19
  */
-public interface AnnotatedElement extends Named {
+public interface ConstructorElement extends MethodElement{
 
 }
