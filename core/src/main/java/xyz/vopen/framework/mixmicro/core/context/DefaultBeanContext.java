@@ -18,24 +18,28 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.event;
+package xyz.vopen.framework.mixmicro.core.context;
 
-import java.util.EventListener;
+import java.util.Collection;
+import java.util.concurrent.Future;
+import javax.annotation.Nonnull;
+import xyz.vopen.framework.mixmicro.core.event.ApplicationEventListener;
 
 /**
- * {@link BeanCreatedEventListener}
+ * {@link DefaultBeanContext} The {@link BeanContext} default implementation.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/24
  */
-public interface BeanCreatedEventListener<T> extends EventListener {
+public class DefaultBeanContext implements BeanContext {
 
-  /**
-   * Fired when a bean is created and all {@link javax.annotation.PostConstruct} initialization
-   * hooks have been called.
-   *
-   * @param event The bean created event.
-   * @return The bean or a replacement of the same type.
-   */
-  T onCreated(BeanCreatedEvent<T> event);
+  @Override
+  public void publishEvent(@Nonnull Object event) {}
+
+  public @Nonnull Future<Void> publishEventAsync(@Nonnull Object event) {
+    return null;
+  }
+
+  private void notifyEventListeners(
+      @Nonnull Object event, Collection<ApplicationEventListener> eventListeners) {}
 }

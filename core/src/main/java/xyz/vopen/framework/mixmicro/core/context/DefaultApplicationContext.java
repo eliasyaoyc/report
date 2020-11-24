@@ -18,24 +18,14 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.event;
-
-import java.util.EventListener;
+package xyz.vopen.framework.mixmicro.core.context;
 
 /**
- * {@link BeanCreatedEventListener}
+ * {@link DefaultApplicationContext}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/24
  */
-public interface BeanCreatedEventListener<T> extends EventListener {
+public class DefaultApplicationContext implements ApplicationContext{
 
-  /**
-   * Fired when a bean is created and all {@link javax.annotation.PostConstruct} initialization
-   * hooks have been called.
-   *
-   * @param event The bean created event.
-   * @return The bean or a replacement of the same type.
-   */
-  T onCreated(BeanCreatedEvent<T> event);
 }

@@ -22,7 +22,6 @@ package xyz.vopen.framework.mixmicro.core.event;
 
 import java.util.EventListener;
 import javax.inject.Provider;
-import xyz.vopen.framework.mixmicro.api.annotations.Indexed;
 
 /**
  * {@link BeanInitializedEventListener}
@@ -40,7 +39,6 @@ import xyz.vopen.framework.mixmicro.api.annotations.Indexed;
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2020/11/14
  */
-@Indexed(BeanInitializedEventListener.class)
 public interface BeanInitializedEventListener<T> extends EventListener {
 
   /**

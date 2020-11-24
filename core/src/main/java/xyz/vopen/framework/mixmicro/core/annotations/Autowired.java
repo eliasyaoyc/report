@@ -18,24 +18,24 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.event;
+package xyz.vopen.framework.mixmicro.core.annotations;
 
-import java.util.EventListener;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * {@link BeanCreatedEventListener}
+ * {@link Autowired} Equivalent to the inject annotation.
  *
+ * @see javax.inject.Inject
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/24
  */
-public interface BeanCreatedEventListener<T> extends EventListener {
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.CONSTRUCTOR, ElementType.FIELD, ElementType.METHOD})
+public @interface Autowired {
 
-  /**
-   * Fired when a bean is created and all {@link javax.annotation.PostConstruct} initialization
-   * hooks have been called.
-   *
-   * @param event The bean created event.
-   * @return The bean or a replacement of the same type.
-   */
-  T onCreated(BeanCreatedEvent<T> event);
 }

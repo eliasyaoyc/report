@@ -16,12 +16,9 @@
 package xyz.vopen.framework.mixmicro.commons.utils;
 
 import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.NoSuchElementException;
-import javax.annotation.Nullable;
 
 /**
  * Utility methods for working with arrays.
@@ -105,31 +102,31 @@ public class ArrayUtils {
     return !isEmpty(array);
   }
 
-  /**
-   * Produce a string representation of the given array.
-   *
-   * @param array The array
-   * @return The string representation
-   */
-  public static String toString(@Nullable Object[] array) {
-    String delimiter = ",";
-    return toString(delimiter, array);
-  }
+//  /**
+//   * Produce a string representation of the given array.
+//   *
+//   * @param array The array
+//   * @return The string representation
+//   */
+//  public static String toString(@Nullable Object[] array) {
+//    String delimiter = ",";
+//    return toString(delimiter, array);
+//  }
 
-  /**
-   * Produce a string representation of the given array.
-   *
-   * @param delimiter The delimiter
-   * @param array     The array
-   * @return The string representation
-   */
-  public static String toString(String delimiter, @Nullable Object[] array) {
-    if (isEmpty(array)) {
-      return "";
-    }
-    List<Object> list = Arrays.asList(array);
-    return CollectionUtils.toString(delimiter, list);
-  }
+//  /**
+//   * Produce a string representation of the given array.
+//   *
+//   * @param delimiter The delimiter
+//   * @param array     The array
+//   * @return The string representation
+//   */
+//  public static String toString(String delimiter, @Nullable Object[] array) {
+//    if (isEmpty(array)) {
+//      return "";
+//    }
+//    List<Object> list = Arrays.asList(array);
+//    return CollectionUtils.toString(delimiter, list);
+//  }
 
   /**
    * Produce an iterator for the given array.

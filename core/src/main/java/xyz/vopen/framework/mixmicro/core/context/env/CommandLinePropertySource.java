@@ -20,50 +20,12 @@
  */
 package xyz.vopen.framework.mixmicro.core.context.env;
 
-import com.google.common.collect.Maps;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import xyz.vopen.framework.mixmicro.commons.cli.CommandLine;
-
 /**
- * {@link CommandLinePropertySource} Implementation {@link PropertySource} that parsed from the
- * command line.
+ * {@link CommandLinePropertySource}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/17
+ * @version ${project.version} - 2020/11/24
  */
-public class CommandLinePropertySource extends MapPropertySource {
+public class CommandLinePropertySource implements PropertySource {
 
-  /** The position of the loader. */
-  public static final int POSITION = SystemPropertiesPropertySource.POSITION + 100;
-
-  /** The name of the property source */
-  public static final String NAME = "cli";
-
-  /**
-   * Construct the {@link CommandLinePropertySource} form properties passed from command line.
-   *
-   * @param commandLine
-   */
-  public CommandLinePropertySource(CommandLine commandLine) {
-    super(NAME, resolveValues(commandLine));
-  }
-
-  @Override
-  public int getOrder() {
-    return POSITION;
-  }
-
-  private static Map<String, Object> resolveValues(CommandLine commandLine) {
-    if (commandLine == null) {
-      return Collections.emptyMap();
-    }
-    LinkedHashMap<String, Object> map = Maps.newLinkedHashMap(commandLine.getUndeclaredOptions());
-    for (Entry<Object, Object> entry : commandLine.getSystemProperties().entrySet()) {
-      map.put(entry.getKey().toString(), entry.getValue());
-    }
-    return map;
-  }
 }

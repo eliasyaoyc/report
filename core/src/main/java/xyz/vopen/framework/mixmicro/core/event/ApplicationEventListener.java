@@ -21,7 +21,6 @@
 package xyz.vopen.framework.mixmicro.core.event;
 
 import java.util.EventListener;
-import xyz.vopen.framework.mixmicro.api.annotations.Indexed;
 
 /**
  * {@link ApplicationEventListener} interface for receivers of application events.
@@ -29,7 +28,6 @@ import xyz.vopen.framework.mixmicro.api.annotations.Indexed;
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2020/11/14
  */
-@Indexed(ApplicationEventListener.class)
 public interface ApplicationEventListener<E> extends EventListener {
 
   /**

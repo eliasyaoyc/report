@@ -55,24 +55,9 @@ public final class Mixmicro {
 
   private static ApplicationContext applicationContext;
 
-  Mixmicro() {
-    applicationContext = new ApplicationContext();
-  }
+  Mixmicro() {}
 
   public static Mixmicro run() {
-    applicationContext.start();
     return new Mixmicro();
-  }
-
-  // =====================   Builder  =====================
-  public MixmicroBuilder builder() {
-    return new MixmicroBuilder();
-  }
-
-  public static class MixmicroBuilder {
-
-    public Mixmicro build() {
-      return new Mixmicro();
-    }
   }
 }

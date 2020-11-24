@@ -20,15 +20,12 @@
  */
 package xyz.vopen.framework.mixmicro.core.inject;
 
-import java.io.Serializable;
-import xyz.vopen.framework.mixmicro.core.Named;
-
 /**
  * {@link BeanIdentifier}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/24
  */
-public interface BeanIdentifier extends Named,CharSequence, Serializable {
+public interface BeanIdentifier {
 
 }

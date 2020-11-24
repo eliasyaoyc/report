@@ -18,24 +18,18 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.event;
-
-import java.util.EventListener;
+package xyz.vopen.framework.mixmicro.core.exceptions;
 
 /**
- * {@link BeanCreatedEventListener}
+ * {@link NoSuchMessageException} Thrown if an error occurs locating a message.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/16
  */
-public interface BeanCreatedEventListener<T> extends EventListener {
+public class NoSuchMessageException extends BeanContextException {
+  private static final long serialVersionUID = 6677987627768552925L;
 
-  /**
-   * Fired when a bean is created and all {@link javax.annotation.PostConstruct} initialization
-   * hooks have been called.
-   *
-   * @param event The bean created event.
-   * @return The bean or a replacement of the same type.
-   */
-  T onCreated(BeanCreatedEvent<T> event);
+  public NoSuchMessageException(String code) {
+    super("No message exists for the given code: " + code);
+  }
 }

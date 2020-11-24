@@ -18,24 +18,33 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.event;
-
-import java.util.EventListener;
+package xyz.vopen.framework.mixmicro.core.exceptions;
 
 /**
- * {@link BeanCreatedEventListener}
+ * {@link BeanCreationException} A base class for exceptions that occured during bean creation.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/16
  */
-public interface BeanCreatedEventListener<T> extends EventListener {
+public class BeanCreationException extends BeanContextException {
+  private static final long serialVersionUID = 2757897621399461136L;
 
-  /**
-   * Fired when a bean is created and all {@link javax.annotation.PostConstruct} initialization
-   * hooks have been called.
-   *
-   * @param event The bean created event.
-   * @return The bean or a replacement of the same type.
-   */
-  T onCreated(BeanCreatedEvent<T> event);
+  public BeanCreationException() {}
+
+  public BeanCreationException(String message) {
+    super(message);
+  }
+
+  public BeanCreationException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  public BeanCreationException(Throwable cause) {
+    super(cause);
+  }
+
+  public BeanCreationException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
+  }
 }
