@@ -39,7 +39,6 @@ import java.util.Queue;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import xyz.vopen.framework.mixmicro.commons.converter.ConversionService;
 
 /**
  * {@link CollectionUtils} Utility methods for working with {@link java.util.Collection} types.
@@ -224,45 +223,6 @@ public class CollectionUtils {
       return new HashSet<>(0);
     }
     return new HashSet<>(Arrays.asList(objects));
-  }
-
-  /**
-   * Produce a string representation of the given iterable.
-   *
-   * @param iterable The iterable
-   * @return The string representation
-   */
-  public static String toString(Iterable<?> iterable) {
-    return toString(",", iterable);
-  }
-
-  /**
-   * Produce a string representation of the given iterable.
-   *
-   * @param delimiter The delimiter
-   * @param iterable The iterable
-   * @return The string representation
-   */
-  public static String toString(String delimiter, Iterable<?> iterable) {
-    StringBuilder builder = new StringBuilder();
-    Iterator<?> i = iterable.iterator();
-    while (i.hasNext()) {
-      Object o = i.next();
-      if (o == null) {
-        continue;
-      } else {
-        if (CharSequence.class.isInstance(o)) {
-          builder.append(o.toString());
-        } else {
-          Optional<String> converted = ConversionService.SHARED.convert(o, String.class);
-          converted.ifPresent(builder::append);
-        }
-      }
-      if (i.hasNext()) {
-        builder.append(delimiter);
-      }
-    }
-    return builder.toString();
   }
 
   /**

@@ -18,23 +18,56 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.aop;
+package xyz.vopen.framework.mixmicro.core.annotations;
 
 import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.inject.Singleton;
 
 /**
- * {@link Adapter}
+ * {@link Factory}
  *
+ * <p>A factory is a {@link Singleton} that produces one or many other bean implementations.
+ *
+ * <p>Each produced bean is defined by method that is annotated with {@link Bean}
+ *
+ * <pre class="code">
+ * &#064;Factory
+ * public class MyFactory {
+ *
+ *     &#064;Bean
+ *     public MyBean myBean() {
+ *         // create the bean
+ *     }
+ * }</pre>
+ *
+ * <p>Methods defined within the body of the class that are annotated with {@link Bean} will be
+ * exposed as beans.
+ *
+ * <p>You can use a {@link javax.inject.Scope} annotation to control the scope the bean is exposed
+ * within. For example for a singleton instance you can annotation the method with {@link
+ * Singleton}.
+ *
+ * <p>Methods annotated with {@link Bean} can accept arguments and Micronaut will attempt to inject
+ * those arguments from existing beans or values. For example:
+ *
+ * <pre class="code">
+ * &#064;Factory
+ * public class MyFactory {
+ *
+ *     &#064;Bean
+ *     public MyBean myBean(&#064;Value("foo.bar") String myValue) {
+ *         // create the bean
+ *     }
+ * }</pre>
+ *
+ * @see Bean
+ * @see Configuration
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/19
+ * @version ${project.version} - 2020/11/14
  */
-@Documented
+@Singleton
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.ANNOTATION_TYPE,ElementType.METHOD})
-public @interface Adapter {
-
-}
+@Documented
+public @interface Factory {}

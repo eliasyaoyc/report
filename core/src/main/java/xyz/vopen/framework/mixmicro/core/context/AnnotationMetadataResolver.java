@@ -22,7 +22,7 @@ package xyz.vopen.framework.mixmicro.core.context;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import xyz.vopen.framework.mixmicro.core.annotation.AnnotationMetadata;
+import xyz.vopen.framework.mixmicro.core.inject.AnnotationMetadata;
 
 /**
  * {@link AnnotationMetadataResolver} for types capable of resolving {@link AnnotationMetadata}.
@@ -41,7 +41,8 @@ public interface AnnotationMetadataResolver {
    * @param type The type.
    * @return The {@link AnnotationMetadata}.
    */
-  default @Nonnull AnnotationMetadata resolveMetadata(@Nullable Class<?> type) {
+  default @Nonnull
+  AnnotationMetadata resolveMetadata(@Nullable Class<?> type) {
     return AnnotationMetadata.EMPTY_METADATA;
   }
 

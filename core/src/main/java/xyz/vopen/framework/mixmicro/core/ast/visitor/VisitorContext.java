@@ -18,34 +18,17 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.event;
-
-import java.util.EventListener;
-import xyz.vopen.framework.mixmicro.api.annotations.Indexed;
+package xyz.vopen.framework.mixmicro.core.ast.visitor;
 
 /**
- * {@link ApplicationEventListener} interface for receivers of application events.
+ * {@link VisitorContext} Provides
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/19
  */
-@Indexed(ApplicationEventListener.class)
-public interface ApplicationEventListener<E> extends EventListener {
-
-  /**
-   * Handle an application event.
-   *
-   * @param event the event to respond tp.
-   */
-  void onApplicationEvent(E event);
-
-  /**
-   * Whether the given event is supported.
-   *
-   * @param event The event.
-   * @return True if it is.
-   */
-  default boolean supports(E event) {
-    return true;
-  }
+public interface VisitorContext extends ClassWriterOutputVisitor {
+  String MIXMICRO_BASE_OPTION_NAM = "mixmicro";
+  String MIXMICRO_PROCESSING_PROJECT_DIR = "mixmicro.processing.project.dir";
+  String MIXMICRO_PROCESSING_GROUP = "mixmicro.processing.group";
+  String MIXMICRO_PROCESSING_MODULE = "mixmicro.processing.module";
 }

@@ -18,34 +18,45 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.event;
+package xyz.vopen.framework.mixmicro.core.annotations;
 
-import java.util.EventListener;
-import xyz.vopen.framework.mixmicro.api.annotations.Indexed;
+import java.lang.annotation.Annotation;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
- * {@link ApplicationEventListener} interface for receivers of application events.
+ * {@link Replaces} Allows a bean to specify that it replaces another bean. Note that the bean to be
+ * replaced cannot be an {@link Underlay} bean.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2020/11/14
  */
-@Indexed(ApplicationEventListener.class)
-public interface ApplicationEventListener<E> extends EventListener {
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Replaces {
+  /** @return The bean type that this bean replaces */
+  @AliasFor(member = "bean")
+  Class value() default void.class;
+
+  /** @return The bean type that this bean replaces */
+  @AliasFor(member = "value")
+  Class bean() default void.class;
+
+  /** @return The declaring bean type */
+  Class factory() default void.class;
 
   /**
-   * Handle an application event.
+   * The name of the qualifiers of the bean that should be replaced.
    *
-   * @param event the event to respond tp.
+   * @return The qualifier
    */
-  void onApplicationEvent(E event);
+  Class<? extends Annotation>[] qualifier() default {};
 
   /**
-   * Whether the given event is supported.
+   * The name of the qualifiers of the bean that should be replaced.
    *
-   * @param event The event.
-   * @return True if it is.
+   * @return The qualifier
    */
-  default boolean supports(E event) {
-    return true;
-  }
+  String named() default "";
 }

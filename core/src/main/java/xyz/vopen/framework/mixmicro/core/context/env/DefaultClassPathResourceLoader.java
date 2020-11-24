@@ -57,4 +57,9 @@ public class DefaultClassPathResourceLoader implements ClassPathResourceLoader {
     }
     return path;
   }
+
+  @Override
+  public ClassLoader getClassLoader() {
+    return null;
+  }
 }

@@ -18,34 +18,39 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.event;
+package xyz.vopen.framework.mixmicro.core.annotations;
 
-import java.util.EventListener;
-import xyz.vopen.framework.mixmicro.api.annotations.Indexed;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * {@link ApplicationEventListener} interface for receivers of application events.
+ * {@link ConfigurationReader} A meta configuration for use with other annotations to indicates that
+ * the annotation reads configuration.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/17
  */
-@Indexed(ApplicationEventListener.class)
-public interface ApplicationEventListener<E> extends EventListener {
-
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.ANNOTATION_TYPE)
+public @interface ConfigurationReader {
   /**
-   * Handle an application event.
+   * The prefix to use when resolving properties. The prefix should be defined in kebab case.
+   * Example: my-app.foo.
    *
-   * @param event the event to respond tp.
+   * @return The configuration entry to read
    */
-  void onApplicationEvent(E event);
+  String value() default "";
 
-  /**
-   * Whether the given event is supported.
-   *
-   * @param event The event.
-   * @return True if it is.
-   */
-  default boolean supports(E event) {
-    return true;
-  }
+  /** @return The prefix to use */
+  String prefix() default "";
+
+  /** @return The names of the properties to include */
+  String[] includes() default {};
+
+  /** @return The names of the properties to exclude */
+  String[] excludes() default {};
 }

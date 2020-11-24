@@ -18,34 +18,20 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.event;
+package xyz.vopen.framework.mixmicro.core.annotations;
 
-import java.util.EventListener;
-import xyz.vopen.framework.mixmicro.api.annotations.Indexed;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
- * {@link ApplicationEventListener} interface for receivers of application events.
+ * {@link Underlay} scope represents a bean that cannot be overridden or replaced because it is
+ * critical to the functioning of the system.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2020/11/14
  */
-@Indexed(ApplicationEventListener.class)
-public interface ApplicationEventListener<E> extends EventListener {
-
-  /**
-   * Handle an application event.
-   *
-   * @param event the event to respond tp.
-   */
-  void onApplicationEvent(E event);
-
-  /**
-   * Whether the given event is supported.
-   *
-   * @param event The event.
-   * @return True if it is.
-   */
-  default boolean supports(E event) {
-    return true;
-  }
-}
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Bean
+public @interface Underlay {}

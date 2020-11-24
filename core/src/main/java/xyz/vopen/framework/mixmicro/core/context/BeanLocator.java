@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import xyz.vopen.framework.mixmicro.commons.reflect.InstantiationUtils;
-import xyz.vopen.framework.mixmicro.core.context.annotations.Bean;
+import xyz.vopen.framework.mixmicro.core.annotations.Bean;
 import xyz.vopen.framework.mixmicro.core.context.exceptions.NoSuchBeanException;
 import xyz.vopen.framework.mixmicro.core.context.exceptions.NoUniqueBeanException;
 import xyz.vopen.framework.mixmicro.core.inject.BeanDefinition;

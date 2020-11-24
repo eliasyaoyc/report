@@ -11,10 +11,6 @@
   <modules>
     <module>commons</module>
     <module>core</module>
-    <module>istio</module>
-    <module>mthread</module>
-    <module>scheduler</module>
-    <module>spring</module>
     <module>web</module>
   </modules>
 

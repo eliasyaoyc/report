@@ -18,34 +18,22 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.core.event;
+package xyz.vopen.framework.mixmicro.core.ast.processor;
 
-import java.util.EventListener;
-import xyz.vopen.framework.mixmicro.api.annotations.Indexed;
+import java.util.Set;
+import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.TypeElement;
 
 /**
- * {@link ApplicationEventListener} interface for receivers of application events.
+ * {@link TypeElementProcessor}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
- * @version ${project.version} - 2020/11/14
+ * @version ${project.version} - 2020/11/24
  */
-@Indexed(ApplicationEventListener.class)
-public interface ApplicationEventListener<E> extends EventListener {
+public class TypeElementProcessor extends AbstractAnnotationProcessor{
 
-  /**
-   * Handle an application event.
-   *
-   * @param event the event to respond tp.
-   */
-  void onApplicationEvent(E event);
-
-  /**
-   * Whether the given event is supported.
-   *
-   * @param event The event.
-   * @return True if it is.
-   */
-  default boolean supports(E event) {
-    return true;
+  @Override
+  public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+    return false;
   }
 }
