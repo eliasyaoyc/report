@@ -18,7 +18,7 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.commons.utils;
+package xyz.vopen.framework.mixmicro.commons.kits;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -41,12 +41,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * {@link CollectionUtils} Utility methods for working with {@link java.util.Collection} types.
+ * {@link CollectionKit} Utility methods for working with {@link java.util.Collection} types.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2020/11/17
  */
-public class CollectionUtils {
+public class CollectionKit {
   /**
    * Is the given type an iterable or map type.
    *

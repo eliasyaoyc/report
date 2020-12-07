@@ -18,7 +18,7 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package xyz.vopen.framework.mixmicro.commons.utils;
+package xyz.vopen.framework.mixmicro.commons.kits;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,12 +31,12 @@ import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 
 /**
- * {@link StringUtils} Utility methods for strings.
+ * {@link StringKit} Utility methods for strings.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2020/11/17
  */
-public class StringUtils {
+public class StringKit {
   /** Constant for the value true. */
   public static final String TRUE = "true";
   /** Constant for the value false. */
@@ -294,7 +294,7 @@ public class StringUtils {
   public static String trimToNull(@Nullable String string) {
     return Optional.ofNullable(string)
         .map(String::trim)
-        .filter(StringUtils::isNotEmpty)
+        .filter(StringKit::isNotEmpty)
         .orElse(null);
   }
 

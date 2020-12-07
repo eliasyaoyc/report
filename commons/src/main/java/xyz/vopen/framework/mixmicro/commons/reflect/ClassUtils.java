@@ -44,9 +44,9 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.NOPLogger;
-import xyz.vopen.framework.mixmicro.commons.utils.ArrayUtils;
-import xyz.vopen.framework.mixmicro.commons.utils.CollectionUtils;
-import xyz.vopen.framework.mixmicro.commons.utils.StringUtils;
+import xyz.vopen.framework.mixmicro.commons.kits.ArrayKit;
+import xyz.vopen.framework.mixmicro.commons.kits.CollectionKit;
+import xyz.vopen.framework.mixmicro.commons.kits.StringKit;
 
 /**
  * {@link ClassUtils} Utility methods for loading classes.
@@ -64,7 +64,7 @@ public class ClassUtils {
       "micronaut.classloader.logging";
 
   public static final int EMPTY_OBJECT_ARRAY_HASH_CODE =
-      Arrays.hashCode(ArrayUtils.EMPTY_OBJECT_ARRAY);
+      Arrays.hashCode(ArrayKit.EMPTY_OBJECT_ARRAY);
   public static final Map<String, Class> COMMON_CLASS_MAP = new HashMap<>(34);
   public static final Map<String, Class> BASIC_TYPE_MAP = new HashMap<>(18);
 
@@ -83,7 +83,7 @@ public class ClassUtils {
 
   @SuppressWarnings("unchecked")
   private static final Map<String, Class> PRIMITIVE_TYPE_MAP =
-      CollectionUtils.mapOf(
+      CollectionKit.mapOf(
           "int", Integer.TYPE,
           "boolean", Boolean.TYPE,
           "long", Long.TYPE,
@@ -96,7 +96,7 @@ public class ClassUtils {
 
   @SuppressWarnings("unchecked")
   private static final Map<String, Class> PRIMITIVE_ARRAY_MAP =
-      CollectionUtils.mapOf(
+      CollectionKit.mapOf(
           "int", int[].class,
           "boolean", boolean[].class,
           "long", long[].class,
@@ -255,7 +255,7 @@ public class ClassUtils {
    * @return True if is a Java basic type
    */
   public static boolean isJavaBasicType(@Nullable String name) {
-    if (StringUtils.isEmpty(name)) {
+    if (StringKit.isEmpty(name)) {
       return false;
     }
     return isJavaLangType(name) || BASIC_TYPE_MAP.containsKey(name);

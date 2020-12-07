@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package xyz.vopen.framework.mixmicro.commons.utils;
+package xyz.vopen.framework.mixmicro.commons.kits;
 
 import java.lang.reflect.Array;
 import java.util.Collections;
@@ -23,7 +23,7 @@ import java.util.NoSuchElementException;
 /**
  * Utility methods for working with arrays.
  */
-public class ArrayUtils {
+public class ArrayKit {
 
   /**
    * An empty object array.

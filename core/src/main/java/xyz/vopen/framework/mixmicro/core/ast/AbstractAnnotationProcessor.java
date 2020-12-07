@@ -32,7 +32,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic.Kind;
-import xyz.vopen.framework.mixmicro.commons.utils.CollectionUtils;
+import xyz.vopen.framework.mixmicro.commons.kits.CollectionKit;
 
 /**
  * {@link AbstractAnnotationProcessor}
@@ -51,7 +51,7 @@ abstract class AbstractAnnotationProcessor extends AbstractProcessor {
 
   @Override
   public Set<String> getSupportedAnnotationTypes() {
-    Set<String> types = CollectionUtils.setOf(JAVAX_INJECT_ANNOTATIONS, MIXMICRO_ANNOTATIONS);
+    Set<String> types = CollectionKit.setOf(JAVAX_INJECT_ANNOTATIONS, MIXMICRO_ANNOTATIONS);
     return types;
   }
 
