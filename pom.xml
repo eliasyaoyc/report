@@ -4,17 +4,20 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>xyz.vopen.framework</groupId>
-  <artifactId>mixmicro</artifactId>
+  <groupId>yyc.open.framework</groupId>
+  <artifactId>mixmicro-components</artifactId>
   <packaging>pom</packaging>
   <version>${revision}</version>
+
   <modules>
-    <module>commons</module>
-    <module>core</module>
-    <module>web</module>
+    <module>docs</module>
+    <module>starters</module>
+    <module>kits</module>
+    <module>enhance</module>
+    <module>tests</module>
   </modules>
 
-  <name>Mixmicro</name>
+  <name>Mixmicro Components</name>
 
   <properties>
     <revision>1.0.0-SNAPSHOT</revision>
@@ -71,16 +74,6 @@
       </dependency>
 
       <!-- Core Dependency  -->
-      <dependency>
-        <groupId>xyz.vopen.framework</groupId>
-        <artifactId>mixmicro-commons</artifactId>
-        <version>${revision}</version>
-      </dependency>
-      <dependency>
-        <groupId>xyz.vopen.framework</groupId>
-        <artifactId>mixmicro-core</artifactId>
-        <version>${revision}</version>
-      </dependency>
 
       <dependency>
         <groupId>com.google.guava</groupId>
@@ -319,6 +312,7 @@
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-core</artifactId>
     </dependency>
+
     <!-- 'javax.annotation' classes like '@Nullable' -->
     <dependency>
       <groupId>com.google.code.findbugs</groupId>
