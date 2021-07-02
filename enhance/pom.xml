@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>mixmicro-components</artifactId>
+        <artifactId>microants-components</artifactId>
         <groupId>yyc.open.framework</groupId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
 
-    <artifactId>mixmicro-components-enhance</artifactId>
-    <name>Mixmicro Components Enhance</name>
+    <artifactId>microants-components-enhance</artifactId>
+    <name>Microants Components Enhance</name>
 
 </project>

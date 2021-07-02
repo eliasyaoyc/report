@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>yyc.open.framework</groupId>
-  <artifactId>mixmicro-components</artifactId>
+  <artifactId>microants-components</artifactId>
   <packaging>pom</packaging>
   <version>${revision}</version>
 
@@ -14,10 +14,9 @@
     <module>starters</module>
     <module>kits</module>
     <module>enhance</module>
-    <module>tests</module>
   </modules>
 
-  <name>Mixmicro Components</name>
+  <name>Microants Components</name>
 
   <properties>
     <revision>1.0.0-SNAPSHOT</revision>
@@ -74,6 +73,29 @@
       </dependency>
 
       <!-- Core Dependency  -->
+      <dependency>
+        <groupId>yyc.open.framework</groupId>
+        <artifactId>microants-components-kits</artifactId>
+        <version>${revision}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>yyc.open.framework</groupId>
+        <artifactId>microants-components-enhance</artifactId>
+        <version>${revision}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>yyc.open.framework</groupId>
+        <artifactId>microants-components-starters</artifactId>
+        <version>${revision}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>yyc.open.framework</groupId>
+        <artifactId>microants-components-tests</artifactId>
+        <version>${revision}</version>
+      </dependency>
 
       <dependency>
         <groupId>com.google.guava</groupId>
