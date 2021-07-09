@@ -3,19 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>microants-components-kits</artifactId>
+        <artifactId>microants-components-starters</artifactId>
         <groupId>yyc.open.framework</groupId>
         <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>microants-components-excel-kit</artifactId>
-    <name>Microants Components Excel Kit</name>
+    <artifactId>microants-components-security-starter</artifactId>
+    <name>Microants Components Security Starter</name>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.monitorjbl</groupId>
-            <artifactId>xlsx-streamer</artifactId>
-        </dependency>
-    </dependencies>
 </project>

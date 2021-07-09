@@ -3,19 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>microants-components</artifactId>
+        <artifactId>microants-components-starters</artifactId>
         <groupId>yyc.open.framework</groupId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <packaging>pom</packaging>
-    <modules>
-        <module>circuitbreaker-starter</module>
-        <module>elasticsearch-orm-starter</module>
-        <module>security-starter</module>
-    </modules>
 
-    <artifactId>microants-components-starters</artifactId>
-    <name>Microants Components Starters</name>
+    <artifactId>microants-components-circuitbreaker-starter</artifactId>
+    <name>Microants Components CircuitBreaker Starter</name>
+
 </project>

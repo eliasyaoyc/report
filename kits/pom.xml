@@ -15,13 +15,13 @@
     <name>Microants Components Kits</name>
 
     <modules>
-        <module>excel-kit</module>
+        <module>compress-kit</module>
+        <module>file-kit</module>
     </modules>
 
     <properties>
         <xlsx.streamer.version>2.1.0</xlsx.streamer.version>
     </properties>
-
 
     <dependencyManagement>
         <dependencies>

@@ -10,6 +10,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
+
+    <properties>
+        <disruptor.version>3.4.2</disruptor.version>
+        <transmittable.thread.local.version>2.12.1</transmittable.thread.local.version>
+    </properties>
+
     <modules>
         <module>concurrent-enhance</module>
     </modules>
@@ -17,4 +23,20 @@
     <artifactId>microants-components-enhance</artifactId>
     <name>Microants Components Enhance</name>
 
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.lmax</groupId>
+                <artifactId>disruptor</artifactId>
+                <version>${disruptor.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>transmittable-thread-local</artifactId>
+                <version>${transmittable.thread.local.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
