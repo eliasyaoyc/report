@@ -17,6 +17,7 @@
     <modules>
         <module>compress-kit</module>
         <module>file-kit</module>
+        <module>http-kit</module>
     </modules>
 
     <properties>
