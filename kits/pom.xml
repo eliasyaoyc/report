@@ -18,6 +18,7 @@
         <module>compress-kit</module>
         <module>file-kit</module>
         <module>http-kit</module>
+        <module>reflect-kit</module>
     </modules>
 
     <properties>

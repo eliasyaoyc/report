@@ -6,17 +6,17 @@
         <artifactId>microants-components-enhance</artifactId>
         <groupId>yyc.open.framework</groupId>
         <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>microants-components-concurrent-enhance</artifactId>
-    <name>Microants Components Concurrent Enhance</name>
-
+    <artifactId>microants-components-collections-enhance</artifactId>
+    <name>Microants Components Collections Enhance</name>
 
     <dependencies>
         <dependency>
-            <groupId>yyc.open.framework</groupId>
-            <artifactId>microants-components-collections-enhance</artifactId>
+            <groupId>com.lmax</groupId>
+            <artifactId>disruptor</artifactId>
         </dependency>
     </dependencies>
 </project>

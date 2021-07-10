@@ -18,6 +18,7 @@
 
     <modules>
         <module>concurrent-enhance</module>
+        <module>collections-enhance</module>
     </modules>
 
     <artifactId>microants-components-enhance</artifactId>
@@ -36,6 +37,11 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>transmittable-thread-local</artifactId>
                 <version>${transmittable.thread.local.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>yyc.open.framework</groupId>
+                <artifactId>microants-components-collections-enhance</artifactId>
+                <version>${revision}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
