@@ -29,12 +29,6 @@ public class ResizeableBlockingQueue<E> extends SizeBlockingQueue<E> {
 
     /**
      * Resize the limit for the queue, returning the new size limit.
-     *
-     * @param optimalCapacity
-     * @param adjustmentAmount
-     * @param minCapacity
-     * @param maxCapacity
-     * @return
      */
     public synchronized int adjustCapacity(int optimalCapacity, int adjustmentAmount, int minCapacity, int maxCapacity) {
         assert adjustmentAmount > 0 : "adjustment amount should be a positive value";
@@ -42,6 +36,21 @@ public class ResizeableBlockingQueue<E> extends SizeBlockingQueue<E> {
         assert minCapacity >= 0 : "cannot have min capacity smaller than 0";
         assert maxCapacity >= minCapacity : "cannot have max capacity smaller than min capacity";
 
-        return this.capacity;
+        if (optimalCapacity == capacity) {
+            return this.capacity;
+        }
+
+        if (optimalCapacity > capacity + adjustmentAmount) {
+            // adjust up
+            final int newCapacity = Math.min(maxCapacity, capacity + adjustmentAmount);
+            this.capacity = newCapacity;
+            return newCapacity;
+        } else if (optimalCapacity < capacity - adjustmentAmount) {
+            final int newCapacity = Math.max(minCapacity, capacity - adjustmentAmount);
+            this.capacity = newCapacity;
+            return newCapacity;
+        } else {
+            return this.capacity;
+        }
     }
 }

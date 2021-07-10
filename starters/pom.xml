@@ -13,6 +13,7 @@
 
     <properties>
         <circuitbreaker.version>1.5.0</circuitbreaker.version>
+        <sentinel.version>1.8.2</sentinel.version>
     </properties>
 
     <modules>
@@ -41,6 +42,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.alibaba.csp</groupId>
+                <artifactId>sentinel-core</artifactId>
+                <version>1.8.2</version>
+            </dependency>
             <dependency>
                 <groupId>io.github.resilience4j</groupId>
                 <artifactId>resilience4j-circuitbreaker</artifactId>

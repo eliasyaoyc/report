@@ -26,5 +26,9 @@
             <groupId>yyc.open.framework</groupId>
             <artifactId>microants-components-reflect-kit</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba.csp</groupId>
+            <artifactId>sentinel-core</artifactId>
+        </dependency>
     </dependencies>
 </project>
