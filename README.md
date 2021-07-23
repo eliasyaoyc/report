@@ -17,3 +17,17 @@ Second: build
 mvn clean install
 ```
 if you want to build with regular `mvn` command, you will need Maven v3.5.0 or above.
+
+## Documents
+### 🧲 Enhance Package
+* [Collections Enhance](./enhance/collections-enhance/README.md)
+### 🚁 Kits Package
+
+### ✈️ Starter Package
+* [Elasticsearch ORM Starter](./starters/elasticsearch-orm-starter/README.md)
+* [CircuitBreaker Starter](./starters/circuitbreaker-starter/README.md)
+
+### 🏎 Other Package
+* [Injector Docs](./injector/README.md)
+
+![magic!](http://www.reactiongifs.com/r/mgc.gif)
