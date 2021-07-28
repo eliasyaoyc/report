@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+   yyc.open.framework.microants.components.starter.file.autoconfigure.MicroantsFileAutoConfiguration
