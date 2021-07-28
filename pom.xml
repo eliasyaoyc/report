@@ -73,6 +73,7 @@
             </dependency>
 
             <!-- Core Dependency  -->
+            <!--     Enhances       -->
             <dependency>
                 <groupId>yyc.open.framework</groupId>
                 <artifactId>microants-components-kits</artifactId>
@@ -85,6 +86,7 @@
                 <version>${revision}</version>
             </dependency>
 
+            <!--     Kits       -->
             <dependency>
                 <groupId>yyc.open.framework</groupId>
                 <artifactId>microants-components-kits</artifactId>
@@ -99,21 +101,22 @@
 
             <dependency>
                 <groupId>yyc.open.framework</groupId>
-                <artifactId>microants-components-file-kit</artifactId>
+                <artifactId>microants-components-http-kit</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>yyc.open.framework</groupId>
+                <artifactId>microants-components-report-kit</artifactId>
                 <version>${revision}</version>
             </dependency>
 
+            <!--     Starters       -->
             <dependency>
                 <groupId>yyc.open.framework</groupId>
                 <artifactId>microants-components-starters</artifactId>
                 <version>${revision}</version>
             </dependency>
 
-            <dependency>
-                <groupId>yyc.open.framework</groupId>
-                <artifactId>microants-components-tests</artifactId>
-                <version>${revision}</version>
-            </dependency>
 
             <dependency>
                 <groupId>com.google.guava</groupId>

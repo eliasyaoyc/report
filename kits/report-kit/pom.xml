@@ -18,5 +18,10 @@
             <groupId>com.monitorjbl</groupId>
             <artifactId>xlsx-streamer</artifactId>
         </dependency>
+        <dependency>
+            <groupId>yyc.open.framework</groupId>
+            <artifactId>microants-components-http-kit</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

@@ -1,6 +1,6 @@
 package yyc.open.framework.microants.components.kit.report.handler;
 
-import yyc.open.framework.microants.components.kit.report.event.Event;
+import yyc.open.framework.microants.components.kit.report.event.ReportEvent;
 
 /**
  * {@link ExcelHandler}
@@ -10,7 +10,7 @@ import yyc.open.framework.microants.components.kit.report.event.Event;
  */
 public class ExcelHandler implements Handler {
     @Override
-    public void onHandle(Event event) {
+    public void onHandle(ReportEvent event) {
 
     }
 }

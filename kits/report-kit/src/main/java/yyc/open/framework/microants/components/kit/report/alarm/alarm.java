@@ -1,17 +1,13 @@
-package yyc.open.framework.microants.components.kit.report.handler;
+package yyc.open.framework.microants.components.kit.report.alarm;
 
 import yyc.open.framework.microants.components.kit.report.event.ReportEvent;
 
 /**
- * {@link Handler}
+ * {@link alarm}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2021/7/28
  */
-public interface Handler {
-    void onHandle(ReportEvent event);
-
-    default void onCompletion() {
-
-    }
+public interface alarm {
+    void onAlarm(ReportEvent event);
 }
