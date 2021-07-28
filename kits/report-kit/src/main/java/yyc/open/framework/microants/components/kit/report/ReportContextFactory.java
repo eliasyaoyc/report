@@ -14,7 +14,11 @@ public class ReportContextFactory {
     }
 
     public ReportContext getContext() {
-        return (ReportContext) context.get();
+        return context.get();
+    }
+
+    public void close() {
+        this.context.remove();
     }
 
     enum ReportContextFactoryEnum {

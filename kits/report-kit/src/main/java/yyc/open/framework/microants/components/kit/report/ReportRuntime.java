@@ -2,27 +2,29 @@ package yyc.open.framework.microants.components.kit.report;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import lombok.Getter;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import yyc.open.framework.microants.components.kit.report.exceptions.ReportException;
+import yyc.open.framework.microants.components.kit.report.listener.ReportStatusListener;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static sun.tools.jconsole.Messages.WINDOWS;
-
 /**
- * {@link ReportRuntime}
+ * {@link ReportRuntime} The report generation runtime that providers phantomjs running and
+ * record report status in generating.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2021/7/28
  */
-public class ReportRuntime implements AutoCloseable{
+public class ReportRuntime implements AutoCloseable {
     private static final Logger logger = LoggerFactory.getLogger(ReportRuntime.class);
 
     private String GLOBAL_JSON_PATH = "server.json";
@@ -33,11 +35,11 @@ public class ReportRuntime implements AutoCloseable{
         this.running = new AtomicBoolean(false);
     }
 
-
+    @Getter
     enum Platforms {
-        WINDOWS("Windows", ""),
-        MACOS("Mac OS X", ""),
-        UNIX("Unix", "");
+        WINDOWS("Windows", "phantomjs-windows.exe"),
+        MACOS("Mac OS X", "phantomjs-macosx"),
+        UNIX("Unix", "phantomjs-linux");
 
         String name;
         String path;
@@ -59,23 +61,7 @@ public class ReportRuntime implements AutoCloseable{
                     return pf;
                 }
             }
-            throw new IllegalArgumentException("");
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getPath() {
-            return path;
-        }
-
-        public void setPath(String path) {
-            this.path = path;
+            throw new IllegalArgumentException("[Report Runtime] input parameter is not support.");
         }
     }
 
@@ -112,6 +98,7 @@ public class ReportRuntime implements AutoCloseable{
                 .append(globalConfig.getEChartJsPath())
                 .append(" -s -p ")
                 .append(globalConfig.getPort()).toString();
+
         try {
             Runtime.getRuntime().exec(command);
         } catch (IOException e) {
@@ -120,13 +107,22 @@ public class ReportRuntime implements AutoCloseable{
 
         ReportContextFactory.ReportContextFactoryEnum.INSTANCE
                 .getReportContextFactory()
-                .setContext(constructContext());
+                .setContext(this.constructContext());
 
         this.running.compareAndSet(false, true);
     }
 
+    /**
+     * Construct a context that supports the report generation status report functional.
+     *
+     * @return
+     */
     private ReportContext constructContext() {
-        return new ReportContext();
+        return ReportContext.builder()
+                .globalConfig(this.globalConfig)
+                .reportStatus(new ReportContext.ReportStatus())
+                .listeners(Arrays.asList(new ReportStatusListener()))
+                .build();
     }
 
     /**
@@ -142,13 +138,30 @@ public class ReportRuntime implements AutoCloseable{
      * Stop the phantomjs plugin.
      */
     public void close() {
+        if (!this.running.get()) {
+            return;
+        }
+
         HashMap<String, Object> pa = new HashMap<>();
         pa.put("exit", "true");
+        // TODO  Use it temporarily, then replace it with http kit.
 //        phantomJS("http://localhost:" + PORT , pa);
+
+        ReportContextFactory.ReportContextFactoryEnum.INSTANCE
+                .getReportContextFactory()
+                .close();
+
+        this.running.compareAndSet(true, false);
     }
 
+    /**
+     * Returns the resource path.
+     *
+     * @param path
+     * @return
+     */
     private static String getResourcePath(String path) {
         path = ReportRuntime.class.getClassLoader().getResource(path).getPath();
-        return System.getProperty("os.name").contains(WINDOWS) ? path.substring(1) : path;
+        return System.getProperty("os.name").contains(Platforms.WINDOWS.getName()) ? path.substring(1) : path;
     }
 }
