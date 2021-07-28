@@ -20,7 +20,7 @@
         <module>circuitbreaker-starter</module>
         <module>elasticsearch-orm-starter</module>
         <module>security-starter</module>
-        <module>file-starter</module>
+        <module>report-starter</module>
     </modules>
 
     <artifactId>microants-components-starters</artifactId>

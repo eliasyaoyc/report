@@ -16,7 +16,7 @@
 
     <modules>
         <module>compress-kit</module>
-        <module>file-kit</module>
+        <module>report-kit</module>
         <module>http-kit</module>
         <module>reflect-kit</module>
     </modules>
