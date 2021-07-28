@@ -1,0 +1,14 @@
+{
+  "port": 6666,
+  "watermark": false,
+  "horizontal": false,
+  "parallel": false,
+  "chart": true,
+  "execPath": "exec/",
+  "eChartJsPath": "js/echarts-util.js",
+  "alarm": {
+    "enabled": false,
+    "type": "e-wechat",
+    "address": ""
+  }
+}

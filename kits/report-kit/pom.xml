@@ -21,7 +21,6 @@
         <dependency>
             <groupId>yyc.open.framework</groupId>
             <artifactId>microants-components-http-kit</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

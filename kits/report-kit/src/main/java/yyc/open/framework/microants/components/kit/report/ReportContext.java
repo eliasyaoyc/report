@@ -1,5 +1,7 @@
 package yyc.open.framework.microants.components.kit.report;
 
+import yyc.open.framework.microants.components.kit.report.ReportConfig.*;
+
 /**
  * {@link ReportContext}
  *
@@ -7,4 +9,11 @@ package yyc.open.framework.microants.components.kit.report;
  * @version ${project.version} - 2021/7/28
  */
 public class ReportContext {
+    private GlobalConfig globalConfig;
+    private ReportStatus reportStatus;
+
+
+    static class ReportStatus {
+
+    }
 }

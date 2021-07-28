@@ -11,7 +11,12 @@ import java.util.stream.Collectors;
  * @version ${project.version} - 2021/7/28
  */
 public class ReportBuilder<T> {
+    private List<ReportConfig> configs;
     private ReportConfig reportConfig;
+
+    private ReportBuilder() {
+        reportConfig = new ReportConfig();
+    }
 
     public static ReportBuilder builder() {
         return new ReportBuilder();
@@ -42,12 +47,19 @@ public class ReportBuilder<T> {
         return this;
     }
 
-    public ReportBuilder data(T data){
+    public ReportBuilder data(T data) {
         this.reportConfig.setData(data);
         return this;
     }
 
-    public static void generate() {
+    public ReportBuilder and() {
+        this.configs.add(reportConfig);
+        reportConfig = new ReportConfig();
+        return this;
+    }
 
+    public Report build() {
+        this.configs.add(reportConfig);
+        return new Report(this.configs);
     }
 }

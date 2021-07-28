@@ -1,11 +1,17 @@
 package yyc.open.framework.microants.components.kit.report;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import yyc.open.framework.microants.components.kit.report.exceptions.ReportException;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static sun.tools.jconsole.Messages.WINDOWS;
@@ -16,13 +22,12 @@ import static sun.tools.jconsole.Messages.WINDOWS;
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2021/7/28
  */
-public class ReportRuntime {
+public class ReportRuntime implements AutoCloseable{
     private static final Logger logger = LoggerFactory.getLogger(ReportRuntime.class);
 
-    private static final String EXEC_PATH_PREFIX = "exec/";
-    private static final int PORT = 6666;
+    private String GLOBAL_JSON_PATH = "server.json";
     private AtomicBoolean running;
-    private ReportContext reportContext;
+    private ReportConfig.GlobalConfig globalConfig;
 
     {
         this.running = new AtomicBoolean(false);
@@ -74,23 +79,54 @@ public class ReportRuntime {
         }
     }
 
+    private void initialize() {
+        try {
+            String ret = FileUtils.readFileToString(new File(GLOBAL_JSON_PATH), StandardCharsets.UTF_8);
+            Gson gson = new GsonBuilder().create();
+            globalConfig = gson.fromJson(ret, ReportConfig.GlobalConfig.class);
+        } catch (IOException e) {
+            throw new ReportException("[Report Runtime] initialize fail", e);
+        }
+    }
+
     /**
      * Start the phantomjs plugin.
      */
     public void start() {
+        if (this.running.get()) {
+            logger.error("[Report Runtime] already running, please shutdown first.");
+            return;
+        }
+
+        this.initialize();
+        if (Objects.isNull(this.globalConfig)) {
+            logger.error("[Report Runtime] Global config initialize not success yet.");
+            return;
+        }
+
         String property = System.getProperty("os.name");
         Platforms platforms = Platforms.getPlatforms(property);
-        String command = new StringBuilder(EXEC_PATH_PREFIX)
+        String command = new StringBuilder(globalConfig.getExecPath())
                 .append(getResourcePath(platforms.getPath()))
                 .append(" ")
-                .append("js/echarts-util.js")
+                .append(globalConfig.getEChartJsPath())
                 .append(" -s -p ")
-                .append(PORT).toString();
+                .append(globalConfig.getPort()).toString();
         try {
             Runtime.getRuntime().exec(command);
         } catch (IOException e) {
             throw new ReportException(String.format("[Report Runtime] exec command: %s fail", command), e);
         }
+
+        ReportContextFactory.ReportContextFactoryEnum.INSTANCE
+                .getReportContextFactory()
+                .setContext(constructContext());
+
+        this.running.compareAndSet(false, true);
+    }
+
+    private ReportContext constructContext() {
+        return new ReportContext();
     }
 
     /**

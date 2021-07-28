@@ -1,5 +1,7 @@
 package yyc.open.framework.microants.components.kit.report;
 
+import lombok.Getter;
+import lombok.Setter;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 
 import java.util.List;
@@ -10,6 +12,8 @@ import java.util.List;
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2021/7/28
  */
+@Getter
+@Setter
 public class ReportConfig<T> {
     private List<String> colors;
     private ReportEnums type;
@@ -17,43 +21,29 @@ public class ReportConfig<T> {
     private boolean horizontal;
     private T data;
 
-    public List<String> getColors() {
-        return colors;
-    }
-
-    public void setColors(List<String> colors) {
-        this.colors = colors;
-    }
-
-    public ReportEnums getType() {
-        return type;
-    }
-
     public void setType(String type) {
         this.type = ReportEnums.getType(type);
     }
 
-    public boolean isWatermark() {
-        return watermark;
+    @Getter
+    @Setter
+    static class GlobalConfig {
+        int port;
+        boolean watermark;
+        boolean horizontal;
+        boolean parallel;
+        boolean chart;
+        String execPath;
+        String eChartJsPath;
+        AlarmConfig alarm;
+
     }
 
-    public void setWatermark(boolean watermark) {
-        this.watermark = watermark;
-    }
-
-    public boolean isHorizontal() {
-        return horizontal;
-    }
-
-    public void setHorizontal(boolean horizontal) {
-        this.horizontal = horizontal;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
+    @Getter
+    @Setter
+    static class AlarmConfig {
+        boolean enabled;
+        String type;
+        String address;
     }
 }
