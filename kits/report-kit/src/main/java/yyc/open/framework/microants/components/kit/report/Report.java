@@ -26,10 +26,8 @@ public class Report {
 
     /**
      * Generate the report that supports batch generation.
-     *
-     * @param configs
      */
-    public void generateReport(List<ReportConfig> configs) {
+    public void generateReport() {
         generate(configs, false);
     }
 
@@ -37,10 +35,8 @@ public class Report {
      * TODO next version.
      * <p>
      * Generate the report, in additional supports parallel generation.
-     *
-     * @param configs
      */
-    private void generateReportParallel(List<ReportConfig> configs) {
+    private void generateReportParallel() {
         generate(configs, true);
     }
 
@@ -56,7 +52,7 @@ public class Report {
             List<ReportTask> tasks = createTask(configs);
 
             // 3. Handle task.
-            ReportInstanceProvider.handlerFactory().handle(tasks);
+            ReportInstanceProvider.handlerFactory().handle(tasks, parallel);
         } catch (ReportException re) {
             logger.error("[Report] create task encounter error : {}", re);
             // Determine if an alarm is needed.

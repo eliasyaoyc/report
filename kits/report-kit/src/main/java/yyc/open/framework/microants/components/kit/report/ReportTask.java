@@ -17,6 +17,11 @@ public class ReportTask {
      * @return
      */
     public static List<ReportTask> createTask(List<ReportConfig> configs) {
+
+        ReportEvent event = ReportEvent.builder()
+                .type(ReportEvent.EventType.CREATION)
+                .build();
+        ReportInstanceProvider.listenerFactory().onEvent(event);
         return null;
     }
 }

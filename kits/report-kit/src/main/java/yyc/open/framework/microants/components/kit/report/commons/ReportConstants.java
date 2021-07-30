@@ -49,4 +49,5 @@ public interface ReportConstants {
 
     String LISTENER = "listener";
     String HANDLER = "handler";
+    String ROOT_NAME = "yyc.open.framework.microants.components.kit.report";
 }

@@ -20,6 +20,8 @@
         <module>http-kit</module>
         <module>reflect-kit</module>
         <module>json-kit</module>
+        <module>validate-kit</module>
+        <module>thirdparty-kit</module>
     </modules>
 
     <properties>

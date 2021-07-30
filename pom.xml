@@ -118,6 +118,18 @@
                 <version>${revision}</version>
             </dependency>
 
+            <dependency>
+                <groupId>yyc.open.framework</groupId>
+                <artifactId>microants-components-validate-kit</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>yyc.open.framework</groupId>
+                <artifactId>microants-components-thirdpart-kit</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
             <!--     Starters       -->
             <dependency>
                 <groupId>yyc.open.framework</groupId>
@@ -399,6 +411,11 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>yyc.open.framework</groupId>
+            <artifactId>microants-components-validate-kit</artifactId>
         </dependency>
     </dependencies>
 

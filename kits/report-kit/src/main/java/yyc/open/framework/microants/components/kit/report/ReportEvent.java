@@ -14,6 +14,7 @@ import lombok.Getter;
 public class ReportEvent {
     private EventType type;
     private String message;
+    private String taskId;
 
     public enum EventType {
         CREATION,

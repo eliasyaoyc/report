@@ -19,6 +19,7 @@
     <modules>
         <module>concurrent-enhance</module>
         <module>collections-enhance</module>
+        <module>io-enhance</module>
     </modules>
 
     <artifactId>microants-components-enhance</artifactId>

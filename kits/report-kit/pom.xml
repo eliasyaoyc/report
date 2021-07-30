@@ -34,5 +34,9 @@
             <groupId>yyc.open.framework</groupId>
             <artifactId>microants-components-http-kit</artifactId>
         </dependency>
+        <dependency>
+            <groupId>yyc.open.framework</groupId>
+            <artifactId>microants-components-reflect-kit</artifactId>
+        </dependency>
     </dependencies>
 </project>
