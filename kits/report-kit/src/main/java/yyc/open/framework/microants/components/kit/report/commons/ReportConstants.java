@@ -46,4 +46,7 @@ public interface ReportConstants {
         String WORD = "word";
         String HTML = "html";
     }
+
+    String LISTENER = "listener";
+    String HANDLER = "handler";
 }

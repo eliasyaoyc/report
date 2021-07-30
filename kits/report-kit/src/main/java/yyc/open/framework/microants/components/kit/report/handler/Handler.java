@@ -1,6 +1,7 @@
 package yyc.open.framework.microants.components.kit.report.handler;
 
-import yyc.open.framework.microants.components.kit.report.event.ReportEvent;
+
+import yyc.open.framework.microants.components.kit.report.ReportEvent;
 
 /**
  * {@link Handler}

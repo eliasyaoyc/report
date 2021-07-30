@@ -22,6 +22,23 @@ public class ReportBuilder<T> {
         return new ReportBuilder();
     }
 
+    public ReportBuilder configs(ReportConfig... configs) {
+        this.configs = Arrays.stream(configs).collect(Collectors.toList());
+        return this;
+    }
+
+    public ReportBuilder configs(List<ReportConfig> configs) {
+        this.configs = configs;
+        return this;
+    }
+
+    /**
+     * Set charts colors, this priority is highest so use colors in global config
+     * if you not set. Even worse, use the default if you haven't set any of them.
+     *
+     * @param colors
+     * @return
+     */
     public ReportBuilder colors(String... colors) {
         this.reportConfig.setColors(Arrays.stream(colors).collect(Collectors.toList()));
         return this;

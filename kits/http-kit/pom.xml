@@ -13,4 +13,10 @@
     <artifactId>microants-components-http-kit</artifactId>
     <name>Microants Components Http Kit</name>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+    </dependencies>
 </project>

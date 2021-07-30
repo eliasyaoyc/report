@@ -3,14 +3,8 @@
 This kit support that generate echart picture(e.g. bar, line, pie etc.) and file creation.
 
 # Supports
-
-* Bar、Cross Bar
-* Pie、Hollow Pie
-* Line
-* HTML
-* Excel
-* PDF
-* Word
+* Multiple chart generation e.g. Bar、Cross Bar、Pie、Hollow Pie、Line etc.
+* Multiple file generation e.g. Excel、Html、Pdf、Word etc.
 
 # Example
 
@@ -24,8 +18,9 @@ This kit support that generate echart picture(e.g. bar, line, pie etc.) and file
 # TODO List
 
 - [ ] Alarm module that supports enterprise wechat alarm and email.
-- [ ] Completion of report generation
-- [ ] Parallel report generation
+- [ ] Completion of report generation.
+- [ ] Parallel report generation.
+- [ ] Generate from fail-point.
 
 # Use-case
 

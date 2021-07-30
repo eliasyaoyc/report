@@ -105,9 +105,16 @@
                 <artifactId>microants-components-http-kit</artifactId>
                 <version>${revision}</version>
             </dependency>
+
             <dependency>
                 <groupId>yyc.open.framework</groupId>
                 <artifactId>microants-components-report-kit</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>yyc.open.framework</groupId>
+                <artifactId>microants-components-json-kit</artifactId>
                 <version>${revision}</version>
             </dependency>
 

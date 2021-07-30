@@ -1,5 +1,7 @@
 package yyc.open.framework.microants.components.kit.report.listener;
 
+import yyc.open.framework.microants.components.kit.report.ReportEvent;
+
 /**
  * {@link Listener}
  *
@@ -7,7 +9,7 @@ package yyc.open.framework.microants.components.kit.report.listener;
  * @version ${project.version} - 2021/7/28
  */
 public interface Listener {
-    void onSuccess();
+    void onSuccess(ReportEvent event);
 
-    void onFailure();
+    void onFailure(ReportEvent event);
 }

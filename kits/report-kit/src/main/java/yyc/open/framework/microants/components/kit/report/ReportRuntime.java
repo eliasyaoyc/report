@@ -6,13 +6,12 @@ import lombok.Getter;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import yyc.open.framework.microants.components.kit.http.HttpKit;
 import yyc.open.framework.microants.components.kit.report.exceptions.ReportException;
-import yyc.open.framework.microants.components.kit.report.listener.ReportStatusListener;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -121,7 +120,6 @@ public class ReportRuntime implements AutoCloseable {
         return ReportContext.builder()
                 .globalConfig(this.globalConfig)
                 .reportStatus(new ReportContext.ReportStatus())
-                .listeners(Arrays.asList(new ReportStatusListener()))
                 .build();
     }
 
@@ -144,8 +142,11 @@ public class ReportRuntime implements AutoCloseable {
 
         HashMap<String, Object> pa = new HashMap<>();
         pa.put("exit", "true");
-        // TODO  Use it temporarily, then replace it with http kit.
-//        phantomJS("http://localhost:" + PORT , pa);
+        HttpKit.builder()
+                .post("http://localhost:" + globalConfig.getPort())
+                .body(pa)
+                .build()
+                .get();
 
         ReportContextFactory.ReportContextFactoryEnum.INSTANCE
                 .getReportContextFactory()

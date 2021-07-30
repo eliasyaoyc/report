@@ -21,8 +21,24 @@ public class ReportConfig<T> {
     private boolean horizontal;
     private T data;
 
-    public void setType(String type) {
+    protected void setType(String type) {
         this.type = ReportEnums.getType(type);
+    }
+
+    public static ReportConfigBuilder builder() {
+        return new ReportConfigBuilder();
+    }
+
+    static class ReportConfigBuilder<T> {
+        private List<String> colors;
+        private ReportEnums type;
+        private boolean watermark;
+        private boolean horizontal;
+        private T data;
+
+        public ReportConfig build() {
+            return new ReportConfig();
+        }
     }
 
     @Getter
@@ -36,7 +52,8 @@ public class ReportConfig<T> {
         String execPath;
         String eChartJsPath;
         AlarmConfig alarm;
-
+        List<String> colors;
+        int maxTaskNum;
     }
 
     @Getter
