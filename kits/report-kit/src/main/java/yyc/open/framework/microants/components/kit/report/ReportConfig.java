@@ -43,7 +43,7 @@ public class ReportConfig<T> {
 
     @Getter
     @Setter
-    static class GlobalConfig {
+    public static class GlobalConfig {
         int port;
         boolean watermark;
         boolean horizontal;
@@ -58,7 +58,7 @@ public class ReportConfig<T> {
 
     @Getter
     @Setter
-    static class AlarmConfig {
+    public static class AlarmConfig {
         boolean enabled;
         String type;
         String address;

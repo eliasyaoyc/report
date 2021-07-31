@@ -12,6 +12,66 @@
 
     <artifactId>microants-components-report-kit</artifactId>
     <name>Microants Components Report Kit</name>
+
+    <properties>
+        <freemarker.version>2.3.31</freemarker.version>
+        <xlsx.streamer.version>2.1.0</xlsx.streamer.version>
+        <itextpdf.version>5.5.13.2</itextpdf.version>
+        <itext.core.version>7.1.16</itext.core.version>
+        <poi.version>5.0.0</poi.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.monitorjbl</groupId>
+            <artifactId>xlsx-streamer</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.monitorjbl</groupId>
+            <artifactId>xlsx-streamer</artifactId>
+            <version>${xlsx.streamer.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>${freemarker.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itext7-core</artifactId>
+            <version>${itext.core.version}</version>
+            <type>pom</type>
+        </dependency>
+
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>${itextpdf.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>yyc.open.framework</groupId>
+            <artifactId>microants-components-http-kit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>yyc.open.framework</groupId>
+            <artifactId>microants-components-common-kit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>yyc.open.framework</groupId>
+            <artifactId>microants-components-thirdparty-kit</artifactId>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -24,19 +84,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.monitorjbl</groupId>
-            <artifactId>xlsx-streamer</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>yyc.open.framework</groupId>
-            <artifactId>microants-components-http-kit</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>yyc.open.framework</groupId>
-            <artifactId>microants-components-common-kit</artifactId>
-        </dependency>
-    </dependencies>
 </project>

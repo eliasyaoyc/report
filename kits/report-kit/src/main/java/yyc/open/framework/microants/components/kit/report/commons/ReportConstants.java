@@ -35,6 +35,11 @@ public interface ReportConstants {
          * Hollow pie chart.
          */
         String HOLLOW_PIE = "hollow-pie";
+
+        /**
+         * Table form
+         */
+        String TABLE = "table";
     }
 
     /**
@@ -50,4 +55,10 @@ public interface ReportConstants {
     String LISTENER = "listener";
     String HANDLER = "handler";
     String ROOT_NAME = "yyc.open.framework.microants.components.kit.report";
+
+
+    String CHART_HANDLE = "chartHandler";
+    String FILE_HANDLE = "fileHandler";
+    String ALARM_LISTENER = "alarmListener";
+    String DEFAULT_LISTENER = "defaultListener";
 }

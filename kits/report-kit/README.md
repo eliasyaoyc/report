@@ -18,7 +18,7 @@ This kit support that generate echart picture(e.g. bar, line, pie etc.) and file
 # TODO List
 
 - [ ] Alarm module that supports enterprise wechat alarm and email.
-- [ ] Completion of report generation.
+- [ ] Percentage complete of report generation.
 - [ ] Parallel report generation.
 - [ ] Generate from fail-point.
 

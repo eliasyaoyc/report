@@ -16,6 +16,7 @@ public enum ReportEnums {
     LINE(Charts.LINE),
     PIE(Charts.PIE),
     HOLLOW_PIE(Charts.HOLLOW_PIE),
+    TABLE(Charts.TABLE),
 
     PDF(File.PDF),
     EXCEL(File.EXCEL),
@@ -26,6 +27,24 @@ public enum ReportEnums {
 
     ReportEnums(String name) {
         this.name = name;
+    }
+
+    /**
+     * Determine the type whether belongs to chart.
+     * @param type
+     * @return
+     */
+    public static boolean isCharts(ReportEnums type) {
+        if (type == ReportEnums.BAR ||
+                type == ReportEnums.CROSS_BAR ||
+                type == ReportEnums.CROSS_MULTI_BAR ||
+                type == ReportEnums.LINE ||
+                type == ReportEnums.PIE ||
+                type == ReportEnums.HOLLOW_PIE ||
+                type == ReportEnums.TABLE) {
+            return true;
+        }
+        return false;
     }
 
     /**

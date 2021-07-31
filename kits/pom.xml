@@ -21,37 +21,4 @@
         <module>thirdparty-kit</module>
         <module>common-kit</module>
     </modules>
-
-    <properties>
-        <xlsx.streamer.version>2.1.0</xlsx.streamer.version>
-        <http.client.version>4.5.13</http.client.version>
-        <reflection.version>0.9.12</reflection.version>
-        <freemarker.version>2.3.31</freemarker.version>
-    </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.monitorjbl</groupId>
-                <artifactId>xlsx-streamer</artifactId>
-                <version>${xlsx.streamer.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpclient</artifactId>
-                <version>${http.client.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.reflections</groupId>
-                <artifactId>reflections</artifactId>
-                <version>${reflection.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.freemarker</groupId>
-                <artifactId>freemarker</artifactId>
-                <version>${freemarker.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 </project>

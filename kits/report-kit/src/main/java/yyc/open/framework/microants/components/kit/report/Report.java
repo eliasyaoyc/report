@@ -52,38 +52,28 @@ public class Report {
             List<ReportTask> tasks = createTask(configs);
 
             // 3. Handle task.
-            ReportInstanceProvider.handlerFactory().handle(tasks, parallel);
+            ReportContext.handlerFactory().handle(tasks, parallel);
         } catch (ReportException re) {
-            logger.error("[Report] create task encounter error : {}", re);
-            // Determine if an alarm is needed.
-            if (needToAlarm()) {
-                // send alarm.
-                ReportEvent event = ReportEvent.builder()
-                        .type(ReportEvent.EventType.FAIL)
-                        .message(re.getMessage()) // including report id and name.
-                        .build();
-                ReportInstanceProvider.listenerFactory().onEvent(event);
-            }
+            String msg = String.format("[Report] create task encounter error : {}", re);
+            logger.error(msg);
+            // send alarm.
+            ReportEvent event = ReportEvent.builder()
+                    .type(ReportEvent.EventType.FAIL)
+                    .message(re.getMessage()) // including report id and name.
+                    .message(msg)
+                    .build();
+            ReportContext.listenerFactory().onEvent(event);
         }
     }
 
     /**
+     * Check the report ru
+     *
      * @return
      */
     boolean checkReportState() {
         ReportContext context = ReportContextFactoryEnum.INSTANCE.getReportContextFactory().getContext();
         ReportContext.ReportStatus reportStatus = context.getReportStatus();
         return true;
-    }
-
-    /**
-     * Determine the alarm whether is enabled.
-     *
-     * @return true if alarm is enabled, otherwise false.
-     */
-    boolean needToAlarm() {
-        ReportContext context = ReportContextFactoryEnum.INSTANCE.getReportContextFactory().getContext();
-        ReportConfig.AlarmConfig alarm = context.getGlobalConfig().getAlarm();
-        return alarm.isEnabled();
     }
 }

@@ -61,6 +61,29 @@ public class AnnotationScannerKit {
      * Returns the collection of all class objects under the specified package that contain the specified annotation.
      *
      * @param packageName       name of package.
+     * @param recursive         whether recursive.
+     * @param targetAnnotations target annotation collection.
+     * @return
+     */
+    public static Map<Class<? extends Annotation>, Set<Class<?>>> scanClassesByAnnotations(String packageName, final boolean recursive, List<Class<? extends Annotation>> targetAnnotations) {
+        return scanClassesByAnnotations(packageName, getPackagePath(packageName), recursive, targetAnnotations);
+    }
+
+    /**
+     * Returns the collection of all class objects under the specified package that contain the specified annotation.
+     *
+     * @param packageName      name of package.
+     * @param targetAnnotation target annotation.
+     * @return
+     */
+    public static Map<Class<? extends Annotation>, Set<Class<?>>> scanClassesByAnnotations(String packageName, Class<? extends Annotation> targetAnnotation) {
+        return scanClassesByAnnotations(packageName, getPackagePath(packageName), true, Arrays.asList(targetAnnotation));
+    }
+
+    /**
+     * Returns the collection of all class objects under the specified package that contain the specified annotation.
+     *
+     * @param packageName       name of package.
      * @param packagePath       path of package.
      * @param recursive         whether recursive.
      * @param targetAnnotations target annotation collection.

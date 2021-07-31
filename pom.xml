@@ -21,7 +21,6 @@
         <revision>1.0.0-SNAPSHOT</revision>
         <java.version>1.8</java.version>
 
-
         <kryo.version>5.0.0-RC5</kryo.version>
         <rocksdb.version>6.11.6</rocksdb.version>
         <flink.version>1.11.1</flink.version>
@@ -134,7 +133,7 @@
 
             <dependency>
                 <groupId>yyc.open.framework</groupId>
-                <artifactId>microants-components-thirdpart-kit</artifactId>
+                <artifactId>microants-components-thirdparty-kit</artifactId>
                 <version>${revision}</version>
             </dependency>
 

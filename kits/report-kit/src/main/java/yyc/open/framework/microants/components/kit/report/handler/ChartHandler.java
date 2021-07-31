@@ -1,8 +1,10 @@
 package yyc.open.framework.microants.components.kit.report.handler;
 
-import yyc.open.framework.microants.components.kit.report.ReportEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
 
+import static yyc.open.framework.microants.components.kit.report.commons.ReportConstants.CHART_HANDLE;
 import static yyc.open.framework.microants.components.kit.report.commons.ReportConstants.HANDLER;
 
 /**
@@ -11,10 +13,11 @@ import static yyc.open.framework.microants.components.kit.report.commons.ReportC
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2021/7/28
  */
-@Processor(name = "chartHandler", type = HANDLER)
-public class ChartHandler implements Handler {
-    @Override
-    public void onHandle(ReportEvent event) {
+@Processor(name = CHART_HANDLE, type = HANDLER)
+public class ChartHandler<T> extends AbstractHandler<T> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChartHandler.class);
 
+    @Override
+    public void onHandle(T task) {
     }
 }

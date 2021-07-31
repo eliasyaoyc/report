@@ -3,6 +3,8 @@ package yyc.open.framework.microants.components.kit.report;
 import lombok.Builder;
 import lombok.Getter;
 import yyc.open.framework.microants.components.kit.report.ReportConfig.GlobalConfig;
+import yyc.open.framework.microants.components.kit.report.handler.ReportHandlerFactory;
+import yyc.open.framework.microants.components.kit.report.listener.ReportListenerFactory;
 
 /**
  * {@link ReportContext}
@@ -19,5 +21,26 @@ public class ReportContext {
 
     static class ReportStatus {
 
+    }
+
+    public static ReportListenerFactory listenerFactory() {
+        return ReportListenerFactory
+                .ReportListenerFactoryEnum
+                .INSTANCE
+                .getReportListenerFactory();
+    }
+
+    public static ReportHandlerFactory handlerFactory() {
+        return ReportHandlerFactory
+                .HandlerFactoryEnum
+                .INSTANCE
+                .getReportHandlerFactory();
+    }
+
+    public static ReportTaskRegistry reportRegistry() {
+        return ReportTaskRegistry
+                .ReportRegistryEnum
+                .INSTANCE
+                .getReportRegistry();
     }
 }

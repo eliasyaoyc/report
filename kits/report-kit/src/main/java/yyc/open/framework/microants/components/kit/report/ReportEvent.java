@@ -18,7 +18,8 @@ public class ReportEvent {
 
     public enum EventType {
         CREATION,
-        FINISH,
+        PARTIALLY_COMPLETED,
+        COMPLETED,
         FAIL;
     }
 }

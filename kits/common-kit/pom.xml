@@ -12,10 +12,20 @@
     <artifactId>microants-components-common-kit</artifactId>
     <name>Microants Components Common Kit</name>
 
+    <properties>
+        <reflection.version>0.9.12</reflection.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>${reflection.version}</version>
         </dependency>
     </dependencies>
 </project>

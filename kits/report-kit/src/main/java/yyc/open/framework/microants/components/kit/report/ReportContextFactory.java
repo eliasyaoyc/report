@@ -21,7 +21,7 @@ public class ReportContextFactory {
         this.context.remove();
     }
 
-    enum ReportContextFactoryEnum {
+    public enum ReportContextFactoryEnum {
         INSTANCE;
 
         private ReportContextFactory reportContextFactory;

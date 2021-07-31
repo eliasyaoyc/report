@@ -13,10 +13,15 @@
     <artifactId>microants-components-http-kit</artifactId>
     <name>Microants Components Http Kit</name>
 
+    <properties>
+        <http.client.version>4.5.13</http.client.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
+            <version>${http.client.version}</version>
         </dependency>
     </dependencies>
 </project>
