@@ -18,10 +18,8 @@
         <module>compress-kit</module>
         <module>report-kit</module>
         <module>http-kit</module>
-        <module>reflect-kit</module>
-        <module>json-kit</module>
-        <module>validate-kit</module>
         <module>thirdparty-kit</module>
+        <module>common-kit</module>
     </modules>
 
     <properties>

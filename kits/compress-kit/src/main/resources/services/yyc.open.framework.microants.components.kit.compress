@@ -1,0 +1,14 @@
+yyc.open.framework.microants.components.kit.compress.SkinnySevenZCompress
+yyc.open.framework.microants.components.kit.compress.SkinnyZipCompress
+yyc.open.framework.microants.components.kit.compress.SkinnyImageCompress
+yyc.open.framework.microants.components.kit.compress.SkinnyArCompress
+yyc.open.framework.microants.components.kit.compress.SkinnyBzip2Compress
+yyc.open.framework.microants.components.kit.compress.SkinnyCpioCompress
+yyc.open.framework.microants.components.kit.compress.SkinnyGzipCompress
+yyc.open.framework.microants.components.kit.compress.SkinnyJarCompress
+yyc.open.framework.microants.components.kit.compress.SkinnyRarCompress
+yyc.open.framework.microants.components.kit.compress.SkinnyRar5Compress
+yyc.open.framework.microants.components.kit.compress.SkinnyTarBz2Compress
+yyc.open.framework.microants.components.kit.compress.SkinnyTarCompress
+yyc.open.framework.microants.components.kit.compress.SkinnyTarGzCompress
+yyc.open.framework.microants.components.kit.compress.SkinnyXzCompress

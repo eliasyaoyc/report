@@ -45,6 +45,7 @@
         <scala.binary.version>2.13</scala.binary.version>
 
         <commons-logging.version>1.2</commons-logging.version>
+        <commons-collections4.version>4.4</commons-collections4.version>
         <log4j.version>1.2.17</log4j.version>
         <slf4j.version>1.7.21</slf4j.version>
         <junit.version>4.12</junit.version>
@@ -116,12 +117,6 @@
 
             <dependency>
                 <groupId>yyc.open.framework</groupId>
-                <artifactId>microants-components-reflect-kit</artifactId>
-                <version>${revision}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>yyc.open.framework</groupId>
                 <artifactId>microants-components-http-kit</artifactId>
                 <version>${revision}</version>
             </dependency>
@@ -134,19 +129,13 @@
 
             <dependency>
                 <groupId>yyc.open.framework</groupId>
-                <artifactId>microants-components-json-kit</artifactId>
-                <version>${revision}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>yyc.open.framework</groupId>
-                <artifactId>microants-components-validate-kit</artifactId>
-                <version>${revision}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>yyc.open.framework</groupId>
                 <artifactId>microants-components-thirdpart-kit</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>yyc.open.framework</groupId>
+                <artifactId>microants-components-common-kit</artifactId>
                 <version>${revision}</version>
             </dependency>
 
@@ -377,6 +366,11 @@
                 <version>${lombok.version}</version>
                 <scope>provided</scope>
             </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${commons-collections4.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -389,6 +383,11 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
         </dependency>
 
         <dependency>

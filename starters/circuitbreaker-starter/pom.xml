@@ -24,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>yyc.open.framework</groupId>
-            <artifactId>microants-components-reflect-kit</artifactId>
+            <artifactId>microants-components-common-kit</artifactId>
         </dependency>
         <dependency>
             <groupId>com.alibaba.csp</groupId>
