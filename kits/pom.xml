@@ -48,6 +48,7 @@
                 <artifactId>reflections</artifactId>
                 <version>${reflection.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.freemarker</groupId>
                 <artifactId>freemarker</artifactId>

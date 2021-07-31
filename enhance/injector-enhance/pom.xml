@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>microants-components</artifactId>
+        <artifactId>microants-components-enhance</artifactId>
         <groupId>yyc.open.framework</groupId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
@@ -15,8 +15,8 @@
         <javax.inject.version>1</javax.inject.version>
         <aopalliance.version>1.0</aopalliance.version>
     </properties>
-    <artifactId>microants-components-ioc</artifactId>
-    <name>Microants Components IOC</name>
+    <artifactId>microants-components-injector-enhance</artifactId>
+    <name>Microants Components Injector Enhance</name>
 
     <dependencies>
         <dependency>

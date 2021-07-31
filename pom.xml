@@ -13,7 +13,6 @@
         <module>starters</module>
         <module>kits</module>
         <module>enhance</module>
-        <module>injector</module>
     </modules>
 
     <name>Microants Components</name>
@@ -74,7 +73,6 @@
             </dependency>
 
             <!-- Core Dependency  -->
-            <!--     Enhances       -->
             <dependency>
                 <groupId>yyc.open.framework</groupId>
                 <artifactId>microants-components-kits</artifactId>
@@ -84,6 +82,28 @@
             <dependency>
                 <groupId>yyc.open.framework</groupId>
                 <artifactId>microants-components-enhance</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <!--     Enhances       -->
+            <dependency>
+                <groupId>yyc.open.framework</groupId>
+                <artifactId>microants-components-injector-enhance</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>yyc.open.framework</groupId>
+                <artifactId>microants-components-io-enhance</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>yyc.open.framework</groupId>
+                <artifactId>microants-components-collections-enhance</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>yyc.open.framework</groupId>
+                <artifactId>microants-components-concurrent-enhance</artifactId>
                 <version>${revision}</version>
             </dependency>
 
@@ -136,7 +156,6 @@
                 <artifactId>microants-components-starters</artifactId>
                 <version>${revision}</version>
             </dependency>
-
 
             <dependency>
                 <groupId>com.google.guava</groupId>
@@ -411,11 +430,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>yyc.open.framework</groupId>
-            <artifactId>microants-components-validate-kit</artifactId>
         </dependency>
     </dependencies>
 

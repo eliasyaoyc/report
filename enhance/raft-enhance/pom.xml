@@ -9,17 +9,25 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>microants-components-io-enhance</artifactId>
-    <name>Microants Components IO Enhance</name>
+    <artifactId>microants-components-raft-enhance</artifactId>
+    <name>Microants Components Raft Enhance</name>
 
     <dependencies>
+        <dependency>
+            <groupId>yyc.open.framework</groupId>
+            <artifactId>microants-components-io-enhance</artifactId>
+        </dependency>
         <dependency>
             <groupId>yyc.open.framework</groupId>
             <artifactId>microants-components-injector-enhance</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
+            <groupId>yyc.open.framework</groupId>
+            <artifactId>microants-components-collections-enhance</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>yyc.open.framework</groupId>
+            <artifactId>microants-components-concurrent-enhance</artifactId>
         </dependency>
     </dependencies>
 </project>
