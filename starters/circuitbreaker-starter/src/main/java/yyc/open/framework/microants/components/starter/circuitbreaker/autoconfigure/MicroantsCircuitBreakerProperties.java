@@ -17,7 +17,7 @@ import static yyc.open.framework.microants.components.starter.circuitbreaker.aut
  */
 @ConfigurationProperties(prefix = MIROANTS_CIRCUIT_BREAKER)
 public class MicroantsCircuitBreakerProperties {
-    public static final String MIROANTS_CIRCUIT_BREAKER = "Microants.circuit-breaker";
+    public static final String MIROANTS_CIRCUIT_BREAKER = "microants.circuit-breaker";
 
     private CircuitBreakerType type = CircuitBreakerType.R4J;
 

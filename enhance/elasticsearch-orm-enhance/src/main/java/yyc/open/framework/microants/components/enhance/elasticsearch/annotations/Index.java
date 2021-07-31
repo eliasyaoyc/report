@@ -1,4 +1,4 @@
-package yyc.open.framework.microants.components.starter.es.annotations;
+package yyc.open.framework.microants.components.enhance.elasticsearch.annotations;
 
 import java.lang.annotation.*;
 

@@ -12,4 +12,11 @@
 
     <artifactId>microants-components-elasticsearch-orm-starter</artifactId>
     <name>Microants Components Elasticsearch Orm Starter</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>yyc.open.framework</groupId>
+            <artifactId>microants-components-elasticsearch-orm-enhance</artifactId>
+        </dependency>
+    </dependencies>
 </project>

@@ -1,4 +1,4 @@
-package yyc.open.framework.microants.components.starter.es.config;
+package yyc.open.framework.microants.components.enhance.elasticsearch.config;
 
 /**
  * {@link ElasticsearchConfig}

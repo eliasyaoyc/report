@@ -1,4 +1,6 @@
-package yyc.open.framework.microants.components.starter.es.exceptions;
+package yyc.open.framework.microants.components.enhance.elasticsearch.exceptions;
+
+import yyc.open.framework.microants.components.starter.elasticsearch.exceptions.ElasticsearchException;
 
 /**
  * {@link NoSuchIndexException}

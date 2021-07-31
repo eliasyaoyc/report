@@ -107,6 +107,11 @@
                 <artifactId>microants-components-concurrent-enhance</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <dependency>
+                <groupId>yyc.open.framework</groupId>
+                <artifactId>microants-components-elasticsearch-orm-enhance</artifactId>
+                <version>${revision}</version>
+            </dependency>
 
             <!--     Kits       -->
             <dependency>

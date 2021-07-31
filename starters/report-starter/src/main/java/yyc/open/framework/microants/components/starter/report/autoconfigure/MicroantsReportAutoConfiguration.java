@@ -4,12 +4,12 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 
 /**
- * {@link MicroantsFileAutoConfiguration}
+ * {@link MicroantsReportAutoConfiguration}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2021/7/28
  */
 @Configuration
-@EnableConfigurationProperties(MicroantsFileProperties.class)
-public class MicroantsFileAutoConfiguration {
+@EnableConfigurationProperties(MicroantsReportProperties.class)
+public class MicroantsReportAutoConfiguration {
 }
