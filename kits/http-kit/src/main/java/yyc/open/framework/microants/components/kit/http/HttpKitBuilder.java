@@ -42,6 +42,11 @@ public class HttpKitBuilder {
         return this;
     }
 
+    public HttpKitBuilder body(String body){
+        this.body = body;
+        return this;
+    }
+
     public HttpKit build() {
         client = HttpClients.createDefault();
 

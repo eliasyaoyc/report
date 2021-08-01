@@ -24,10 +24,10 @@ public class ReportTask {
     @Getter
     public static class ReportTaskChild {
         String taskId;
+        String path;
         ReportEnums type;
-        String data;
-        Integer page;
         Integer priority;
+        String data;
     }
 
     /**

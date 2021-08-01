@@ -67,9 +67,9 @@ public class Report {
     }
 
     /**
-     * Check the report ru
+     * Check the report runtime whether running.
      *
-     * @return
+     * @return true if report is running, otherwise return false.
      */
     boolean checkReportState() {
         ReportContext context = ReportContextFactoryEnum.INSTANCE.getReportContextFactory().getContext();

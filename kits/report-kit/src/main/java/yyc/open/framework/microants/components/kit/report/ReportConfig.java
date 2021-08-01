@@ -17,7 +17,7 @@ import java.util.List;
 public class ReportConfig<T> {
     private List<String> colors;
     private ReportEnums type;
-    private boolean watermark;
+    private String watermark;
     private boolean horizontal;
     private T data;
 
@@ -32,7 +32,7 @@ public class ReportConfig<T> {
     static class ReportConfigBuilder<T> {
         private List<String> colors;
         private ReportEnums type;
-        private boolean watermark;
+        private String watermark;
         private boolean horizontal;
         private T data;
 
@@ -45,7 +45,7 @@ public class ReportConfig<T> {
     @Setter
     public static class GlobalConfig {
         int port;
-        boolean watermark;
+        String watermark;
         boolean horizontal;
         boolean parallel;
         boolean chart;

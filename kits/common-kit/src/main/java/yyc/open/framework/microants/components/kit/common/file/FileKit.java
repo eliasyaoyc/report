@@ -1,5 +1,8 @@
 package yyc.open.framework.microants.components.kit.common.file;
 
+import com.google.common.base.Strings;
+import yyc.open.framework.microants.components.kit.common.validate.Asserts;
+
 /**
  * {@link FileKit}
  *
@@ -8,4 +11,8 @@ package yyc.open.framework.microants.components.kit.common.file;
  */
 public class FileKit {
 
+    public static String suffix(CharSequence identifier, String path) {
+        Asserts.hasText(path);
+        return Strings.commonSuffix(path, identifier);
+    }
 }
