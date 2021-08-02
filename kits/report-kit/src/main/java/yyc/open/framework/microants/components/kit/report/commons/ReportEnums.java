@@ -21,7 +21,7 @@ public enum ReportEnums implements ReportEnumsInterface {
     BAR(Charts.BAR) {
         @Override
         public String getTemplateName() {
-            return "barOption3.ftl";
+            return "barOption.ftl";
         }
     },
     CROSS_BAR(Charts.CROSS_BAR) {
@@ -45,7 +45,7 @@ public enum ReportEnums implements ReportEnumsInterface {
     PIE(Charts.PIE) {
         @Override
         public String getTemplateName() {
-            return "pieOption1.ftl";
+            return "pieOption.ftl";
         }
     },
     HOLLOW_PIE(Charts.HOLLOW_PIE) {

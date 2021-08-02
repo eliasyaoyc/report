@@ -1,9 +1,10 @@
 package yyc.open.framework.microants.components.kit.report.entity;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,23 +14,11 @@ import java.util.List;
  * @version ${project.version} - 2021/8/1
  */
 @Getter
-@Builder
+@Setter
 public class ReportEntity {
-//    /**
-//     * Chart title.
-//     */
-//    private String title;
-//
-//    /**
-//     * The legend name that only to Bar and Pie.
-//     */
-//    private String legendName;
-//
-//
-//    private List<Object[]> xdatas;
-//
-//    private Object[] yDatas;
-
+    /**
+     * The type of report. e.g. pdf, word, html etc.
+     */
     private ReportEnums reportType;
 
     /**
@@ -52,12 +41,20 @@ public class ReportEntity {
      */
     private ReportContent content;
 
+    public ReportEntity(ReportEnums reportType, ReportTitle title, ReportInfo info, ReportCatalogue catalogue, ReportContent content) {
+        this.reportType = reportType;
+        this.title = title;
+        this.info = info;
+        this.catalogue = catalogue;
+        this.content = content;
+    }
+
     /**
      * Inner class about report title part.
      */
     @Getter
-    @Builder
-    public class ReportTitle {
+    @Setter
+    public static class ReportTitle {
         private String background;
         private String title;
         private String description;
@@ -67,31 +64,53 @@ public class ReportEntity {
      * Inner class about report info part (e.g. generate-time, report range time etc.)
      */
     @Getter
-    @Builder
-    public class ReportInfo {
-        private String label;
-        private String value;
+    @Setter
+    public static class ReportInfo {
+        private List<String> labels = new ArrayList<>();
+        private List<String> values = new ArrayList<>();
     }
 
     /**
      * Inner class about report catalogue.
      */
     @Getter
-    @Builder
-    public class ReportCatalogue {
-        private List<String> chapter;
-        private List<List<String>> indices;
+    @Setter
+    public static class ReportCatalogue {
+        private List<String> chapter = new ArrayList<>();
+        private List<List<String>> indices = new ArrayList<>();
     }
 
     /**
      * Inner class about report content.
      */
     @Getter
-    @Builder
-    public class ReportContent {
-        private String chapter;
-        private List<String> indices;
-        private List<String> description;
-        private List<Object> data;
+    @Setter
+    public static class ReportContent {
+        private List<String> chapter;
+        private List<List<String>> indices = new ArrayList<>();
+        private List<List<String>> description = new ArrayList<>();
+        private List<List<Object>> data = new ArrayList<>();
+    }
+
+    /**
+     * Construct `reportEntity` used builder.
+     */
+    public static ReportEntityBuilder builder() {
+        return new ReportEntityBuilder();
     }
 }
+
+//    /**
+//     * Chart title.
+//     */
+//    private String title;
+//
+//    /**
+//     * The legend name that only to Bar and Pie.
+//     */
+//    private String legendName;
+//
+//
+//    private List<Object[]> xdatas;
+//
+//    private Object[] yDatas;

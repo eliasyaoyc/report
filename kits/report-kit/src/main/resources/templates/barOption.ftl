@@ -2,10 +2,14 @@
     "title": {
         "text": "${title}",
         "textStyle": {
-            "color": "red",
-            "fontSize": 15,
-            "fontWeight": "bolder"
+        "color": "#7f7f7f",
+        "fontSize": 12,
+        "fontWeight": "bolder"
         }
+    },
+    "toolbox": {
+        "feature": {},
+        "show": true
     },
     "tooltip": {
         "formatter": "{a}<br/>{b} : {c}",
@@ -13,11 +17,11 @@
     },
     "legend": {
         "textStyle": {
-            "color": "red",
+            "color": "#333333",
             "fontSize": 15,
             "fontWeight": "bolder"
         },
-    "data": ["${legend}"]
+        "data": ["${legend}"]
     },
     "xAxis": [{
         "type": "category",
@@ -25,47 +29,56 @@
             "show": true,
             "textStyle": {
                 "fontSize": 15,
-                "fontWeight": "bolder"
+                "fontWeight": "bolder",
+				"color":"#7F7F7F"
             }
         },
         "axisLine":{
             "lineStyle":{
-                "color": "#315070",
-                "width":4
+                "color":'#7F7F7F',
+                "width":"3"
             }
         },
         "data": ${category}
-
     }],
     "yAxis": [{
         "type": "value",
-            "axisLabel": {
-                "show": true,
-                "textStyle": {
-                    "fontSize": 15,
-                    "fontWeight": "bolder"
-                }
-            },
-        "axisLine":{
-            "lineStyle":{
-                "color":"#315070",
-                "width":4
+        "axisLabel": {
+            "show": true,
+            "textStyle": {
+                "fontSize": 15,
+                "fontWeight": "bolder",
+				"color":"#7F7F7F"
             }
+        },
+        "axisLine":{
+            "show":true,
+            "lineStyle":{
+                "color":'#7F7F7F',
+                "width":"3"
+            }
+        },
+        "axisTick": {
+           "show": true
         }
     }],
     "series": [{
         "name": "${legend}",
-        "data": ${values},
         "type": "bar",
-        "barWidth": "30%",
+		"barWidth": "30%",
         "label": {
             "normal": {
-                "color": "green",
-                "fontSize": 15,
-                "fontWeight": "bolder",
+                "color": "#3370FE",
                 "show": true,
-                "position": "top"
+                "position": "top",
+				"textStyle": {
+					"color": "#7F7F7F",
+					"fontSize": 15,
+					"fontWeight": "bolder"
+				}
             }
-        }
+        },
+        "data":${values},
+        "itemStyle": "__itemStyle"
     }]
 }
