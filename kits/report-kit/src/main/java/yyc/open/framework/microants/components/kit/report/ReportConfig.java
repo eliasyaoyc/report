@@ -14,31 +14,20 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class ReportConfig<T> {
+public class ReportConfig {
     private List<String> colors;
     private ReportEnums type;
     private String watermark;
     private boolean horizontal;
-    private T data;
+    private int port;
+    private boolean parallel;
+    private String execPath;
+    private String eChartJsPath;
+    AlarmConfig alarm;
+    private int maxTaskNum;
 
     protected void setType(String type) {
         this.type = ReportEnums.getType(type);
-    }
-
-    public static ReportConfigBuilder builder() {
-        return new ReportConfigBuilder();
-    }
-
-    static class ReportConfigBuilder<T> {
-        private List<String> colors;
-        private ReportEnums type;
-        private String watermark;
-        private boolean horizontal;
-        private T data;
-
-        public ReportConfig build() {
-            return new ReportConfig();
-        }
     }
 
     @Getter

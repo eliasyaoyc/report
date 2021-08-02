@@ -1,7 +1,14 @@
 package yyc.open.framework.microants.components.starter.report.autoconfigure;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import yyc.open.framework.microants.components.kit.report.ReportRuntime;
+
+import static yyc.open.framework.microants.components.starter.report.autoconfigure.MicroantsReportProperties.MICROANTS_FILE;
 
 /**
  * {@link MicroantsReportAutoConfiguration}
@@ -12,4 +19,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableConfigurationProperties(MicroantsReportProperties.class)
 public class MicroantsReportAutoConfiguration {
+
+    @Bean
+    @Primary
+    @ConditionalOnClass(MicroantsReportProperties.class)
+    @ConditionalOnProperty(prefix = MICROANTS_FILE, value = "echart", havingValue = "enabled")
+    public void reportRuntime() {
+        ReportRuntime runtime = new ReportRuntime();
+        runtime.start();
+    }
 }

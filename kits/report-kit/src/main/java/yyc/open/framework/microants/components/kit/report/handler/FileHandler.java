@@ -5,8 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
 
-import static yyc.open.framework.microants.components.kit.report.commons.ReportConstants.FILE_HANDLE;
-import static yyc.open.framework.microants.components.kit.report.commons.ReportConstants.HANDLER;
+import static yyc.open.framework.microants.components.kit.report.commons.ReportConstants.*;
 
 /**
  * {@link FileHandler}
@@ -20,20 +19,15 @@ public class FileHandler<T> extends AbstractHandler<T> {
 
     @Override
     public void onHandle(T task) {
+        // Generate html.
+        // Determine which file convert to.
     }
 
-    private void generateExcel() {
-    }
-
-    private void generateHtml() {
-
-    }
-
-    private void generatePdf() {
+    void convertToPdf() {
 
     }
 
-    private void generateWord() {
+    void convertToWord() {
 
     }
 }

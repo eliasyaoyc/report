@@ -2,6 +2,7 @@ package yyc.open.framework.microants.components.kit.report.entity;
 
 import lombok.Builder;
 import lombok.Getter;
+import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 
 import java.util.List;
 
@@ -28,6 +29,8 @@ public class ReportEntity {
 //    private List<Object[]> xdatas;
 //
 //    private Object[] yDatas;
+
+    private ReportEnums reportType;
 
     /**
      * Report title.
