@@ -21,4 +21,19 @@ public class FileHandler<T> extends AbstractHandler<T> {
     @Override
     public void onHandle(T task) {
     }
+
+    private void generateExcel() {
+    }
+
+    private void generateHtml() {
+
+    }
+
+    private void generatePdf() {
+
+    }
+
+    private void generateWord() {
+
+    }
 }

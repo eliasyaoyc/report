@@ -40,11 +40,11 @@ public class ChartHandler<T> extends AbstractHandler<T> {
     private final String templatePath;
 
     {
+        templatePath = ChartHandler.class.getClassLoader().getResource("").getPath() + "templates";
         globalConfig = ReportContextFactory.ReportContextFactoryEnum.INSTANCE
                 .getReportContextFactory()
                 .getContext()
                 .getGlobalConfig();
-        templatePath = ChartHandler.class.getClassLoader().getResource("").getPath() + "templates";
     }
 
     @Override
