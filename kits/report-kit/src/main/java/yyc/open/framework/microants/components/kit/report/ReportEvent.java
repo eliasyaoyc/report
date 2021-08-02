@@ -2,6 +2,7 @@ package yyc.open.framework.microants.components.kit.report;
 
 import lombok.Builder;
 import lombok.Getter;
+import yyc.open.framework.microants.components.kit.report.entity.ReportEntity;
 
 /**
  * {@link ReportEvent}
@@ -15,6 +16,7 @@ public class ReportEvent {
     private EventType type;
     private String message;
     private String taskId;
+    private ReportEntity entity;
 
     public enum EventType {
         CREATION,

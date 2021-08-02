@@ -15,15 +15,10 @@ import java.util.stream.Collectors;
  * @version ${project.version} - 2021/7/28
  */
 public class ReportBuilder {
-    private final ReportConfig.GlobalConfig globalConfig;
     private ReportConfig reportConfig;
 
     private ReportBuilder() {
         reportConfig = new ReportConfig();
-        globalConfig = ReportContextFactory.ReportContextFactoryEnum.INSTANCE
-                .getReportContextFactory()
-                .getContext()
-                .getGlobalConfig();
     }
 
     public static ReportBuilder builder() {
@@ -210,12 +205,17 @@ public class ReportBuilder {
      * @return Report.
      */
     public Report build() {
+        ReportConfig.GlobalConfig globalConfig = ReportContextProvider.INSTANCE.getContext().getGlobalConfig();
+
         // Check global config.
-        Asserts.check(this.globalConfig != null, "Report Runtime initialize fail.");
+        Asserts.check(globalConfig != null, "Report Runtime initialize fail.");
+
         // Check report type whether is null (type is required parameter).
         Asserts.check(this.reportConfig.getType() == null, "[Constructor Report] the report type is must, please setup before build.");
 
         BeansKit.copyPropertiesIsNull(globalConfig, reportConfig);
+
+        // Create report status.
         return new Report(reportConfig);
     }
 }

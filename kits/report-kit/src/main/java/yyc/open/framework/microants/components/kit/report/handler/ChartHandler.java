@@ -6,10 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import yyc.open.framework.microants.components.kit.http.HttpKit;
 import yyc.open.framework.microants.components.kit.http.Result;
-import yyc.open.framework.microants.components.kit.report.ReportConfig;
-import yyc.open.framework.microants.components.kit.report.ReportContext;
-import yyc.open.framework.microants.components.kit.report.ReportContextFactory;
-import yyc.open.framework.microants.components.kit.report.ReportTask;
+import yyc.open.framework.microants.components.kit.report.*;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
 import yyc.open.framework.microants.components.kit.report.entity.PhantomJS;
 
@@ -28,13 +25,12 @@ import static yyc.open.framework.microants.components.kit.report.commons.ReportC
 @Processor(name = CHART_HANDLE, type = HANDLER)
 public class ChartHandler<T> extends AbstractHandler<T> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ChartHandler.class);
+
+    private ReportStatus reportStatus;
     private ReportConfig.GlobalConfig globalConfig;
 
-    {
-        globalConfig = ReportContextFactory.ReportContextFactoryEnum.INSTANCE
-                .getReportContextFactory()
-                .getContext()
-                .getGlobalConfig();
+    public ChartHandler() {
+        reportStatus = ReportContextProvider.INSTANCE.getContext().getReportStatus();
     }
 
     @Override
@@ -67,9 +63,14 @@ public class ChartHandler<T> extends AbstractHandler<T> {
 
             reportCompleteness(t.getTaskId());
         } catch (Exception e) {
-            LOGGER.error("[Chart Handler] generate chart encountered error: {}", e);
-            // add to fail queue.
-            ReportContext.reportRegistry().addToFailQueue(t.getTaskId());
+            String msg = String.format("[Chart Handler] generate chart encountered error: {}", e);
+            LOGGER.error(msg);
+
+            reportStatus.publishEvent(t.getTaskId(), msg, ReportEvent.EventType.FAIL);
         }
+    }
+
+    public void setReportStatus(ReportStatus reportStatus) {
+        this.reportStatus = reportStatus;
     }
 }

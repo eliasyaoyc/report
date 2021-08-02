@@ -29,7 +29,7 @@ public abstract class AbstractHandler<T> implements Handler<T> {
     }
 
     public void reportCompleteness(String taskId) {
-        reportStatus.reportStatus(taskId, "", ReportEvent.EventType.PARTIALLY_COMPLETED);
+        reportStatus.publishEvent(taskId, "", ReportEvent.EventType.PARTIALLY_COMPLETED);
     }
 
     /**

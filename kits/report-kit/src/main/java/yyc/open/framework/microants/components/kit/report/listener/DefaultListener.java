@@ -2,7 +2,6 @@ package yyc.open.framework.microants.components.kit.report.listener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import yyc.open.framework.microants.components.kit.report.ReportContext;
 import yyc.open.framework.microants.components.kit.report.ReportEvent;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
 import yyc.open.framework.microants.components.kit.report.entity.ReportEntity;
@@ -24,7 +23,7 @@ public class DefaultListener implements Listener {
     public void onSuccess(ReportEvent event) {
         switch (event.getType()) {
             case REPORT:
-                ReportEntity reportEntity = ReportContext.reportRegistry().getReportEntity(event.getTaskId());
+                ReportEntity reportEntity = event.getEntity();
                 // Send the report task.
             case COMPLETED:
                 LOGGER.info("");
@@ -33,7 +32,5 @@ public class DefaultListener implements Listener {
 
     @Override
     public void onFailure(ReportEvent event) {
-        LOGGER.info("[Default Listener] task {} execute fail, add to fail-queue and wait to retry", event.getTaskId());
-        ReportContext.reportRegistry().addToFailQueue(event.getTaskId());
     }
 }

@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import yyc.open.framework.microants.components.kit.common.validate.NonNull;
 import yyc.open.framework.microants.components.kit.report.entity.ReportEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,15 +14,32 @@ import java.util.Map;
  * @version ${project.version} - 2021/7/30
  */
 public class ReportTaskRegistry {
+    private ReportStatus reportStatus;
     private Map<String, ReportTask> tasks = Maps.newConcurrentMap();
     private Map<String, ReportTask> failTasks = Maps.newConcurrentMap();
 
-    enum ReportRegistryEnum {
+    private ReportTaskRegistry() {
+        this.reportStatus = ReportContextProvider.INSTANCE.getContext().getReportStatus();
+    }
+
+    /**
+     * Returns the task collections to support parallel execution.
+     *
+     * @param config   need to generate report.
+     * @param entities data need to generate report.
+     * @return
+     */
+    public List<ReportTask> createTask(ReportConfig config, List<ReportEntity> entities) {
+        this.reportStatus.publishEvent("", "", ReportEvent.EventType.CREATION);
+        return null;
+    }
+
+    public enum ReportRegistryEnum {
         INSTANCE;
 
         ReportTaskRegistry reportRegistry;
 
-        ReportTaskRegistry getReportRegistry() {
+        public ReportTaskRegistry getReportRegistry() {
             if (reportRegistry == null) {
                 reportRegistry = new ReportTaskRegistry();
             }

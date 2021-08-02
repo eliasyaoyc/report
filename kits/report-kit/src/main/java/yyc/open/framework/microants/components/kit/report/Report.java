@@ -2,13 +2,11 @@ package yyc.open.framework.microants.components.kit.report;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import yyc.open.framework.microants.components.kit.report.ReportContextFactory.ReportContextFactoryEnum;
 import yyc.open.framework.microants.components.kit.report.entity.ReportEntity;
 import yyc.open.framework.microants.components.kit.report.exceptions.ReportException;
+import yyc.open.framework.microants.components.kit.report.handler.ReportHandlerFactory;
 
 import java.util.List;
-
-import static yyc.open.framework.microants.components.kit.report.ReportTask.createTask;
 
 /**
  * {@link Report}
@@ -20,9 +18,19 @@ public class Report {
     private static final Logger logger = LoggerFactory.getLogger(Report.class);
 
     private final ReportConfig config;
+    private final ReportHandlerFactory handlerFactory;
+    private final ReportTaskRegistry taskRegistry;
 
     public Report(ReportConfig config) {
         this.config = config;
+        this.handlerFactory = ReportHandlerFactory
+                .HandlerFactoryEnum
+                .INSTANCE
+                .getReportHandlerFactory();
+        this.taskRegistry = ReportTaskRegistry
+                .ReportRegistryEnum
+                .INSTANCE
+                .getReportRegistry();
     }
 
     /**
@@ -48,23 +56,11 @@ public class Report {
             throw new ReportException("[Report Runtime] has not started, please start first.");
         }
 
-        try {
-            // 2. Create the task collections.
-            List<ReportTask> tasks = createTask(config, reportEntities);
+        // 2. Create the task collections.
+        List<ReportTask> tasks = taskRegistry.createTask(config, reportEntities);
 
-            // 3. Handle task.
-            ReportContext.handlerFactory().handle(tasks, parallel);
-        } catch (ReportException re) {
-            String msg = String.format("[Report] create task encounter error : {}", re);
-            logger.error(msg);
-            // send alarm.
-            ReportEvent event = ReportEvent.builder()
-                    .type(ReportEvent.EventType.FAIL)
-                    .message(re.getMessage()) // including report id and name.
-                    .message(msg)
-                    .build();
-            ReportContext.listenerFactory().onEvent(event);
-        }
+        // 3. Handle task.
+        this.handlerFactory.handle(tasks, parallel);
     }
 
     /**
@@ -73,8 +69,6 @@ public class Report {
      * @return true if report is running, otherwise return false.
      */
     boolean checkReportState() {
-        ReportContext context = ReportContextFactoryEnum.INSTANCE.getReportContextFactory().getContext();
-        ReportContext.ReportStatus reportStatus = context.getReportStatus();
-        return true;
+        return ReportContextProvider.INSTANCE.getContext().getReportStatus() == null;
     }
 }

@@ -6,9 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import yyc.open.framework.microants.components.kit.common.reflect.AnnotationScannerKit;
 import yyc.open.framework.microants.components.kit.common.validate.NonNull;
-import yyc.open.framework.microants.components.kit.report.ReportContext;
-import yyc.open.framework.microants.components.kit.report.ReportEvent;
-import yyc.open.framework.microants.components.kit.report.ReportTask;
+import yyc.open.framework.microants.components.kit.report.*;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 
@@ -29,9 +27,12 @@ import static yyc.open.framework.microants.components.kit.report.commons.ReportC
 public class ReportHandlerFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReportHandlerFactory.class);
 
+    private ReportStatus reportStatus;
     private Map<String, Set<Handler>> handlers = Maps.newHashMap();
 
     private ReportHandlerFactory() {
+        reportStatus = ReportContextProvider.INSTANCE.getContext().getReportStatus();
+
         // Construct handlers through processor annotation.
         Map<Class<? extends Annotation>, Set<Class<?>>> classSetMap = AnnotationScannerKit.scanClassesByAnnotations(ROOT_NAME, Processor.class);
         if (classSetMap.isEmpty()) {
@@ -67,12 +68,7 @@ public class ReportHandlerFactory {
             String msg = String.format("[ReportHandler] task {} handle failed, handlers do not initialized yet.", taskIds);
             LOGGER.error(msg);
 
-            ReportEvent event = ReportEvent.builder()
-                    .taskId(taskIds)
-                    .type(ReportEvent.EventType.FAIL)
-                    .message(msg)
-                    .build();
-            reportStatus(event);
+            reportStatus.publishEvent(taskIds, msg, ReportEvent.EventType.FAIL);
         }
 
         // Parallel model.
@@ -101,10 +97,6 @@ public class ReportHandlerFactory {
 
     }
 
-    private void reportStatus(ReportEvent event) {
-        ReportContext.listenerFactory().onEvent(event);
-    }
-
     /**
      * Choose the handler corresponding to the task type.
      *
@@ -121,11 +113,7 @@ public class ReportHandlerFactory {
      */
     private void doFinish(String taskId) {
         LOGGER.info("[Report Handler] report {} generation success.", taskId);
-        ReportEvent event = ReportEvent.builder()
-                .type(ReportEvent.EventType.COMPLETED)
-                .taskId(taskId)
-                .build();
-        reportStatus(event);
+        reportStatus.publishEvent(taskId, "", ReportEvent.EventType.COMPLETED);
     }
 
     public enum HandlerFactoryEnum {

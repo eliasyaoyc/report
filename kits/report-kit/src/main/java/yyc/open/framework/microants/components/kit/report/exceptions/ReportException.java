@@ -8,6 +8,7 @@ package yyc.open.framework.microants.components.kit.report.exceptions;
  */
 public class ReportException extends RuntimeException {
     private static final long serialVersionUID = -4680761951462797309L;
+    private String taskId;
 
     public ReportException() {
         super();
@@ -27,5 +28,9 @@ public class ReportException extends RuntimeException {
 
     protected ReportException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
+    }
+
+    public String getTaskId() {
+        return taskId;
     }
 }

@@ -3,7 +3,6 @@ package yyc.open.framework.microants.components.kit.report;
 import lombok.Builder;
 import lombok.Getter;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
-import yyc.open.framework.microants.components.kit.report.entity.ReportEntity;
 
 import java.util.List;
 
@@ -30,21 +29,5 @@ public class ReportTask {
         Integer priority;
         String templatePath;
         String data;
-    }
-
-    /**
-     * Returns the task collections to support parallel execution.
-     *
-     * @param config   need to generate report.
-     * @param entities data need to generate report.
-     * @return
-     */
-    public static List<ReportTask> createTask(ReportConfig config, List<ReportEntity> entities) {
-
-        ReportEvent event = ReportEvent.builder()
-                .type(ReportEvent.EventType.CREATION)
-                .build();
-        ReportContext.listenerFactory().onEvent(event);
-        return null;
     }
 }

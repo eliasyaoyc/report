@@ -104,9 +104,7 @@ public class ReportRuntime implements AutoCloseable {
             throw new ReportException(String.format("[Report Runtime] exec command: %s fail", command), e);
         }
 
-        ReportContextFactory.ReportContextFactoryEnum.INSTANCE
-                .getReportContextFactory()
-                .setContext(this.constructContext());
+        ReportContextProvider.INSTANCE.setContext(this.constructContext());
 
         this.running.compareAndSet(false, true);
     }
@@ -119,7 +117,7 @@ public class ReportRuntime implements AutoCloseable {
     private ReportContext constructContext() {
         return ReportContext.builder()
                 .globalConfig(this.globalConfig)
-                .reportStatus(new ReportContext.ReportStatus())
+                .reportStatus(new ReportStatus())
                 .build();
     }
 
@@ -148,9 +146,7 @@ public class ReportRuntime implements AutoCloseable {
                 .build()
                 .get();
 
-        ReportContextFactory.ReportContextFactoryEnum.INSTANCE
-                .getReportContextFactory()
-                .close();
+        ReportContextProvider.INSTANCE.close();
 
         this.running.compareAndSet(true, false);
     }

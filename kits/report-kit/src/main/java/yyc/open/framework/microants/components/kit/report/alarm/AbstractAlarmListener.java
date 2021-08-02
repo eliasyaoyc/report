@@ -2,7 +2,7 @@ package yyc.open.framework.microants.components.kit.report.alarm;
 
 import yyc.open.framework.microants.components.kit.report.ReportConfig;
 import yyc.open.framework.microants.components.kit.report.ReportContext;
-import yyc.open.framework.microants.components.kit.report.ReportContextFactory;
+import yyc.open.framework.microants.components.kit.report.ReportContextProvider;
 import yyc.open.framework.microants.components.kit.report.ReportEvent;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
 import yyc.open.framework.microants.components.kit.report.listener.Listener;
@@ -44,7 +44,7 @@ public abstract class AbstractAlarmListener implements Listener, alarm {
      * @return true if alarm is enabled, otherwise false.
      */
     boolean needToAlarm() {
-        ReportContext context = ReportContextFactory.ReportContextFactoryEnum.INSTANCE.getReportContextFactory().getContext();
+        ReportContext context = ReportContextProvider.INSTANCE.getContext();
         ReportConfig.AlarmConfig alarm = context.getGlobalConfig().getAlarm();
         return alarm.isEnabled();
     }
