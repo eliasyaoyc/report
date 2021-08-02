@@ -16,9 +16,11 @@ import java.util.stream.Collectors;
  */
 public class ReportBuilder {
     private ReportConfig reportConfig;
+    private ReportStatus status;
 
     private ReportBuilder() {
-        reportConfig = new ReportConfig();
+        this.reportConfig = new ReportConfig();
+        this.status = new ReportStatus();
     }
 
     public static ReportBuilder builder() {
@@ -216,6 +218,6 @@ public class ReportBuilder {
         BeansKit.copyPropertiesIsNull(globalConfig, reportConfig);
 
         // Create report status.
-        return new Report(reportConfig);
+        return new Report(reportConfig, status);
     }
 }

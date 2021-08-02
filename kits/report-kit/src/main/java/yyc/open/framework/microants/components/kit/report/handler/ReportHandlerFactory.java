@@ -30,8 +30,8 @@ public class ReportHandlerFactory {
     private ReportStatus reportStatus;
     private Map<String, Set<Handler>> handlers = Maps.newHashMap();
 
-    private ReportHandlerFactory() {
-        reportStatus = ReportContextProvider.INSTANCE.getContext().getReportStatus();
+    private ReportHandlerFactory(@NonNull ReportStatus reportStatus) {
+        this.reportStatus = reportStatus;
 
         // Construct handlers through processor annotation.
         Map<Class<? extends Annotation>, Set<Class<?>>> classSetMap = AnnotationScannerKit.scanClassesByAnnotations(ROOT_NAME, Processor.class);
@@ -59,9 +59,10 @@ public class ReportHandlerFactory {
      * But in parallel model，`tasks` is  a collection that represents a batch tasks.
      *
      * @param tasks
-     * @param parallel
+     * @param parallel whether parallel process.
+     * @param callback handle the response when a task completed.
      */
-    public void handle(@NonNull List<ReportTask> tasks, boolean parallel) {
+    public void handle(@NonNull List<ReportTask> tasks, boolean parallel, ReportCallback callback) {
         // Handle error.
         if (handlers.isEmpty()) {
             String taskIds = tasks.stream().map(task -> task.getReportId()).collect(Collectors.joining());
@@ -82,7 +83,7 @@ public class ReportHandlerFactory {
             task.getChilds().stream().forEach(subTask -> {
                 Set<Handler> handlers = chooseHandler(subTask.getType());
 
-                handlers.stream().forEach(handler -> handler.onHandle(subTask));
+                handlers.stream().forEach(handler -> handler.onHandle(subTask, callback));
             });
             doFinish(task.getReportId());
         });
@@ -121,9 +122,9 @@ public class ReportHandlerFactory {
 
         ReportHandlerFactory factory;
 
-        public ReportHandlerFactory getReportHandlerFactory() {
+        public ReportHandlerFactory getReportHandlerFactory(ReportStatus reportStatus) {
             if (factory == null) {
-                factory = new ReportHandlerFactory();
+                factory = new ReportHandlerFactory(reportStatus);
             }
             return factory;
         }

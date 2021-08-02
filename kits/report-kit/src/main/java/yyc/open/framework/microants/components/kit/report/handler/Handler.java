@@ -1,5 +1,7 @@
 package yyc.open.framework.microants.components.kit.report.handler;
 
+import yyc.open.framework.microants.components.kit.report.ReportCallback;
+
 /**
  * {@link Handler}
  *
@@ -7,9 +9,5 @@ package yyc.open.framework.microants.components.kit.report.handler;
  * @version ${project.version} - 2021/7/28
  */
 public interface Handler<T> {
-    void onHandle(T task);
-
-    default void onCompletion() {
-
-    }
+    void onHandle(T task, ReportCallback callback);
 }

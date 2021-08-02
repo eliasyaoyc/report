@@ -1,12 +1,18 @@
 package yyc.open.framework.microants.components.kit.report;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import yyc.open.framework.microants.components.kit.common.validate.NonNull;
+import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 import yyc.open.framework.microants.components.kit.report.entity.ReportEntity;
 import yyc.open.framework.microants.components.kit.report.exceptions.ReportException;
 import yyc.open.framework.microants.components.kit.report.handler.ReportHandlerFactory;
+import yyc.open.framework.microants.components.kit.report.threadpool.ReportThreadPool;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * {@link Report}
@@ -20,17 +26,20 @@ public class Report {
     private final ReportConfig config;
     private final ReportHandlerFactory handlerFactory;
     private final ReportTaskRegistry taskRegistry;
+    private ReportThreadPool threadPool;
+    private ReportStatus reportStatus;
 
-    public Report(ReportConfig config) {
+    public Report(@NonNull ReportConfig config, @NonNull ReportStatus status) {
+        this.reportStatus = status;
         this.config = config;
         this.handlerFactory = ReportHandlerFactory
                 .HandlerFactoryEnum
                 .INSTANCE
-                .getReportHandlerFactory();
+                .getReportHandlerFactory(status);
         this.taskRegistry = ReportTaskRegistry
                 .ReportRegistryEnum
                 .INSTANCE
-                .getReportRegistry();
+                .getReportRegistry(status);
     }
 
     /**
@@ -58,9 +67,30 @@ public class Report {
 
         // 2. Create the task collections.
         List<ReportTask> tasks = taskRegistry.createTask(config, reportEntities);
+        if (CollectionUtils.isEmpty(tasks)) {
+            return;
+        }
 
+        CountDownLatch latch = new CountDownLatch(tasks.size());
         // 3. Handle task.
-        this.handlerFactory.handle(tasks, parallel);
+        this.handlerFactory.handle(tasks, parallel, new ReportCallback() {
+            @Override
+            public void onReceived(String taskId, ReportEvent.EventType type) {
+                latch.countDown();
+                reportStatus.publishEvent(taskId, "", ReportEvent.EventType.PARTIALLY_COMPLETED);
+            }
+
+            @Override
+            public void onException(String taskId, String msg) {
+                reportStatus.publishEvent(taskId, msg, ReportEvent.EventType.FAIL);
+            }
+        });
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -71,4 +101,5 @@ public class Report {
     boolean checkReportState() {
         return ReportContextProvider.INSTANCE.getContext().getReportStatus() == null;
     }
+
 }

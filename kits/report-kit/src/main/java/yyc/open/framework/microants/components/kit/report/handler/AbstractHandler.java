@@ -22,14 +22,9 @@ import java.util.Map;
  */
 public abstract class AbstractHandler<T> implements Handler<T> {
     private final String defaultTemplatePath;
-    private ReportStatus reportStatus = ReportStatus.ReportStatusEnum.INSTANCE.getReportStatus();
 
     {
         defaultTemplatePath = ChartHandler.class.getClassLoader().getResource("").getPath() + "templates";
-    }
-
-    public void reportCompleteness(String taskId) {
-        reportStatus.publishEvent(taskId, "", ReportEvent.EventType.PARTIALLY_COMPLETED);
     }
 
     /**

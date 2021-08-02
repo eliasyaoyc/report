@@ -26,15 +26,13 @@ import static yyc.open.framework.microants.components.kit.report.commons.ReportC
 public class ChartHandler<T> extends AbstractHandler<T> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ChartHandler.class);
 
-    private ReportStatus reportStatus;
     private ReportConfig.GlobalConfig globalConfig;
 
     public ChartHandler() {
-        reportStatus = ReportContextProvider.INSTANCE.getContext().getReportStatus();
     }
 
     @Override
-    public void onHandle(T task) {
+    public void onHandle(T task, ReportCallback callback) {
         ReportTask.ReportTaskChild t = (ReportTask.ReportTaskChild) task;
         LOGGER.info("[Chard Handler] handle the task {}", t.getTaskId());
 
@@ -62,15 +60,11 @@ public class ChartHandler<T> extends AbstractHandler<T> {
             }
 
             reportCompleteness(t.getTaskId());
+            callback.onReceived(t.getTaskId(), ReportEvent.EventType.PARTIALLY_COMPLETED);
         } catch (Exception e) {
             String msg = String.format("[Chart Handler] generate chart encountered error: {}", e);
             LOGGER.error(msg);
-
-            reportStatus.publishEvent(t.getTaskId(), msg, ReportEvent.EventType.FAIL);
+            callback.onException(t.getTaskId(), msg);
         }
-    }
-
-    public void setReportStatus(ReportStatus reportStatus) {
-        this.reportStatus = reportStatus;
     }
 }

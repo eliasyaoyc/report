@@ -3,6 +3,7 @@ package yyc.open.framework.microants.components.kit.report.handler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import yyc.open.framework.microants.components.kit.report.ReportCallback;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
 
 import static yyc.open.framework.microants.components.kit.report.commons.ReportConstants.*;
@@ -18,7 +19,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileHandler.class);
 
     @Override
-    public void onHandle(T task) {
+    public void onHandle(T task, ReportCallback callback) {
         // Generate html.
         // Determine which file convert to.
     }

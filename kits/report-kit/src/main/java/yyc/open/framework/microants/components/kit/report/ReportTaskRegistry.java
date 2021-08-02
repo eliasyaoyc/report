@@ -18,8 +18,8 @@ public class ReportTaskRegistry {
     private Map<String, ReportTask> tasks = Maps.newConcurrentMap();
     private Map<String, ReportTask> failTasks = Maps.newConcurrentMap();
 
-    private ReportTaskRegistry() {
-        this.reportStatus = ReportContextProvider.INSTANCE.getContext().getReportStatus();
+    private ReportTaskRegistry(ReportStatus reportStatus) {
+        this.reportStatus = reportStatus;
     }
 
     /**
@@ -39,9 +39,9 @@ public class ReportTaskRegistry {
 
         ReportTaskRegistry reportRegistry;
 
-        public ReportTaskRegistry getReportRegistry() {
+        public ReportTaskRegistry getReportRegistry(ReportStatus reportStatus) {
             if (reportRegistry == null) {
-                reportRegistry = new ReportTaskRegistry();
+                reportRegistry = new ReportTaskRegistry(reportStatus);
             }
             return reportRegistry;
         }
