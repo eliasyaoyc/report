@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import yyc.open.framework.microants.components.kit.report.ReportContext;
 import yyc.open.framework.microants.components.kit.report.ReportEvent;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
+import yyc.open.framework.microants.components.kit.report.entity.ReportEntity;
 
 import static yyc.open.framework.microants.components.kit.report.commons.ReportConstants.DEFAULT_LISTENER;
 import static yyc.open.framework.microants.components.kit.report.commons.ReportConstants.LISTENER;
@@ -21,7 +22,13 @@ public class DefaultListener implements Listener {
 
     @Override
     public void onSuccess(ReportEvent event) {
-
+        switch (event.getType()) {
+            case REPORT:
+                ReportEntity reportEntity = ReportContext.reportRegistry().getReportEntity(event.getTaskId());
+                // Send the report task.
+            case COMPLETED:
+                LOGGER.info("");
+        }
     }
 
     @Override

@@ -11,8 +11,14 @@ import yyc.open.framework.microants.components.kit.common.validate.Asserts;
  */
 public class FileKit {
 
-    public static String suffix(CharSequence identifier, String path) {
+    public static String suffix(String path, CharSequence flag) {
         Asserts.hasText(path);
-        return Strings.commonSuffix(path, identifier);
+        return Strings.commonSuffix(path, flag);
+    }
+
+    public static String[] splitWithSuffix(String path, CharSequence flag) {
+        Asserts.hasText(path);
+        String suffix = suffix(path, flag);
+        return path.split(suffix);
     }
 }

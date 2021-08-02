@@ -31,12 +31,19 @@ public class HttpKit {
 
     public Result get() {
         Result.ResultBuilder builder = Result.builder();
+        CloseableHttpResponse response = null;
         try {
-            CloseableHttpResponse response = client.execute(request);
+            response = client.execute(request);
             builder.code(response.getStatusLine().getStatusCode());
             builder.msg(response.getEntity());
         } catch (IOException e) {
             logger.error("[Http Kit] execute encountered error:{}", e);
+        } finally {
+            try {
+                response.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return builder.build();
     }

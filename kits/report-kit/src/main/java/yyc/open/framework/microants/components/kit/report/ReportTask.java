@@ -27,6 +27,7 @@ public class ReportTask {
         String path;
         ReportEnums type;
         Integer priority;
+        String templatePath;
         String data;
     }
 
