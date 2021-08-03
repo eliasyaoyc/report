@@ -1,6 +1,7 @@
 package yyc.open.framework.microants.components.kit.report;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.http.util.Asserts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import yyc.open.framework.microants.components.kit.common.validate.NonNull;
@@ -69,6 +70,9 @@ public class Report {
 
         // 2. Create the task collections.
         reportEntities.stream().forEach(entity -> {
+            // Check report type whether is null (type is required parameter).
+            Asserts.check(entity.getReportType() != null, "[Constructor Report] the report type is must, please setup before build.");
+
             List<ReportTask> tasks = taskRegistry.createTask(config, entity);
             if (CollectionUtils.isEmpty(tasks)) {
                 return;

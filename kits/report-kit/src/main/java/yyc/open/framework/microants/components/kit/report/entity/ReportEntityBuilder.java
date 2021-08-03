@@ -13,12 +13,13 @@ import java.util.List;
  */
 public class ReportEntityBuilder {
     private String reportId = UUIDsKit.base64UUID();
-    private String reportName = UUIDsKit.base64UUID();
+    private String reportName = UUIDsKit.base64UUID() + ".png";
 
     private String templatePath;
     private ReportEnums reportType;
     ReportEntity.ReportTitle title;
     ReportEntity.ReportInfo info;
+
     // TODO Consider remove.
     ReportEntity.ReportCatalogue catalogue;
     ReportEntity.ReportContent content;

@@ -18,8 +18,14 @@ import java.util.Map;
  */
 public class ReportTaskRegistry {
     private ReportStatus reportStatus;
-    private Map<String, ReportTask> tasks = Maps.newConcurrentMap();
-    private Map<String, ReportTask> failTasks = Maps.newConcurrentMap();
+    private Map<String, ReportTask> tasks;
+    private Map<String, ReportTask> failTasks;
+
+    private ReportTaskRegistry(ReportStatus reportStatus) {
+        this.reportStatus = reportStatus;
+        this.tasks = Maps.newConcurrentMap();
+        this.failTasks = Maps.newConcurrentMap();
+    }
 
     public enum ReportRegistryEnum {
         INSTANCE;
@@ -32,10 +38,6 @@ public class ReportTaskRegistry {
             }
             return reportRegistry;
         }
-    }
-
-    private ReportTaskRegistry(ReportStatus reportStatus) {
-        this.reportStatus = reportStatus;
     }
 
     /**

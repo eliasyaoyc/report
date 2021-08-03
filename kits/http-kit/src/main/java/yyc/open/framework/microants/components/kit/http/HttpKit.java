@@ -1,5 +1,6 @@
 package yyc.open.framework.microants.components.kit.http;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -36,6 +37,7 @@ public class HttpKit {
         try {
             response = client.execute(request);
             builder.code(response.getStatusLine().getStatusCode());
+            HttpEntity entity = response.getEntity();
             builder.msg(EntityUtils.toString(response.getEntity()));
         } catch (IOException e) {
             logger.error("[Http Kit] execute encountered error:{}", e);

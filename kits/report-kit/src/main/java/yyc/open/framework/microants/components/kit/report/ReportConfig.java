@@ -18,13 +18,12 @@ public class ReportConfig {
     private List<String> colors;
     private ReportEnums type;
     private String watermark;
-    private boolean horizontal;
-    private int port;
-    private boolean parallel;
-    private String execPath;
+    private Boolean horizontal;
+    private Integer port;
+    private Boolean parallel;
     private String eChartJsPath;
     AlarmConfig alarm;
-    private int maxTaskNum;
+    private Integer maxTaskNum;
     private String outputPath;
 
     protected void setType(String type) {
@@ -34,15 +33,15 @@ public class ReportConfig {
     @Getter
     @Setter
     public static class GlobalConfig {
-        int port;
+        Integer port;
         String watermark;
-        boolean horizontal;
-        boolean parallel;
-        boolean chart;
+        Boolean horizontal;
+        Boolean parallel;
+        Boolean chart;
         String eChartJsPath;
         AlarmConfig alarm;
         List<String> colors;
-        int maxTaskNum;
+        Integer maxTaskNum;
         String outputPath;
     }
 

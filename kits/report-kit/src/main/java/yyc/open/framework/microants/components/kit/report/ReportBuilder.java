@@ -113,17 +113,6 @@ public class ReportBuilder {
     }
 
     /**
-     * Sets up the phantom js path.
-     *
-     * @param execPath
-     * @return
-     */
-    public ReportBuilder execPath(String execPath) {
-        this.reportConfig.setExecPath(execPath);
-        return this;
-    }
-
-    /**
      * Sets up the echarts template path.
      *
      * @param eChartJsPath
@@ -211,9 +200,6 @@ public class ReportBuilder {
 
         // Check global config.
         Asserts.check(globalConfig != null, "Report Runtime initialize fail.");
-
-        // Check report type whether is null (type is required parameter).
-        Asserts.check(this.reportConfig.getType() == null, "[Constructor Report] the report type is must, please setup before build.");
 
         BeansKit.copyPropertiesIsNull(globalConfig, reportConfig);
 

@@ -16,10 +16,6 @@ public class PhantomJS {
      */
     private String reqMethod;
     /**
-     * Requested Address: Address requested when table
-     */
-    private String url;
-    /**
      * File path name: supports png. JPG, PDF, etc
      */
     private String file;
@@ -27,10 +23,14 @@ public class PhantomJS {
      * Request parameter: input to option when echarts is used
      */
     private Map<String, Object> opt;
-    /**
-     * Whether to disable PhantomJS True: Not to disable PhantomJS False: disable PhantomJS
-     */
-    private boolean close = true;
+
+    public PhantomJS(String reqMethod,
+                     String file,
+                     Map<String, Object> opt) {
+        this.reqMethod = reqMethod;
+        this.file = file;
+        this.opt = opt;
+    }
 
     public static PhantomJSBuilder builder() {
         return new PhantomJSBuilder();
@@ -38,18 +38,11 @@ public class PhantomJS {
 
     public static class PhantomJSBuilder {
         private String reqMethod;
-        private String url;
         private String file;
         private Map<String, Object> opt;
-        private boolean close = true;
 
         public PhantomJSBuilder reqMethod(@NonNull String reqMethod) {
             this.reqMethod = reqMethod;
-            return this;
-        }
-
-        public PhantomJSBuilder url(@NonNull String url) {
-            this.url = url;
             return this;
         }
 
@@ -63,13 +56,8 @@ public class PhantomJS {
             return this;
         }
 
-        public PhantomJSBuilder close(@NonNull boolean closed) {
-            this.close = closed;
-            return this;
-        }
-
         public PhantomJS build() {
-            return new PhantomJS();
+            return new PhantomJS(this.reqMethod, this.file, this.opt);
         }
     }
 }
