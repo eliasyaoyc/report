@@ -80,11 +80,10 @@ public class ReportHandlerFactory {
 
         // Serial model todo consider that instead of use threadPool.
         tasks.stream().forEach(task -> {
-            task.getChilds().stream().forEach(subTask -> {
-                Set<Handler> handlers = chooseHandler(subTask.getType());
-
-                handlers.stream().forEach(handler -> handler.onHandle(subTask, callback));
-            });
+            Set<Handler> handlers = chooseHandler(task.getType());
+            if (!handlers.isEmpty()) {
+                handlers.stream().forEach(handler -> handler.onHandle(task, callback));
+            }
             doFinish(task.getReportId());
         });
     }

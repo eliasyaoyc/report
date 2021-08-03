@@ -33,7 +33,7 @@ public class ChartHandler<T> extends AbstractHandler<T> {
 
     @Override
     public void onHandle(T task, ReportCallback callback) {
-        ReportTask.ReportTaskChild t = (ReportTask.ReportTaskChild) task;
+        ReportTask t = (ReportTask) task;
         LOGGER.info("[Chard Handler] handle the task {}", t.getTaskId());
 
         try {
@@ -46,7 +46,7 @@ public class ChartHandler<T> extends AbstractHandler<T> {
             PhantomJS req = PhantomJS.builder()
                     .opt(opt)
                     .reqMethod("echarts")
-                    .file(t.getPath())
+                    .file(t.getOutputPath())
                     .build();
 
             Result result = HttpKit.builder()
@@ -56,10 +56,9 @@ public class ChartHandler<T> extends AbstractHandler<T> {
 
             // Determine whether to generate a watermark.
             if (StringUtils.isNotEmpty(globalConfig.getWatermark())) {
-                generateWatermark(globalConfig.getWatermark(), t.getPath());
+                generateWatermark(globalConfig.getWatermark(), t.getOutputPath());
             }
 
-            reportCompleteness(t.getTaskId());
             callback.onReceived(t.getTaskId(), ReportEvent.EventType.PARTIALLY_COMPLETED);
         } catch (Exception e) {
             String msg = String.format("[Chart Handler] generate chart encountered error: {}", e);

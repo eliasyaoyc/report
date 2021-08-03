@@ -11,11 +11,23 @@ import java.util.List;
  * @version ${project.version} - 2021/8/2
  */
 public class ReportEntityBuilder {
+    private String reportId;
+    private String reportName;
     private ReportEnums reportType;
     ReportEntity.ReportTitle title;
     ReportEntity.ReportInfo info;
     ReportEntity.ReportCatalogue catalogue;
     ReportEntity.ReportContent content;
+
+    public ReportEntityBuilder reportId(String reportId) {
+        this.reportId = reportId;
+        return this;
+    }
+
+    public ReportEntityBuilder reportName(String reportName) {
+        this.reportName = reportName;
+        return this;
+    }
 
     public ReportEntityBuilder type(ReportEnums type) {
         this.reportType = type;
@@ -101,7 +113,7 @@ public class ReportEntityBuilder {
             super.content = new ReportEntity.ReportContent();
         }
 
-        public ContentBuilder content(String chapter, List<String> indices, List<String> description, List<Object> data) {
+        public ContentBuilder content(String chapter, List<String> indices, List<String> description, List<ReportData> data) {
             super.content.getChapter().add(chapter);
             super.content.getIndices().add(indices);
             super.content.getDescription().add(description);
@@ -109,7 +121,7 @@ public class ReportEntityBuilder {
             return this;
         }
 
-        public ContentBuilder content(List<String> chapter, List<List<String>> indices, List<List<String>> description, List<List<Object>> data) {
+        public ContentBuilder content(List<String> chapter, List<List<String>> indices, List<List<String>> description, List<List<ReportData>> data) {
             super.content.getChapter().addAll(chapter);
             super.content.getIndices().addAll(indices);
             super.content.getDescription().addAll(description);
@@ -119,6 +131,6 @@ public class ReportEntityBuilder {
     }
 
     public ReportEntity build() {
-        return new ReportEntity(reportType, title, info, catalogue, content);
+        return new ReportEntity(reportId,reportName,reportType, title, info, catalogue, content);
     }
 }

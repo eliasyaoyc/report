@@ -25,6 +25,7 @@ public class ReportConfig {
     private String eChartJsPath;
     AlarmConfig alarm;
     private int maxTaskNum;
+    private String outputPath;
 
     protected void setType(String type) {
         this.type = ReportEnums.getType(type);
@@ -43,6 +44,7 @@ public class ReportConfig {
         AlarmConfig alarm;
         List<String> colors;
         int maxTaskNum;
+        String outputPath;
     }
 
     @Getter

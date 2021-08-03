@@ -4,7 +4,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import yyc.open.framework.microants.components.kit.common.validate.NonNull;
-import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 import yyc.open.framework.microants.components.kit.report.entity.ReportEntity;
 import yyc.open.framework.microants.components.kit.report.exceptions.ReportException;
 import yyc.open.framework.microants.components.kit.report.handler.ReportHandlerFactory;
@@ -12,7 +11,6 @@ import yyc.open.framework.microants.components.kit.report.threadpool.ReportThrea
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * {@link Report}
@@ -63,6 +61,10 @@ public class Report {
         // 1. Check report status whether running
         if (!checkReportState()) {
             throw new ReportException("[Report Runtime] has not started, please start first.");
+        }
+
+        if (CollectionUtils.isEmpty(reportEntities)) {
+            return;
         }
 
         // 2. Create the task collections.

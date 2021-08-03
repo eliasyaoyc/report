@@ -2,6 +2,7 @@ package yyc.open.framework.microants.components.kit.report.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import yyc.open.framework.microants.components.kit.common.uuid.UUIDsKit;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 
 import java.util.ArrayList;
@@ -16,6 +17,10 @@ import java.util.List;
 @Getter
 @Setter
 public class ReportEntity {
+    private String reportId = UUIDsKit.base64UUID();
+
+    private String reportName = UUIDsKit.base64UUID();
+
     /**
      * The type of report. e.g. pdf, word, html etc.
      */
@@ -41,7 +46,9 @@ public class ReportEntity {
      */
     private ReportContent content;
 
-    public ReportEntity(ReportEnums reportType, ReportTitle title, ReportInfo info, ReportCatalogue catalogue, ReportContent content) {
+    public ReportEntity(String reportId, String reportName, ReportEnums reportType, ReportTitle title, ReportInfo info, ReportCatalogue catalogue, ReportContent content) {
+        this.reportId = reportId;
+        this.reportName = reportName;
         this.reportType = reportType;
         this.title = title;
         this.info = info;
@@ -89,7 +96,7 @@ public class ReportEntity {
         private List<String> chapter;
         private List<List<String>> indices = new ArrayList<>();
         private List<List<String>> description = new ArrayList<>();
-        private List<List<Object>> data = new ArrayList<>();
+        private List<List<ReportData>> data = new ArrayList<>();
     }
 
     /**
@@ -99,18 +106,3 @@ public class ReportEntity {
         return new ReportEntityBuilder();
     }
 }
-
-//    /**
-//     * Chart title.
-//     */
-//    private String title;
-//
-//    /**
-//     * The legend name that only to Bar and Pie.
-//     */
-//    private String legendName;
-//
-//
-//    private List<Object[]> xdatas;
-//
-//    private Object[] yDatas;

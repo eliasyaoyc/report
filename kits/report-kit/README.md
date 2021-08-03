@@ -21,6 +21,7 @@ This kit support that generate echart picture(e.g. bar, line, pie etc.) and file
 - [ ] Percentage complete of report generation.
 - [ ] Parallel report generation.
 - [ ] Generate from fail-point.
+- [ ] Improved fault tolerance for report generation failures. 
 
 # Use-case
 
