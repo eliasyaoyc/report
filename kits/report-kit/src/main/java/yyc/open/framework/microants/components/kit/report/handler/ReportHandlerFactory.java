@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import yyc.open.framework.microants.components.kit.common.validate.Asserts;
 import yyc.open.framework.microants.components.kit.common.validate.NonNull;
 import yyc.open.framework.microants.components.kit.report.ReportCallback;
+import yyc.open.framework.microants.components.kit.report.ReportConfig;
 import yyc.open.framework.microants.components.kit.report.Task;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
@@ -26,8 +27,10 @@ public class ReportHandlerFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReportHandlerFactory.class);
 
     private Map<String, Handler> handlers = Maps.newHashMap();
+    private ReportConfig config;
 
-    private ReportHandlerFactory() {
+    private ReportHandlerFactory(ReportConfig config) {
+        this.config = config;
         // Construct handlers through processor annotation.
         ServiceLoader<Handler> handlers = ServiceLoader.load(Handler.class);
         for (Handler handler : handlers) {
@@ -66,7 +69,7 @@ public class ReportHandlerFactory {
         // Serial model todo consider that instead of use threadPool.
         Handler handler = chooseHandler(task);
         Asserts.notNull(handler, "[ReportHandler] handler is empty.");
-        handler.onHandle(task, callback);
+        handler.onHandle(task, config, callback);
     }
 
     /**
@@ -95,9 +98,9 @@ public class ReportHandlerFactory {
 
         ReportHandlerFactory factory;
 
-        public ReportHandlerFactory getReportHandlerFactory() {
+        public ReportHandlerFactory getReportHandlerFactory(ReportConfig config) {
             if (factory == null) {
-                factory = new ReportHandlerFactory();
+                factory = new ReportHandlerFactory(config);
             }
             return factory;
         }

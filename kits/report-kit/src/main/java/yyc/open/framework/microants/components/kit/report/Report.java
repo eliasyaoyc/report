@@ -33,7 +33,7 @@ public class Report {
         this.handlerFactory = ReportHandlerFactory
                 .HandlerFactoryEnum
                 .INSTANCE
-                .getReportHandlerFactory();
+                .getReportHandlerFactory(config);
         this.taskRegistry = ReportTaskRegistry
                 .ReportRegistryEnum
                 .INSTANCE

@@ -5,8 +5,6 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import yyc.open.framework.microants.components.kit.common.file.FileKit;
 import yyc.open.framework.microants.components.kit.common.validate.Asserts;
-import yyc.open.framework.microants.components.kit.report.ReportEvent;
-import yyc.open.framework.microants.components.kit.report.ReportStatus;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -21,11 +19,6 @@ import java.util.Map;
  * @version ${project.version} - 2021/7/31
  */
 public abstract class AbstractHandler<T> implements Handler<T> {
-    private final String defaultTemplatePath;
-
-    {
-        defaultTemplatePath = ChartHandler.class.getClassLoader().getResource("").getPath() + "templates";
-    }
 
     /**
      * Generate the freemarker template.
@@ -38,7 +31,10 @@ public abstract class AbstractHandler<T> implements Handler<T> {
      */
     String generateFreemarkerTemplate(String templatePath, Map<String, Object> data) throws
             IOException, TemplateException {
-        String[] path = FileKit.splitWithSuffix(templatePath, "/");
+        Asserts.notEmpty(data, "data is empty.");
+
+
+        String[] path = FileKit.splitWithSuffix(templatePath, '/');
         Asserts.isTrue(path.length == 2);
 
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_0);
@@ -54,15 +50,7 @@ public abstract class AbstractHandler<T> implements Handler<T> {
 
     String generateFreemarkerTemplateByDefault(String templateName, Map<String, Object> data) throws
             IOException, TemplateException {
-        Configuration configuration = new Configuration(Configuration.VERSION_2_3_0);
-        configuration.setDefaultEncoding("UTF-8");
-        configuration.setDirectoryForTemplateLoading(new File(defaultTemplatePath));
-        Template template = configuration.getTemplate(templateName);
-        try (StringWriter sw = new StringWriter()) {
-            template.process(data, sw);
-            sw.flush();
-            return sw.getBuffer().toString();
-        }
+        return generateFreemarkerTemplate(FileKit.getResourcePath(templateName), data);
     }
 
     /**
@@ -99,7 +87,7 @@ public abstract class AbstractHandler<T> implements Handler<T> {
             g.dispose();
             // 10. Generate.
             os = new FileOutputStream(path);
-            ImageIO.write(buffImg, FileKit.suffix(path, "."), os);
+            ImageIO.write(buffImg, FileKit.suffix(path, '.'), os);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

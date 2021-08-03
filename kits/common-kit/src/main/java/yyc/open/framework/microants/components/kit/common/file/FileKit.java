@@ -11,14 +11,24 @@ import yyc.open.framework.microants.components.kit.common.validate.Asserts;
  */
 public class FileKit {
 
-    public static String suffix(String path, CharSequence flag) {
+    public static String suffix(String path, Character flag) {
         Asserts.hasText(path);
-        return Strings.commonSuffix(path, flag);
+        return Strings.commonSuffix(path, flag.toString());
     }
 
-    public static String[] splitWithSuffix(String path, CharSequence flag) {
+    public static String[] splitWithSuffix(String path, Character flag) {
         Asserts.hasText(path);
-        String suffix = suffix(path, flag);
-        return path.split(suffix);
+        int i = path.lastIndexOf(flag);
+        return new String[]{path.substring(0, i), path.substring(i + 1)};
+    }
+
+    /**
+     * Returns the resource path.
+     *
+     * @param path
+     * @return
+     */
+    public static String getResourcePath(String path) {
+        return Thread.currentThread().getContextClassLoader().getResource(path).getPath();
     }
 }

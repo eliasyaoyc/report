@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import yyc.open.framework.microants.components.kit.report.ReportCallback;
+import yyc.open.framework.microants.components.kit.report.ReportConfig;
 import yyc.open.framework.microants.components.kit.report.ReportEvent;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
 import yyc.open.framework.microants.components.kit.report.entity.ReportEntity;
@@ -27,7 +28,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileHandler.class);
 
     @Override
-    public void onHandle(T task, ReportCallback callback) {
+    public void onHandle(T task, ReportConfig config, ReportCallback callback) {
         ReportEntity t = (ReportEntity) task;
         LOGGER.info("[FileHandler] handle the report {}.", t.getReportId());
 

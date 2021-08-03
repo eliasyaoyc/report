@@ -6,6 +6,7 @@ import lombok.Getter;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import yyc.open.framework.microants.components.kit.common.file.FileKit;
 import yyc.open.framework.microants.components.kit.http.HttpKit;
 import yyc.open.framework.microants.components.kit.report.exceptions.ReportException;
 
@@ -66,7 +67,7 @@ public class ReportRuntime implements AutoCloseable {
 
     private void initialize() {
         try {
-            String ret = FileUtils.readFileToString(new File(getResourcePath(GLOBAL_JSON_PATH)), StandardCharsets.UTF_8);
+            String ret = FileUtils.readFileToString(new File(FileKit.getResourcePath(GLOBAL_JSON_PATH)), StandardCharsets.UTF_8);
             Gson gson = new GsonBuilder().create();
             globalConfig = gson.fromJson(ret, ReportConfig.GlobalConfig.class);
         } catch (IOException e) {
@@ -91,14 +92,18 @@ public class ReportRuntime implements AutoCloseable {
 
         String property = System.getProperty("os.name");
         Platforms platforms = Platforms.getPlatforms(property);
-        String command = new StringBuilder(getResourcePath(platforms.getPath()))
+        String path = FileKit.getResourcePath(platforms.getPath());
+
+        String p = System.getProperty("os.name").contains(Platforms.WINDOWS.getName()) ? path.substring(1) : path;
+
+        String command = new StringBuilder(p)
                 .append(" ")
-                .append(getResourcePath(globalConfig.getEChartJsPath()))
+                .append(FileKit.getResourcePath(globalConfig.getEChartJsPath()))
                 .append(" -s -p ")
                 .append(globalConfig.getPort()).toString();
 
         try {
-            Runtime.getRuntime().exec("chmod 777 " + getResourcePath(platforms.getPath()));
+            Runtime.getRuntime().exec("chmod 777 " + p);
             Runtime.getRuntime().exec(command);
         } catch (IOException e) {
             throw new ReportException(String.format("[Report Runtime] exec command: %s fail", command), e);
@@ -149,16 +154,5 @@ public class ReportRuntime implements AutoCloseable {
         ReportContextProvider.INSTANCE.close();
 
         this.running.compareAndSet(true, false);
-    }
-
-    /**
-     * Returns the resource path.
-     *
-     * @param path
-     * @return
-     */
-    private static String getResourcePath(String path) {
-        path = ReportRuntime.class.getClassLoader().getResource(path).getPath();
-        return System.getProperty("os.name").contains(Platforms.WINDOWS.getName()) ? path.substring(1) : path;
     }
 }

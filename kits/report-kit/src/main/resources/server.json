@@ -4,7 +4,6 @@
   "horizontal": false,
   "parallel": false,
   "chart": true,
-  "execPath": "exec/",
   "eChartJsPath": "js/echarts-util.js",
   "maxTaskNum": 16,
   "outputPath": "/Users/eliasyao/Desktop",

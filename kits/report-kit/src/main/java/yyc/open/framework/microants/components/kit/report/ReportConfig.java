@@ -39,7 +39,6 @@ public class ReportConfig {
         boolean horizontal;
         boolean parallel;
         boolean chart;
-        String execPath;
         String eChartJsPath;
         AlarmConfig alarm;
         List<String> colors;

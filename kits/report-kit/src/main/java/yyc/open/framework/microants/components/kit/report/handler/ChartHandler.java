@@ -14,7 +14,6 @@ import yyc.open.framework.microants.components.kit.report.ReportTask;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
 import yyc.open.framework.microants.components.kit.report.entity.PhantomJS;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static yyc.open.framework.microants.components.kit.report.commons.ReportConstants.CHART_HANDLE;
@@ -30,21 +29,19 @@ import static yyc.open.framework.microants.components.kit.report.commons.ReportC
 public class ChartHandler<T> extends AbstractHandler<T> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ChartHandler.class);
 
-    private ReportConfig.GlobalConfig globalConfig;
-
     public ChartHandler() {
     }
 
     @Override
-    public void onHandle(T task, ReportCallback callback) {
+    public void onHandle(T task, ReportConfig config, ReportCallback callback) {
         ReportTask t = (ReportTask) task;
         LOGGER.info("[ChardHandler] handle the task {}.", t.getTaskId());
 
         Gson gson = new GsonBuilder().create();
         try {
             String option = StringUtils.isNotEmpty(t.getTemplatePath()) ?
-                    generateFreemarkerTemplate(t.getTemplatePath(), new HashMap<>()) :
-                    generateFreemarkerTemplateByDefault(t.getReportType().getTemplateName(), new HashMap<>());
+                    generateFreemarkerTemplate(t.getTemplatePath(), gson.fromJson(t.getData(), Map.class)) :
+                    generateFreemarkerTemplateByDefault(t.getReportType().getTemplateName(), gson.fromJson(t.getData(), Map.class));
 
             Map<String, Object> opt = gson.fromJson(option, Map.class);
 
@@ -55,7 +52,7 @@ public class ChartHandler<T> extends AbstractHandler<T> {
                     .build();
 
             Result result = HttpKit.builder()
-                    .post(String.format("localhost:{}", globalConfig.getPort()))
+                    .post(String.format("localhost:{}", config.getPort()))
                     .body(new GsonBuilder().create().toJson(req))
                     .build().get();
 
@@ -63,8 +60,8 @@ public class ChartHandler<T> extends AbstractHandler<T> {
             String ret = gson.fromJson(result.getMsg(), Map.class).get("data").toString();
 
             // Determine whether to generate a watermark.
-            if (StringUtils.isNotEmpty(globalConfig.getWatermark())) {
-                generateWatermark(globalConfig.getWatermark(), t.getOutputPath());
+            if (StringUtils.isNotEmpty(config.getWatermark())) {
+                generateWatermark(config.getWatermark(), t.getOutputPath());
             }
 
             if (StringUtils.isEmpty(ret)) {
