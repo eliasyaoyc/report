@@ -1,5 +1,6 @@
 package yyc.open.framework.microants.components.kit.report.entity;
 
+import yyc.open.framework.microants.components.kit.common.uuid.UUIDsKit;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 
 import java.util.List;
@@ -11,8 +12,9 @@ import java.util.List;
  * @version ${project.version} - 2021/8/2
  */
 public class ReportEntityBuilder {
-    private String reportId;
-    private String reportName;
+    private String reportId = UUIDsKit.base64UUID();
+    private String reportName = UUIDsKit.base64UUID();
+
     private String templatePath;
     private ReportEnums reportType;
     ReportEntity.ReportTitle title;
@@ -43,102 +45,121 @@ public class ReportEntityBuilder {
     }
 
     public TitleBuilder partTitle() {
-        return new TitleBuilder();
+        return new TitleBuilder(this);
     }
 
-    public InfoBuilder partInfo() {
-        return new InfoBuilder();
-    }
 
-    public CatalogueBuilder partCatalogue() {
-        return new CatalogueBuilder();
-    }
+    public final static class TitleBuilder {
+        private ReportEntityBuilder builder;
 
-    public ContentBuilder partContent() {
-        return new ContentBuilder();
-    }
-
-    public final static class TitleBuilder extends ReportEntityBuilder {
-
-        TitleBuilder() {
-            super.title = new ReportEntity.ReportTitle();
+        public TitleBuilder(ReportEntityBuilder builder) {
+            this.builder = builder;
+            this.builder.title = new ReportEntity.ReportTitle();
         }
 
         public TitleBuilder background(String background) {
-            super.title.setBackground(background);
+            this.builder.title.setBackground(background);
             return this;
         }
 
         public TitleBuilder title(String title) {
-            super.title.setTitle(title);
+            this.builder.title.setTitle(title);
             return this;
         }
 
         public TitleBuilder description(String description) {
-            super.title.setDescription(description);
+            this.builder.title.setDescription(description);
             return this;
         }
+
+        public InfoBuilder partInfo() {
+            return new InfoBuilder(this.builder);
+        }
+
     }
 
-    public final static class InfoBuilder extends ReportEntityBuilder {
-        InfoBuilder() {
-            super.info = new ReportEntity.ReportInfo();
+    public final static class InfoBuilder {
+        private ReportEntityBuilder builder;
+
+        InfoBuilder(ReportEntityBuilder builder) {
+            this.builder = builder;
+            this.builder.info = new ReportEntity.ReportInfo();
         }
 
         public InfoBuilder info(String label, String value) {
-            super.info.getLabels().add(label);
-            super.info.getValues().add(value);
+            this.builder.info.getLabels().add(label);
+            this.builder.info.getValues().add(value);
             return this;
         }
 
         public InfoBuilder info(List<String> labels, List<String> values) {
-            super.info.getLabels().addAll(labels);
-            super.info.getValues().addAll(values);
+            this.builder.info.getLabels().addAll(labels);
+            this.builder.info.getValues().addAll(values);
             return this;
+        }
+
+        public CatalogueBuilder partCatalogue() {
+            return new CatalogueBuilder(this.builder);
         }
     }
 
-    public final static class CatalogueBuilder extends ReportEntityBuilder {
-        CatalogueBuilder() {
-            super.catalogue = new ReportEntity.ReportCatalogue();
+    public final static class CatalogueBuilder {
+        private ReportEntityBuilder builder;
+
+        public CatalogueBuilder(ReportEntityBuilder builder) {
+            this.builder = builder;
+            this.builder.catalogue = new ReportEntity.ReportCatalogue();
         }
 
         public CatalogueBuilder catalogue(String chapter, List<String> indices) {
-            super.catalogue.getChapter().add(chapter);
-            super.catalogue.getIndices().add(indices);
+            this.builder.catalogue.getChapter().add(chapter);
+            this.builder.catalogue.getIndices().add(indices);
             return this;
         }
 
         public CatalogueBuilder catalogue(List<String> chapter, List<List<String>> indices) {
-            super.catalogue.getChapter().addAll(chapter);
-            super.catalogue.getIndices().addAll(indices);
+            this.builder.catalogue.getChapter().addAll(chapter);
+            this.builder.catalogue.getIndices().addAll(indices);
             return this;
+        }
+
+        public ContentBuilder partContent() {
+            return new ContentBuilder(this.builder);
         }
     }
 
-    public final static class ContentBuilder extends ReportEntityBuilder {
-        ContentBuilder() {
-            super.content = new ReportEntity.ReportContent();
+    public final static class ContentBuilder {
+        private ReportEntityBuilder builder;
+
+        ContentBuilder(ReportEntityBuilder builder) {
+            this.builder = builder;
+            this.builder.content = new ReportEntity.ReportContent();
         }
 
         public ContentBuilder content(String chapter, List<String> indices, List<String> description, List<ReportData> data) {
-            super.content.getChapter().add(chapter);
-            super.content.getIndices().add(indices);
-            super.content.getDescription().add(description);
-            super.content.getData().add(data);
+            this.builder.content.getChapter().add(chapter);
+            this.builder.content.getIndices().add(indices);
+            this.builder.content.getDescription().add(description);
+            this.builder.content.getData().add(data);
             return this;
         }
 
         public ContentBuilder content(List<String> chapter, List<List<String>> indices, List<List<String>> description, List<List<ReportData>> data) {
-            super.content.getChapter().addAll(chapter);
-            super.content.getIndices().addAll(indices);
-            super.content.getDescription().addAll(description);
-            super.content.getData().addAll(data);
+            this.builder.content.getChapter().addAll(chapter);
+            this.builder.content.getIndices().addAll(indices);
+            this.builder.content.getDescription().addAll(description);
+            this.builder.content.getData().addAll(data);
             return this;
         }
-    }
 
-    public ReportEntity build() {
-        return new ReportEntity(reportId, reportName, reportType, title, info, catalogue, content);
+        public ReportEntity build() {
+            return new ReportEntity(builder.reportId,
+                    builder.reportName,
+                    builder.reportType,
+                    builder.title,
+                    builder.info,
+                    builder.catalogue,
+                    builder.content);
+        }
     }
 }
