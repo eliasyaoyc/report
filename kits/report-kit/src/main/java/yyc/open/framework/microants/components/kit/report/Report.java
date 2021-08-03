@@ -59,7 +59,7 @@ public class Report {
 
     private void generate(List<ReportEntity> reportEntities, boolean parallel) {
         // 1. Check report status whether running
-        if (!checkReportState()) {
+        if (checkReportState()) {
             throw new ReportException("[Report Runtime] has not started, please start first.");
         }
 
@@ -82,7 +82,7 @@ public class Report {
                     this.handlerFactory.handle(task, parallel, new ReportCallback() {
                         @Override
                         public void onReceived(String taskId, String result, ReportEvent.EventType type) {
-                            switch (type){
+                            switch (type) {
                                 case PARTIALLY_COMPLETED:
                                     reportStatus.publishEvent(taskId, ReportEvent.EventType.PARTIALLY_COMPLETED);
                                     latch.countDown();
@@ -94,6 +94,7 @@ public class Report {
                                     break;
                             }
                         }
+
                         @Override
                         public void onException(String taskId, String msg) {
                             LOGGER.error("[Report] subTask{}-{} execute failed.", entity.getReportId(), taskId);

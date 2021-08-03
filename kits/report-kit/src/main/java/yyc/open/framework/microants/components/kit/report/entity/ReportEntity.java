@@ -97,7 +97,7 @@ public class ReportEntity extends Task {
     @Getter
     @Setter
     public static class ReportContent {
-        private List<String> chapter;
+        private List<String> chapter = new ArrayList<>();
         private List<List<String>> indices = new ArrayList<>();
         private List<List<String>> description = new ArrayList<>();
         private List<List<ReportData>> data = new ArrayList<>();

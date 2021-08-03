@@ -91,14 +91,14 @@ public class ReportRuntime implements AutoCloseable {
 
         String property = System.getProperty("os.name");
         Platforms platforms = Platforms.getPlatforms(property);
-        String command = new StringBuilder()
-                .append(getResourcePath(platforms.getPath()))
+        String command = new StringBuilder(getResourcePath(platforms.getPath()))
                 .append(" ")
-                .append(globalConfig.getEChartJsPath())
+                .append(getResourcePath(globalConfig.getEChartJsPath()))
                 .append(" -s -p ")
                 .append(globalConfig.getPort()).toString();
 
         try {
+            Runtime.getRuntime().exec("chmod 777 " + getResourcePath(platforms.getPath()));
             Runtime.getRuntime().exec(command);
         } catch (IOException e) {
             throw new ReportException(String.format("[Report Runtime] exec command: %s fail", command), e);

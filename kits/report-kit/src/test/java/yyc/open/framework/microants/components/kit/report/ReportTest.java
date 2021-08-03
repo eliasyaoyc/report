@@ -1,13 +1,14 @@
 package yyc.open.framework.microants.components.kit.report;
 
 import org.junit.Test;
+import yyc.open.framework.microants.components.kit.common.reflect.AnnotationScannerKit;
+import yyc.open.framework.microants.components.kit.report.commons.Processor;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 import yyc.open.framework.microants.components.kit.report.entity.ReportData;
 import yyc.open.framework.microants.components.kit.report.entity.ReportEntity;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.lang.annotation.Annotation;
+import java.util.*;
 
 /**
  * {@link ReportTest}
@@ -72,6 +73,8 @@ public class ReportTest {
 
     @Test
     public void testPdf() {
+        Map<Class<? extends Annotation>, Set<Class<?>>> classSetMap = AnnotationScannerKit.scanClassesByAnnotations("yyc.open.framework.microants.components.kit.report", Processor.class);
+        System.out.println(classSetMap);
     }
 
     @Test

@@ -1,10 +1,8 @@
 package yyc.open.framework.microants.components.kit.report.handler;
 
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import yyc.open.framework.microants.components.kit.common.reflect.AnnotationScannerKit;
 import yyc.open.framework.microants.components.kit.common.validate.Asserts;
 import yyc.open.framework.microants.components.kit.common.validate.NonNull;
 import yyc.open.framework.microants.components.kit.report.ReportCallback;
@@ -14,12 +12,11 @@ import yyc.open.framework.microants.components.kit.report.Task;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 
-import java.lang.annotation.Annotation;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.ServiceLoader;
 
-import static yyc.open.framework.microants.components.kit.report.commons.ReportConstants.*;
+import static yyc.open.framework.microants.components.kit.report.commons.ReportConstants.CHART_HANDLE;
+import static yyc.open.framework.microants.components.kit.report.commons.ReportConstants.FILE_HANDLE;
 
 /**
  * {@link ReportHandlerFactory}
@@ -31,27 +28,40 @@ public class ReportHandlerFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReportHandlerFactory.class);
 
     private ReportStatus reportStatus;
-    private Map<String, Set<Handler>> handlers = Maps.newHashMap();
+    private Map<String, Handler> handlers = Maps.newHashMap();
 
     private ReportHandlerFactory(@NonNull ReportStatus reportStatus) {
         this.reportStatus = reportStatus;
 
         // Construct handlers through processor annotation.
-        Map<Class<? extends Annotation>, Set<Class<?>>> classSetMap = AnnotationScannerKit.scanClassesByAnnotations(ROOT_NAME, Processor.class);
-        if (classSetMap.isEmpty()) {
-            return;
-        }
-        for (Map.Entry<Class<? extends Annotation>, Set<Class<?>>> entity : classSetMap.entrySet()) {
-            Processor processor = (Processor) entity.getKey().cast(Processor.class);
-            if (!processor.type().equals(HANDLER)) {
-                continue;
-            }
-            Set<Handler> values = entity.getValue().stream().map(val -> {
-                Handler handler = (Handler) val.cast(Handler.class);
-                return handler;
-            }).collect(Collectors.toSet());
+//        Map<Class<? extends Annotation>, Set<Class<?>>> classSetMap = AnnotationScannerKit.scanClassesByAnnotations(ROOT_NAME, Processor.class);
+//        if (classSetMap.isEmpty()) {
+//            return;
+//        }
+//        for (Map.Entry<Class<? extends Annotation>, Set<Class<?>>> entity : classSetMap.entrySet()) {
+//            Processor processor = (Processor) entity.getKey().cast(Processor.class);
+//            if (!processor.type().equals(HANDLER)) {
+//                continue;
+//            }
+//            Set<Handler> values = entity.getValue().stream().map(val -> {
+//                Handler handler = (Handler) val.cast(Handler.class);
+//                return handler;
+//            }).collect(Collectors.toSet());
+//
+//            handlers.getOrDefault(processor.name(), Sets.newHashSet()).addAll(values);
+//        }
 
-            handlers.getOrDefault(processor.name(), Sets.newHashSet()).addAll(values);
+        ServiceLoader<Handler> handlers = ServiceLoader.load(Handler.class);
+        for (Handler handler : handlers) {
+            Processor spi = handler.getClass().getAnnotation(Processor.class);
+            if (spi != null) {
+                String name = spi.name();
+                if (this.handlers.containsKey(name)) {
+                    throw new RuntimeException(
+                            "The @Processor value(" + name + ") repeat, for class(" + handler.getClass() + ") and class(" + this.handlers.get(name).getClass() + ").");
+                }
+                this.handlers.put(name, handler);
+            }
         }
     }
 
@@ -76,10 +86,9 @@ public class ReportHandlerFactory {
         }
 
         // Serial model todo consider that instead of use threadPool.
-        Set<Handler> handlers = chooseHandler(task);
-        if (!handlers.isEmpty()) {
-            handlers.stream().forEach(handler -> handler.onHandle(task, callback));
-        }
+        Handler handler = chooseHandler(task);
+        Asserts.notNull(handler, "[ReportHandler] handler is empty.");
+        handler.onHandle(task, callback);
     }
 
     /**
@@ -96,7 +105,7 @@ public class ReportHandlerFactory {
      *
      * @return the handler.
      */
-    private <T> Set<Handler> chooseHandler(T task) {
+    private <T> Handler chooseHandler(T task) {
         Task t = (Task) task;
         return ReportEnums.isCharts(t.getReportType()) ?
                 this.handlers.get(CHART_HANDLE) :
