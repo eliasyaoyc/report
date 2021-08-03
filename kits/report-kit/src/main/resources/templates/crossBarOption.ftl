@@ -1,72 +1,37 @@
 <#--横向单柱状图-->
 {
+    "color": "rgba(0, 116, 227, 0.8)",
     "title": {
-        "text": "${title}",
-        "textStyle": {
-            "color": "red",
-            "fontSize": 15,
-            "fontWeight": "bolder"
-        }
+        "text": "${title}"
     },
     "tooltip": {
-        "formatter": "{a}<br/>{b} : {c}",
-        "show": true
+         "axisPointer": {
+             "type": "shadow"
+         },
+         "trigger": "axis"
     },
     "legend": {
-        "textStyle": {
-            "color": "red",
-            "fontSize": 15,
-            "fontWeight": "bolder"
-        },
-    "data": ["${legend}"]
+       "data": ["${legend}"]
     },
-    "xAxis": [{
-        "type": "category",
-        "axisLabel": {
-            "show": true,
-            "textStyle": {
-                "fontSize": 15,
-                "fontWeight": "bolder"
-            }
-        },
-        "axisLine":{
-            "lineStyle":{
-                "color": "#315070",
-                "width":4
-            }
-        },
-        "data": ${category}
-
-    }],
-    "yAxis": [{
+    "grid": {
+        "left": "3%",
+        "bottom": "3%",
+        "right": "4%",
+        "containLabel": true
+    },
+    "xAxis": {
         "type": "value",
-            "axisLabel": {
-                "show": true,
-                "textStyle": {
-                    "fontSize": 15,
-                    "fontWeight": "bolder"
-                }
-            },
-        "axisLine":{
-            "lineStyle":{
-                "color":"#315070",
-                "width":4
-            }
-        }
-    }],
-    "series": [{
+        "boundaryGap": [0,0.01]
+    },
+
+    "yAxis": {
+        "type": "category",
+        "data": ${category}
+    },
+    "series": {
         "name": "${legend}",
         "data": ${values},
-        "type": "bar",
-        "barWidth": "30%",
-        "label": {
-            "normal": {
-                "color": "green",
-                "fontSize": 15,
-                "fontWeight": "bolder",
-                "show": true,
-                "position": "top"
-            }
-        }
-    }]
+        "type": "bar"
+        "barWidth": "30%"
+    }
 }
