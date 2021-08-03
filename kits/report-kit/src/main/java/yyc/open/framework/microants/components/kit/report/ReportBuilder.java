@@ -20,7 +20,7 @@ public class ReportBuilder {
 
     private ReportBuilder() {
         this.reportConfig = new ReportConfig();
-        this.status = new ReportStatus();
+        this.status = ReportStatus.ReportStatusEnum.INSTANCE.getReportStatus();
     }
 
     public static ReportBuilder builder() {

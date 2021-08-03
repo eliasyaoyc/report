@@ -3,6 +3,7 @@ package yyc.open.framework.microants.components.kit.report.entity;
 import lombok.Getter;
 import lombok.Setter;
 import yyc.open.framework.microants.components.kit.common.uuid.UUIDsKit;
+import yyc.open.framework.microants.components.kit.report.Task;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 
 import java.util.ArrayList;
@@ -16,20 +17,17 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class ReportEntity {
+public class ReportEntity extends Task {
     private String reportId = UUIDsKit.base64UUID();
 
     private String reportName = UUIDsKit.base64UUID();
 
     /**
-     * The type of report. e.g. pdf, word, html etc.
-     */
-    private ReportEnums reportType;
-
-    /**
      * Report title.
      */
     private ReportTitle title;
+
+    private String templatePath;
 
     /**
      * Report info.
@@ -46,10 +44,16 @@ public class ReportEntity {
      */
     private ReportContent content;
 
-    public ReportEntity(String reportId, String reportName, ReportEnums reportType, ReportTitle title, ReportInfo info, ReportCatalogue catalogue, ReportContent content) {
+    public ReportEntity(String reportId,
+                        String reportName,
+                        ReportEnums reportType,
+                        ReportTitle title,
+                        ReportInfo info,
+                        ReportCatalogue catalogue,
+                        ReportContent content) {
         this.reportId = reportId;
         this.reportName = reportName;
-        this.reportType = reportType;
+        super.setReportType(reportType);
         this.title = title;
         this.info = info;
         this.catalogue = catalogue;
@@ -97,6 +101,17 @@ public class ReportEntity {
         private List<List<String>> indices = new ArrayList<>();
         private List<List<String>> description = new ArrayList<>();
         private List<List<ReportData>> data = new ArrayList<>();
+    }
+
+    public void setSubTaskExecutionResult(String taskId, String base64) {
+        List<List<ReportData>> data = this.getContent().getData();
+        data.stream().forEach(d -> {
+            d.stream().forEach(i -> {
+                if (i.getTaskId().equals(taskId)) {
+                    i.setBase64(base64);
+                }
+            });
+        });
     }
 
     /**

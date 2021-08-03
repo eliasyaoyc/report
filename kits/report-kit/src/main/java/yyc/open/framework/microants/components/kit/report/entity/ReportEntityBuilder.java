@@ -13,6 +13,7 @@ import java.util.List;
 public class ReportEntityBuilder {
     private String reportId;
     private String reportName;
+    private String templatePath;
     private ReportEnums reportType;
     ReportEntity.ReportTitle title;
     ReportEntity.ReportInfo info;
@@ -28,6 +29,12 @@ public class ReportEntityBuilder {
         this.reportName = reportName;
         return this;
     }
+
+    public ReportEntityBuilder templatePath(String templatePath) {
+        this.templatePath = templatePath;
+        return this;
+    }
+
 
     public ReportEntityBuilder type(ReportEnums type) {
         this.reportType = type;
@@ -131,6 +138,6 @@ public class ReportEntityBuilder {
     }
 
     public ReportEntity build() {
-        return new ReportEntity(reportId,reportName,reportType, title, info, catalogue, content);
+        return new ReportEntity(reportId, reportName, reportType, title, info, catalogue, content);
     }
 }

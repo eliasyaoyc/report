@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.Builder;
 import lombok.Getter;
-import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 import yyc.open.framework.microants.components.kit.report.entity.ReportData;
 
 import java.text.DecimalFormat;
@@ -19,16 +18,14 @@ import java.util.*;
  */
 @Builder
 @Getter
-public class ReportTask {
+public class ReportTask extends Task {
     private String reportId;
     private String reportName;
     private String outputPath;
     private String taskId;
-    private ReportEnums type;
     private Integer priority;
     private String templatePath;
     private String data;
-
 
     public static String parseReportData(ReportData data) {
         Objects.requireNonNull(data, "ReportData");

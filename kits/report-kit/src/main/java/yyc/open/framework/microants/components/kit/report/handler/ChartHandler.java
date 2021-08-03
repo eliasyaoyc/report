@@ -1,12 +1,16 @@
 package yyc.open.framework.microants.components.kit.report.handler;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import yyc.open.framework.microants.components.kit.http.HttpKit;
 import yyc.open.framework.microants.components.kit.http.Result;
-import yyc.open.framework.microants.components.kit.report.*;
+import yyc.open.framework.microants.components.kit.report.ReportCallback;
+import yyc.open.framework.microants.components.kit.report.ReportConfig;
+import yyc.open.framework.microants.components.kit.report.ReportEvent;
+import yyc.open.framework.microants.components.kit.report.ReportTask;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
 import yyc.open.framework.microants.components.kit.report.entity.PhantomJS;
 
@@ -34,14 +38,15 @@ public class ChartHandler<T> extends AbstractHandler<T> {
     @Override
     public void onHandle(T task, ReportCallback callback) {
         ReportTask t = (ReportTask) task;
-        LOGGER.info("[Chard Handler] handle the task {}", t.getTaskId());
+        LOGGER.info("[ChardHandler] handle the task {}.", t.getTaskId());
 
+        Gson gson = new GsonBuilder().create();
         try {
             String option = StringUtils.isNotEmpty(t.getTemplatePath()) ?
                     generateFreemarkerTemplate(t.getTemplatePath(), new HashMap<>()) :
-                    generateFreemarkerTemplateByDefault(t.getType().getTemplateName(), new HashMap<>());
+                    generateFreemarkerTemplateByDefault(t.getReportType().getTemplateName(), new HashMap<>());
 
-            Map<String, Object> opt = new GsonBuilder().create().fromJson(option, Map.class);
+            Map<String, Object> opt = gson.fromJson(option, Map.class);
 
             PhantomJS req = PhantomJS.builder()
                     .opt(opt)
@@ -54,14 +59,21 @@ public class ChartHandler<T> extends AbstractHandler<T> {
                     .body(new GsonBuilder().create().toJson(req))
                     .build().get();
 
+            // Get the base64.
+            String ret = gson.fromJson(result.getMsg(), Map.class).get("data").toString();
+
             // Determine whether to generate a watermark.
             if (StringUtils.isNotEmpty(globalConfig.getWatermark())) {
                 generateWatermark(globalConfig.getWatermark(), t.getOutputPath());
             }
 
-            callback.onReceived(t.getTaskId(), ReportEvent.EventType.PARTIALLY_COMPLETED);
+            if (StringUtils.isEmpty(ret)) {
+                callback.onException(t.getTaskId(), "[ChartHandler] generate echart encounter error: base64 is empty.");
+                return;
+            }
+            callback.onReceived(t.getTaskId(), ret, ReportEvent.EventType.PARTIALLY_COMPLETED);
         } catch (Exception e) {
-            String msg = String.format("[Chart Handler] generate chart encountered error: {}", e);
+            String msg = String.format("[ChartHandler] generate echart encountered error: {}.", e);
             LOGGER.error(msg);
             callback.onException(t.getTaskId(), msg);
         }

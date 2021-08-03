@@ -49,24 +49,39 @@ public class ReportStatus {
     /**
      * Publish the event that will be consumed by {@link Listener}
      *
-     * @param taskId
-     * @param msg
+     * @param id   Maybe ReportId or TaskId.
      * @param type
      */
-    public void publishEvent(String taskId, String msg, ReportEvent.EventType type) {
+
+    public void publishEvent(String id, ReportEvent.EventType type) {
+        this.publishEvent(id, "", type);
+    }
+
+    public void publishEvent(String id, String msg, ReportEvent.EventType type) {
         ReportEvent event = ReportEvent.builder()
-                .taskId(taskId)
+                .taskId(id)
                 .type(type)
                 .message(msg)
                 .build();
 
         switch (type) {
             case CREATION:
+                LOGGER.info("[ReportStatus] report {} all subTask are all creation.", id);
+                break;
             case PARTIALLY_COMPLETED:
+                LOGGER.info("[ReportStatus] task {} is completed.", id);
+                break;
+            case REPORT:
+                LOGGER.info("[ReportStatus] report {} subTask are all finished.", id);
+
+                break;
             case COMPLETED:
+                LOGGER.info("[ReportStatus] report {} is generated completely", id);
+                break;
             case FAIL:
-                LOGGER.info("[Default Listener] task {} execute fail, add to fail-queue and wait to retry", event.getTaskId());
+                LOGGER.info("[ReportStatus] task {} execute fail, add to fail-queue and wait to retry", event.getTaskId());
                 this.listeners.get(ALARM_LISTENER).stream().forEach(listener -> listener.onFailure(event));
+                break;
         }
     }
 

@@ -3,6 +3,7 @@ package yyc.open.framework.microants.components.kit.http;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +36,7 @@ public class HttpKit {
         try {
             response = client.execute(request);
             builder.code(response.getStatusLine().getStatusCode());
-            builder.msg(response.getEntity());
+            builder.msg(EntityUtils.toString(response.getEntity()));
         } catch (IOException e) {
             logger.error("[Http Kit] execute encountered error:{}", e);
         } finally {

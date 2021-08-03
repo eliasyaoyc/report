@@ -1,7 +1,5 @@
 package yyc.open.framework.microants.components.kit.report;
 
-import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
-
 /**
  * {@link ReportCallback}
  *
@@ -10,7 +8,7 @@ import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
  * @date 2021/8/2
  */
 public interface ReportCallback {
-    void onReceived(String taskId, ReportEvent.EventType type);
+    void onReceived(String taskId, String result, ReportEvent.EventType type);
 
     void onException(String taskId, String msg);
 }

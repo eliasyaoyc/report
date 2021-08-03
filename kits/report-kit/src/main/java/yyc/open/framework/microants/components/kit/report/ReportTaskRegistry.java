@@ -2,11 +2,8 @@ package yyc.open.framework.microants.components.kit.report;
 
 import com.google.common.collect.Maps;
 import org.apache.commons.collections4.CollectionUtils;
-import yyc.open.framework.microants.components.kit.common.beans.MatcherAndConverter;
-import yyc.open.framework.microants.components.kit.common.beans.MatcherAndConverterKit;
 import yyc.open.framework.microants.components.kit.common.uuid.UUIDsKit;
 import yyc.open.framework.microants.components.kit.common.validate.NonNull;
-import yyc.open.framework.microants.components.kit.report.entity.ReportData;
 import yyc.open.framework.microants.components.kit.report.entity.ReportEntity;
 
 import java.util.ArrayList;
@@ -23,7 +20,6 @@ public class ReportTaskRegistry {
     private ReportStatus reportStatus;
     private Map<String, ReportTask> tasks = Maps.newConcurrentMap();
     private Map<String, ReportTask> failTasks = Maps.newConcurrentMap();
-    private MatcherAndConverter converter;
 
     public enum ReportRegistryEnum {
         INSTANCE;
@@ -40,41 +36,40 @@ public class ReportTaskRegistry {
 
     private ReportTaskRegistry(ReportStatus reportStatus) {
         this.reportStatus = reportStatus;
-        this.converter = MatcherAndConverterKit.convert(ReportData.class, ReportTask.class);
     }
 
     /**
      * Returns the task collections to support parallel execution.
      *
-     * @param config   need to generate report.
-     * @param entities data need to generate report.
+     * @param config need to generate report.
+     * @param entity data need to generate report.
      * @return
      */
-    public List<ReportTask> createTask(ReportConfig config, List<ReportEntity> entities) {
+    public List<ReportTask> createTask(ReportConfig config, ReportEntity entity) {
         List<ReportTask> tasks = new ArrayList<>();
+        entity.getContent().getData().stream().forEach(data -> {
+            data.stream().forEach(item -> {
+                if (CollectionUtils.isEmpty(item.getTexts())
+                        && CollectionUtils.isEmpty(item.getTables())) {
 
-        String taskId = UUIDsKit.base64UUID();
-        entities.stream().forEach(entity -> {
-            entity.getContent().getData().stream().forEach(data -> {
-                data.stream().forEach(item -> {
-                    if (CollectionUtils.isEmpty(item.getTexts())
-                            && CollectionUtils.isEmpty(item.getTables())) {
+                    String taskId = UUIDsKit.base64UUID();
+                    ReportTask task = ReportTask.builder()
+                            .reportId(entity.getReportId())
+                            .reportName(entity.getReportName())
+                            .outputPath(config.getOutputPath())
+                            .templatePath(item.getTemplateUrl())
+                            .taskId(taskId)
+                            .data(ReportTask.parseReportData(item))
+                            .build();
+                    task.setReportType(item.getType());
 
-                        ReportTask task = ReportTask.builder()
-                                .reportId(entity.getReportId())
-                                .reportName(entity.getReportName())
-                                .outputPath(config.getOutputPath())
-                                .taskId(taskId)
-                                .type(item.getType())
-                                .build();
-                        tasks.add(task);
-                    }
-                });
+                    item.setTaskId(taskId);
+                    tasks.add(task);
+                }
             });
         });
-
-        this.reportStatus.publishEvent(taskId, "", ReportEvent.EventType.CREATION);
-        return null;
+        this.reportStatus.publishEvent(entity.getReportId(), ReportEvent.EventType.CREATION);
+        return tasks;
     }
 
     /**

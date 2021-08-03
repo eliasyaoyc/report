@@ -3,8 +3,6 @@ package yyc.open.framework.microants.components.kit.report.commons;
 import yyc.open.framework.microants.components.kit.report.commons.ReportConstants.Charts;
 import yyc.open.framework.microants.components.kit.report.commons.ReportConstants.File;
 
-import static yyc.open.framework.microants.components.kit.report.commons.ReportConstants.EMPTY;
-
 /**
  * {@link ReportEnums}
  *
@@ -13,7 +11,7 @@ import static yyc.open.framework.microants.components.kit.report.commons.ReportC
  */
 interface ReportEnumsInterface {
     default String getTemplateName() {
-        return EMPTY;
+        return "html.ftl";
     }
 }
 
@@ -56,7 +54,6 @@ public enum ReportEnums implements ReportEnumsInterface {
     },
 
     TABLE(Charts.TABLE),
-
     PDF(File.PDF),
     EXCEL(File.EXCEL),
     WORD(File.WORD),

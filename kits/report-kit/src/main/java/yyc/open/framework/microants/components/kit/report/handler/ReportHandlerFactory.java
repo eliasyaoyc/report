@@ -5,13 +5,16 @@ import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import yyc.open.framework.microants.components.kit.common.reflect.AnnotationScannerKit;
+import yyc.open.framework.microants.components.kit.common.validate.Asserts;
 import yyc.open.framework.microants.components.kit.common.validate.NonNull;
-import yyc.open.framework.microants.components.kit.report.*;
+import yyc.open.framework.microants.components.kit.report.ReportCallback;
+import yyc.open.framework.microants.components.kit.report.ReportEvent;
+import yyc.open.framework.microants.components.kit.report.ReportStatus;
+import yyc.open.framework.microants.components.kit.report.Task;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 
 import java.lang.annotation.Annotation;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -58,42 +61,33 @@ public class ReportHandlerFactory {
      * so only one element in this collection.
      * But in parallel model，`tasks` is  a collection that represents a batch tasks.
      *
-     * @param tasks
+     * @param task     maybe ReportTask or ReportEntity.
      * @param parallel whether parallel process.
      * @param callback handle the response when a task completed.
      */
-    public void handle(@NonNull List<ReportTask> tasks, boolean parallel, ReportCallback callback) {
-        // Handle error.
-        if (handlers.isEmpty()) {
-            String taskIds = tasks.stream().map(task -> task.getReportId()).collect(Collectors.joining());
-            String msg = String.format("[ReportHandler] task {} handle failed, handlers do not initialized yet.", taskIds);
-            LOGGER.error(msg);
-
-            reportStatus.publishEvent(taskIds, msg, ReportEvent.EventType.FAIL);
-        }
+    public <T> void handle(@NonNull T task, boolean parallel, ReportCallback callback) {
+        Asserts.notEmpty(this.handlers, "[ReportHandler] handlers do not initialized yet.");
+        Asserts.isTrue(task instanceof Task, "[ReportHandler] invalid task.");
 
         // Parallel model.
         if (parallel) {
-            handleParallel(tasks);
+            handleParallel(task);
             return;
         }
 
         // Serial model todo consider that instead of use threadPool.
-        tasks.stream().forEach(task -> {
-            Set<Handler> handlers = chooseHandler(task.getType());
-            if (!handlers.isEmpty()) {
-                handlers.stream().forEach(handler -> handler.onHandle(task, callback));
-            }
-            doFinish(task.getReportId());
-        });
+        Set<Handler> handlers = chooseHandler(task);
+        if (!handlers.isEmpty()) {
+            handlers.stream().forEach(handler -> handler.onHandle(task, callback));
+        }
     }
 
     /**
      * TODO in next version.
      *
-     * @param tasks
+     * @param task
      */
-    private void handleParallel(List<ReportTask> tasks) {
+    private <T> void handleParallel(T task) {
 
     }
 
@@ -102,8 +96,11 @@ public class ReportHandlerFactory {
      *
      * @return the handler.
      */
-    private Set<Handler> chooseHandler(ReportEnums type) {
-        return ReportEnums.isCharts(type) ? this.handlers.get(CHART_HANDLE) : this.handlers.get(FILE_HANDLE);
+    private <T> Set<Handler> chooseHandler(T task) {
+        Task t = (Task) task;
+        return ReportEnums.isCharts(t.getReportType()) ?
+                this.handlers.get(CHART_HANDLE) :
+                this.handlers.get(FILE_HANDLE);
     }
 
     /**

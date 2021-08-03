@@ -2,6 +2,8 @@ package yyc.open.framework.microants.components.kit.report.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.reflect.TypeLiteral;
+import yyc.open.framework.microants.components.kit.common.validate.Nullable;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 
 import java.util.List;
@@ -15,7 +17,18 @@ import java.util.Map;
  */
 @Setter
 @Getter
-public class ReportData {
+public class ReportData extends TypeLiteral {
+    /**
+     * Internally generated.
+     */
+    private String taskId;
+
+    /**
+     * The absolute template path for generation.
+     */
+    private @Nullable
+    String templateUrl;
+
     /**
      * Chart title.
      */
@@ -72,10 +85,16 @@ public class ReportData {
      * @param yDatas
      * @return
      */
-    public ReportData echart(String title, ReportEnums type, String legendName, List<Object[]> xdatas, Object[] yDatas) {
+    public ReportData echart(String title,
+                             String templateUrl,
+                             ReportEnums type,
+                             String legendName,
+                             List<Object[]> xdatas,
+                             Object[] yDatas) {
         ReportData reportData = new ReportData();
         reportData.setTitle(title);
         reportData.setType(type);
+        reportData.setTemplateUrl(templateUrl);
         reportData.setLegendName(legendName);
         reportData.setXdatas(xdatas);
         reportData.setYDatas(yDatas);

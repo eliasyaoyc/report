@@ -1,6 +1,8 @@
 package yyc.open.framework.microants.components.kit.http;
 
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * {@link Result}
@@ -9,7 +11,9 @@ import lombok.Builder;
  * @version ${project.version} - 2021/7/30
  */
 @Builder
+@Getter
+@Setter
 public class Result {
     private Integer code;
-    private Object msg;
+    private String msg;
 }

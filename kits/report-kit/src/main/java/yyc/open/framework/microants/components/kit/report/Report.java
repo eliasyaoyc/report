@@ -7,7 +7,6 @@ import yyc.open.framework.microants.components.kit.common.validate.NonNull;
 import yyc.open.framework.microants.components.kit.report.entity.ReportEntity;
 import yyc.open.framework.microants.components.kit.report.exceptions.ReportException;
 import yyc.open.framework.microants.components.kit.report.handler.ReportHandlerFactory;
-import yyc.open.framework.microants.components.kit.report.threadpool.ReportThreadPool;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -19,7 +18,7 @@ import java.util.concurrent.CountDownLatch;
  * @version ${project.version} - 2021/7/28
  */
 public class Report {
-    private static final Logger logger = LoggerFactory.getLogger(Report.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Report.class);
 
     private final ReportConfig config;
     private final ReportHandlerFactory handlerFactory;
@@ -30,6 +29,7 @@ public class Report {
     public Report(@NonNull ReportConfig config, @NonNull ReportStatus status) {
         this.reportStatus = status;
         this.config = config;
+        this.threadPool = new ReportThreadPool("report");
         this.handlerFactory = ReportHandlerFactory
                 .HandlerFactoryEnum
                 .INSTANCE
@@ -68,31 +68,66 @@ public class Report {
         }
 
         // 2. Create the task collections.
-        List<ReportTask> tasks = taskRegistry.createTask(config, reportEntities);
-        if (CollectionUtils.isEmpty(tasks)) {
-            return;
-        }
-
-        CountDownLatch latch = new CountDownLatch(tasks.size());
-        // 3. Handle task.
-        this.handlerFactory.handle(tasks, parallel, new ReportCallback() {
-            @Override
-            public void onReceived(String taskId, ReportEvent.EventType type) {
-                latch.countDown();
-                reportStatus.publishEvent(taskId, "", ReportEvent.EventType.PARTIALLY_COMPLETED);
+        reportEntities.stream().forEach(entity -> {
+            List<ReportTask> tasks = taskRegistry.createTask(config, entity);
+            if (CollectionUtils.isEmpty(tasks)) {
+                return;
             }
 
-            @Override
-            public void onException(String taskId, String msg) {
-                reportStatus.publishEvent(taskId, msg, ReportEvent.EventType.FAIL);
+            CountDownLatch latch = new CountDownLatch(tasks.size());
+
+            tasks.stream().forEach(task -> {
+                // 3. Handle task.
+                threadPool.execute(() -> {
+                    this.handlerFactory.handle(task, parallel, new ReportCallback() {
+                        @Override
+                        public void onReceived(String taskId, String result, ReportEvent.EventType type) {
+                            switch (type){
+                                case PARTIALLY_COMPLETED:
+                                    reportStatus.publishEvent(taskId, ReportEvent.EventType.PARTIALLY_COMPLETED);
+                                    latch.countDown();
+                                    // Add task result.
+                                    entity.setSubTaskExecutionResult(taskId, result);
+                                    break;
+                                case COMPLETED:
+                                    reportStatus.publishEvent(taskId, ReportEvent.EventType.COMPLETED);
+                                    break;
+                            }
+                        }
+                        @Override
+                        public void onException(String taskId, String msg) {
+                            LOGGER.error("[Report] subTask{}-{} execute failed.", entity.getReportId(), taskId);
+                            reportStatus.publishEvent(taskId, msg, ReportEvent.EventType.FAIL);
+                            // Add to fail queue that ready to re-execute.
+                            taskRegistry.addToFailQueue(taskId);
+                        }
+                    });
+                });
+            });
+            try {
+                // The block waits for all subtasks to complete.
+                latch.await();
+
+                // Start execute root task(report).
+                reportStatus.publishEvent(entity.getReportId(), ReportEvent.EventType.REPORT);
+                this.handlerFactory.handle(entity, parallel, new ReportCallback() {
+                    @Override
+                    public void onReceived(String taskId, String result, ReportEvent.EventType type) {
+                        reportStatus.publishEvent(taskId, ReportEvent.EventType.COMPLETED);
+                    }
+
+                    @Override
+                    public void onException(String id, String msg) {
+                        LOGGER.error("[Report] {} execute failed.", id);
+                        reportStatus.publishEvent(id, msg, ReportEvent.EventType.FAIL);
+                        // Add to fail queue that ready to re-execute.
+                        taskRegistry.addToFailQueue(id);
+                    }
+                });
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         });
-
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
