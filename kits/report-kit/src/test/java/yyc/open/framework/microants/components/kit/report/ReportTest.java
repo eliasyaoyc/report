@@ -32,6 +32,14 @@ public class ReportTest {
         return ReportData.echart("水果", ReportEnums.BAR, "水果图例", names, value);
     }
 
+    private static ReportData crossBarEcharts() {
+        String[] name = {"苹果", "香蕉", "雪梨", "西瓜", "哈密瓜", "榴莲"};
+        List<Object[]> names = new ArrayList<>();
+        names.add(name);
+        Integer[] value = {3364, 13899, 2181, 21798, 1796, 1300};
+        return ReportData.echart("水果", ReportEnums.CROSS_BAR, "水果图例", names, value);
+    }
+
     private static ReportData lineEcharts() {
         Integer[] name = {43364, 13899, 12000, 2181, 21798, 1796, 1300};
         List<Object[]> names = new ArrayList<>();
@@ -65,7 +73,7 @@ public class ReportTest {
                 .content("第N 章 我是标题",
                         Arrays.asList("1.1 总计（多）", "1.2 总计", "1.3 echarts 图表"),
                         Arrays.asList("我是组件描述", "我是组件描述", "我是组件描述"),
-                        Arrays.asList(barEcharts(), lineEcharts(), pieEcharts()))
+                        Arrays.asList(barEcharts(), crossBarEcharts(), lineEcharts(), pieEcharts()))
                 .build();
 
         report.generateReport(Arrays.asList(entity));
