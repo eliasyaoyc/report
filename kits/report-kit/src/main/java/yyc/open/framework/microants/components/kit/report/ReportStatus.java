@@ -24,22 +24,6 @@ public class ReportStatus {
 
     public ReportStatus() {
         // Construct listeners through processor annotation.
-//        Map<Class<? extends Annotation>, Set<Class<?>>> classSetMap = AnnotationScannerKit.scanClassesByAnnotations(ROOT_NAME, Processor.class);
-//        if (classSetMap.isEmpty()) {
-//            return;
-//        }
-//        for (Map.Entry<Class<? extends Annotation>, Set<Class<?>>> entity : classSetMap.entrySet()) {
-//            Processor processor = (Processor) entity.getKey().cast(Processor.class);
-//            if (!processor.type().equals(LISTENER)) {
-//                continue;
-//            }
-//            Set<Listener> values = entity.getValue().stream().map(val -> {
-//                Listener listener = (Listener) val.cast(Listener.class);
-//                return listener;
-//            }).collect(Collectors.toSet());
-//
-//            listeners.getOrDefault(processor.name(), Sets.newHashSet()).addAll(values);
-//        }
         ServiceLoader<Listener> listeners = ServiceLoader.load(Listener.class);
         for (Listener listener : listeners) {
             Processor spi = listener.getClass().getAnnotation(Processor.class);

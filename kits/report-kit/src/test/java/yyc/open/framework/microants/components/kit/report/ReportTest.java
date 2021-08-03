@@ -48,6 +48,30 @@ public class ReportTest {
         return ReportData.echart("胸罩图例", ReportEnums.PIE, names, value);
     }
 
+    public static void main(String[] args) {
+        ReportRuntime runtime = new ReportRuntime();
+        runtime.start();
+        Report report = ReportBuilder.ofDefault();
+
+        ReportEntity entity = ReportEntity.builder()
+                .type(ReportEnums.HTML)
+                .partTitle().title("综合安全报表").description("Comprehensive Security Report").background("base64")
+                .partInfo()
+                .info("报告时间范围", "2017-07-01至2021-09-30")
+                .info("报告生成时间", "2021-10-01 08:00:00")
+                .partCatalogue()
+                .catalogue("第一章 整体摘要", Arrays.asList("1.1 安全概览", "1.2 平台状态"))
+                .catalogue("第二章 事件分析", Arrays.asList("2.1 告警类型占比", "2.2 威胁级别占比"))
+                .partContent()
+                .content("第N 章 我是标题",
+                        Arrays.asList("1.1 总计（多）", "1.2 总计", "1.3 echarts 图表"),
+                        Arrays.asList("我是组件描述", "我是组件描述", "我是组件描述"),
+                        Arrays.asList(barEcharts(), lineEcharts(), pieEcharts()))
+                .build();
+
+        report.generateReport(Arrays.asList(entity));
+    }
+
     @Test
     public void testHtml() {
         Report report = ReportBuilder.ofDefault();

@@ -11,13 +11,13 @@ import static yyc.open.framework.microants.components.kit.report.commons.ReportC
 import static yyc.open.framework.microants.components.kit.report.commons.ReportConstants.LISTENER;
 
 /**
- * {@link AbstractAlarmListener}
+ * {@link AlarmListener}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2021/7/30
  */
 @Processor(name = ALARM_LISTENER, type = LISTENER)
-public abstract class AbstractAlarmListener implements Listener, alarm {
+public class AlarmListener implements Listener, alarm {
 
     @Override
     public void onAlarm(ReportEvent event) {

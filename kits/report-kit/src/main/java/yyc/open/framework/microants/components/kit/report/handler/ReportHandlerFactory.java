@@ -6,8 +6,6 @@ import org.slf4j.LoggerFactory;
 import yyc.open.framework.microants.components.kit.common.validate.Asserts;
 import yyc.open.framework.microants.components.kit.common.validate.NonNull;
 import yyc.open.framework.microants.components.kit.report.ReportCallback;
-import yyc.open.framework.microants.components.kit.report.ReportEvent;
-import yyc.open.framework.microants.components.kit.report.ReportStatus;
 import yyc.open.framework.microants.components.kit.report.Task;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
@@ -27,30 +25,10 @@ import static yyc.open.framework.microants.components.kit.report.commons.ReportC
 public class ReportHandlerFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReportHandlerFactory.class);
 
-    private ReportStatus reportStatus;
     private Map<String, Handler> handlers = Maps.newHashMap();
 
-    private ReportHandlerFactory(@NonNull ReportStatus reportStatus) {
-        this.reportStatus = reportStatus;
-
+    private ReportHandlerFactory() {
         // Construct handlers through processor annotation.
-//        Map<Class<? extends Annotation>, Set<Class<?>>> classSetMap = AnnotationScannerKit.scanClassesByAnnotations(ROOT_NAME, Processor.class);
-//        if (classSetMap.isEmpty()) {
-//            return;
-//        }
-//        for (Map.Entry<Class<? extends Annotation>, Set<Class<?>>> entity : classSetMap.entrySet()) {
-//            Processor processor = (Processor) entity.getKey().cast(Processor.class);
-//            if (!processor.type().equals(HANDLER)) {
-//                continue;
-//            }
-//            Set<Handler> values = entity.getValue().stream().map(val -> {
-//                Handler handler = (Handler) val.cast(Handler.class);
-//                return handler;
-//            }).collect(Collectors.toSet());
-//
-//            handlers.getOrDefault(processor.name(), Sets.newHashSet()).addAll(values);
-//        }
-
         ServiceLoader<Handler> handlers = ServiceLoader.load(Handler.class);
         for (Handler handler : handlers) {
             Processor spi = handler.getClass().getAnnotation(Processor.class);
@@ -112,24 +90,14 @@ public class ReportHandlerFactory {
                 this.handlers.get(FILE_HANDLE);
     }
 
-    /**
-     * The task about generate report that is completed.
-     *
-     * @param taskId The corresponding task id.
-     */
-    private void doFinish(String taskId) {
-        LOGGER.info("[Report Handler] report {} generation success.", taskId);
-        reportStatus.publishEvent(taskId, "", ReportEvent.EventType.COMPLETED);
-    }
-
     public enum HandlerFactoryEnum {
         INSTANCE;
 
         ReportHandlerFactory factory;
 
-        public ReportHandlerFactory getReportHandlerFactory(ReportStatus reportStatus) {
+        public ReportHandlerFactory getReportHandlerFactory() {
             if (factory == null) {
-                factory = new ReportHandlerFactory(reportStatus);
+                factory = new ReportHandlerFactory();
             }
             return factory;
         }
