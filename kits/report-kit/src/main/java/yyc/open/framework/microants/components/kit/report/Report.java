@@ -114,21 +114,21 @@ public class Report {
                 latch.await();
 
                 // Start execute root task(report).
-                reportStatus.publishEvent(entity.getReportId(), ReportEvent.EventType.REPORT);
-                this.handlerFactory.handle(entity, parallel, new ReportCallback() {
-                    @Override
-                    public void onReceived(String taskId, String result, ReportEvent.EventType type) {
-                        reportStatus.publishEvent(taskId, ReportEvent.EventType.COMPLETED);
-                    }
-
-                    @Override
-                    public void onException(String id, String msg) {
-                        LOGGER.error("[Report] {} execute failed.", id);
-                        reportStatus.publishEvent(id, msg, ReportEvent.EventType.FAIL);
-                        // Add to fail queue that ready to re-execute.
-                        taskRegistry.addToFailQueue(id);
-                    }
-                });
+//                reportStatus.publishEvent(entity.getReportId(), ReportEvent.EventType.REPORT);
+//                this.handlerFactory.handle(entity, parallel, new ReportCallback() {
+//                    @Override
+//                    public void onReceived(String taskId, String result, ReportEvent.EventType type) {
+//                        reportStatus.publishEvent(taskId, ReportEvent.EventType.COMPLETED);
+//                    }
+//
+//                    @Override
+//                    public void onException(String id, String msg) {
+//                        LOGGER.error("[Report] {} execute failed.", id);
+//                        reportStatus.publishEvent(id, msg, ReportEvent.EventType.FAIL);
+//                        // Add to fail queue that ready to re-execute.
+//                        taskRegistry.addToFailQueue(id);
+//                    }
+//                });
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

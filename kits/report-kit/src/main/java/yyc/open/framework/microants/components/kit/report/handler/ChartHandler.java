@@ -48,7 +48,7 @@ public class ChartHandler<T> extends AbstractHandler<T> {
             PhantomJS req = PhantomJS.builder()
                     .opt(opt)
                     .reqMethod("echarts")
-                    .file(t.getOutputPath() + t.getReportName())
+                    .file(t.getOutputPath() + t.getReportName() + t.getTaskId() + ".png")
                     .build();
 
             Result result = HttpKit.builder()
@@ -70,10 +70,11 @@ public class ChartHandler<T> extends AbstractHandler<T> {
             // Get the base64.
             String ret = "";
 
-            if (StringUtils.isEmpty(ret)) {
-                callback.onException(t.getTaskId(), "[ChartHandler] generate echart encounter error: base64 is empty.");
-                return;
-            }
+//            if (StringUtils.isEmpty(ret)) {
+//                callback.onException(t.getTaskId(), "[ChartHandler] generate echart encounter error: base64 is empty.");
+//                return;
+//            }
+
             callback.onReceived(t.getTaskId(), ret, ReportEvent.EventType.PARTIALLY_COMPLETED);
         } catch (Exception e) {
             String msg = String.format("[ChartHandler] generate echart encountered error: {}.", e);

@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class ReportEntityBuilder {
     private String reportId = UUIDsKit.base64UUID();
-    private String reportName = UUIDsKit.base64UUID() + ".png";
+    private String reportName = UUIDsKit.base64UUID();
 
     private String templatePath;
     private ReportEnums reportType;

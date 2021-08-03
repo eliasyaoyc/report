@@ -1,6 +1,6 @@
 {
   "port": 6666,
-  "watermark": "idss",
+//  "watermark": "idss",
   "horizontal": false,
   "parallel": false,
   "chart": true,

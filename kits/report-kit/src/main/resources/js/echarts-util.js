@@ -1,12 +1,18 @@
 phantom.outputEncoding = "gbk";// 为防止输出中文时出现乱码，可设置输出编码格式,写在最顶部
+var system = require('system');
 var params = require('system');// 获取系统参数
-    var server = require('webserver').create(); // 服务端
-    var port = params.args[3];// 端口,与启动命令有关,不一定是3
-    var listen = server.listen(port, function(request, response) {// 监听端口
+var server = require('webserver').create(); // 服务端
+var port = params.args[3];// 端口,与启动命令有关,不一定是3
+var listen = server.listen(port, function (request, response) {// 监听端口
     var args = serverGetArgs(request);// 得到网络请求参数
     args.response = response;
     methodDis(args);
 });
+if (!listen) {
+    this.error("could not create echarts-convert server listening on port " + params.port);
+} else {
+    console.log("echarts-convert server start success. [pid]=" + system.pid);
+}
 var jslib = {
     jquery : phantom.libraryPath + '/lib/jquery-3.2.1.min.js',
     echarts : phantom.libraryPath + '/lib/echarts.min.js',

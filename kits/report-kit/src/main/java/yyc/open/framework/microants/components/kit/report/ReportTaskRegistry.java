@@ -81,6 +81,6 @@ public class ReportTaskRegistry {
      */
     public void addToFailQueue(@NonNull String taskId) {
         ReportTask failTask = this.tasks.remove(taskId);
-        this.failTasks.put(taskId, failTask);
+//        this.failTasks.put(taskId, failTask);
     }
 }
