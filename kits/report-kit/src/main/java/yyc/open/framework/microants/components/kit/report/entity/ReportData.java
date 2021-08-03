@@ -2,7 +2,6 @@ package yyc.open.framework.microants.components.kit.report.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.reflect.TypeLiteral;
 import yyc.open.framework.microants.components.kit.common.validate.Nullable;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 
@@ -17,7 +16,7 @@ import java.util.Map;
  */
 @Setter
 @Getter
-public class ReportData extends TypeLiteral {
+public class ReportData {
     /**
      * Internally generated.
      */
@@ -57,7 +56,7 @@ public class ReportData extends TypeLiteral {
      * @param texts
      * @return
      */
-    public ReportData text(List<String> texts) {
+    public static ReportData text(List<String> texts) {
         ReportData reportData = new ReportData();
         reportData.setTexts(texts);
         return reportData;
@@ -69,7 +68,7 @@ public class ReportData extends TypeLiteral {
      * @param tables
      * @return
      */
-    public ReportData table(List<Map<String, String>> tables) {
+    public static ReportData table(List<Map<String, String>> tables) {
         ReportData reportData = new ReportData();
         reportData.setTables(tables);
         return reportData;
@@ -80,17 +79,31 @@ public class ReportData extends TypeLiteral {
      *
      * @param title
      * @param type
-     * @param legendName
      * @param xdatas
      * @param yDatas
      * @return
      */
-    public ReportData echart(String title,
-                             String templateUrl,
-                             ReportEnums type,
-                             String legendName,
-                             List<Object[]> xdatas,
-                             Object[] yDatas) {
+    public static ReportData echart(String title,
+                                    ReportEnums type,
+                                    List<Object[]> xdatas,
+                                    Object[] yDatas) {
+        return echart(title, "", type, "", xdatas, yDatas);
+    }
+
+    public static ReportData echart(String title,
+                                    ReportEnums type,
+                                    String legendName,
+                                    List<Object[]> xdatas,
+                                    Object[] yDatas) {
+        return echart(title, "", type, legendName, xdatas, yDatas);
+    }
+
+    public static ReportData echart(String title,
+                                    String templateUrl,
+                                    ReportEnums type,
+                                    String legendName,
+                                    List<Object[]> xdatas,
+                                    Object[] yDatas) {
         ReportData reportData = new ReportData();
         reportData.setTitle(title);
         reportData.setType(type);
@@ -99,5 +112,16 @@ public class ReportData extends TypeLiteral {
         reportData.setXdatas(xdatas);
         reportData.setYDatas(yDatas);
         return reportData;
+
+        /**
+         * Create echarts data.
+         *
+         * @param title
+         * @param type
+         * @param legendName
+         * @param xdatas
+         * @param yDatas
+         * @return
+         */
     }
 }

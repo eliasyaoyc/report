@@ -36,9 +36,9 @@ public class ReportRuntime implements AutoCloseable {
 
     @Getter
     enum Platforms {
-        WINDOWS("Windows", "phantomjs-windows.exe"),
-        MACOS("Mac OS X", "phantomjs-macosx"),
-        UNIX("Unix", "phantomjs-linux");
+        WINDOWS("Windows", "exec/phantomjs-windows.exe"),
+        MACOS("Mac OS X", "exec/phantomjs-macosx"),
+        UNIX("Unix", "exec/phantomjs-linux");
 
         String name;
         String path;
@@ -66,7 +66,7 @@ public class ReportRuntime implements AutoCloseable {
 
     private void initialize() {
         try {
-            String ret = FileUtils.readFileToString(new File(GLOBAL_JSON_PATH), StandardCharsets.UTF_8);
+            String ret = FileUtils.readFileToString(new File(getResourcePath(GLOBAL_JSON_PATH)), StandardCharsets.UTF_8);
             Gson gson = new GsonBuilder().create();
             globalConfig = gson.fromJson(ret, ReportConfig.GlobalConfig.class);
         } catch (IOException e) {
@@ -91,7 +91,7 @@ public class ReportRuntime implements AutoCloseable {
 
         String property = System.getProperty("os.name");
         Platforms platforms = Platforms.getPlatforms(property);
-        String command = new StringBuilder(globalConfig.getExecPath())
+        String command = new StringBuilder()
                 .append(getResourcePath(platforms.getPath()))
                 .append(" ")
                 .append(globalConfig.getEChartJsPath())

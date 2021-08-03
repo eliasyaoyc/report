@@ -7,6 +7,7 @@
   "execPath": "exec/",
   "eChartJsPath": "js/echarts-util.js",
   "maxTaskNum": 16,
+  "outputPath": "/Users/eliasyao/Desktop",
   "colors": [
     "rgba(0, 116, 227, 1)",
     "rgba(0, 116, 227, 0.8)",

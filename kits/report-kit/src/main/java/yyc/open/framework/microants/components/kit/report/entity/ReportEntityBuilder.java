@@ -17,6 +17,7 @@ public class ReportEntityBuilder {
     private ReportEnums reportType;
     ReportEntity.ReportTitle title;
     ReportEntity.ReportInfo info;
+    // TODO Consider remove.
     ReportEntity.ReportCatalogue catalogue;
     ReportEntity.ReportContent content;
 
