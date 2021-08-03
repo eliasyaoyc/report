@@ -2,15 +2,13 @@ package yyc.open.framework.microants.components.kit.report;
 
 import com.google.common.collect.Maps;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.reflect.TypeLiteral;
+import yyc.open.framework.microants.components.kit.common.beans.MatcherAndConverter;
+import yyc.open.framework.microants.components.kit.common.beans.MatcherAndConverterKit;
 import yyc.open.framework.microants.components.kit.common.uuid.UUIDsKit;
 import yyc.open.framework.microants.components.kit.common.validate.NonNull;
 import yyc.open.framework.microants.components.kit.report.entity.ReportData;
 import yyc.open.framework.microants.components.kit.report.entity.ReportEntity;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +23,7 @@ public class ReportTaskRegistry {
     private ReportStatus reportStatus;
     private Map<String, ReportTask> tasks = Maps.newConcurrentMap();
     private Map<String, ReportTask> failTasks = Maps.newConcurrentMap();
-    private final List<MatcherAndConverter> converters = new ArrayList<>();
+    private MatcherAndConverter converter;
 
     public enum ReportRegistryEnum {
         INSTANCE;
@@ -42,16 +40,7 @@ public class ReportTaskRegistry {
 
     private ReportTaskRegistry(ReportStatus reportStatus) {
         this.reportStatus = reportStatus;
-        initConverters();
-    }
-
-    void initConverters() {
-        convertToEChart(ReportData.class, ReportTask.class);
-        convertToEChart(ReportData.class, ReportTask.class);
-        convertToEChart(ReportData.class, ReportTask.class);
-        convertToEChart(ReportData.class, ReportTask.class);
-        convertToEChart(ReportData.class, ReportTask.class);
-        convertToEChart(ReportData.class, ReportTask.class);
+        this.converter = MatcherAndConverterKit.convert(ReportData.class, ReportTask.class);
     }
 
     /**
@@ -96,61 +85,5 @@ public class ReportTaskRegistry {
     public void addToFailQueue(@NonNull String taskId) {
         ReportTask failTask = this.tasks.remove(taskId);
         this.failTasks.put(taskId, failTask);
-    }
-
-    public static String capitalize(String s) {
-        if (s.length() == 0) {
-            return s;
-        }
-        char first = s.charAt(0);
-        char capitalized = Character.toUpperCase(first);
-        return (first == capitalized)
-                ? s
-                : capitalized + s.substring(1);
-    }
-
-    private <S, D> void convertToEChart(Class<S> source, final Class<D> wrapperType) {
-        try {
-            final Method parser = wrapperType.getMethod(
-                    "parseReportData", ReportData.class);
-            Converter converter = new Converter() {
-                @Override
-                public Object convert(Object value, TypeLiteral<?> toType) {
-                    try {
-                        return parser.invoke(null, value);
-                    } catch (IllegalAccessException e) {
-                        throw new AssertionError(e);
-                    } catch (InvocationTargetException e) {
-                        throw new RuntimeException(e.getTargetException());
-                    }
-                }
-            };
-            convertToClass(wrapperType, converter);
-        } catch (NoSuchMethodException e) {
-            throw new AssertionError(e);
-        }
-    }
-
-    private <T> void convertToClass(Class<T> type, Converter converter) {
-        convertToClasses(Matchers.identicalTo(type), converter);
-    }
-
-    private void convertToClasses(final Matcher<? super Class<?>> matcher, Converter converter) {
-        internalConvertToTypes(new AbstractMatcher<TypeLiteral<?>>() {
-            @Override
-            public boolean matches(TypeLiteral<?> typeLiteral) {
-                Type type = typeLiteral.getType();
-                if (!(type instanceof Class)) {
-                    return false;
-                }
-                Class<?> clazz = (Class<?>) type;
-                return matcher.matches(clazz);
-            }
-        }, converter);
-    }
-
-    private void internalConvertToTypes(Matcher<? super TypeLiteral<?>> matcher,
-                                        Converter converter) {
-        this.converters.add(new MatcherAndConverter(matcher, converter));
     }
 }

@@ -1,4 +1,4 @@
-package yyc.open.framework.microants.components.kit.report;
+package yyc.open.framework.microants.components.kit.common.beans;
 
 /**
  * {@link AbstractMatcher}
@@ -7,8 +7,9 @@ package yyc.open.framework.microants.components.kit.report;
  * @version ${project.version} - 2021/8/3
  */
 public abstract class AbstractMatcher<T> implements Matcher<T> {
+
     @Override
-    public Matcher<T> and(Matcher<? super T> other) {
+    public Matcher<T> and(final Matcher<? super T> other) {
         return new AndMatcher<>(this, other);
     }
 
@@ -20,7 +21,7 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
     private static class AndMatcher<T> extends AbstractMatcher<T> {
         private final Matcher<? super T> a, b;
 
-        public AndMatcher(Matcher<? super T> a, Matcher<? super T> b) {
+        AndMatcher(Matcher<? super T> a, Matcher<? super T> b) {
             this.a = a;
             this.b = b;
         }
