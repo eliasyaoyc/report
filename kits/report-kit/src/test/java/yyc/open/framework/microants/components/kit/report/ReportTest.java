@@ -1,22 +1,12 @@
 package yyc.open.framework.microants.components.kit.report;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import lombok.Getter;
-import lombok.Setter;
 import org.junit.Test;
-import yyc.open.framework.microants.components.kit.common.file.FileKit;
 import yyc.open.framework.microants.components.kit.common.reflect.AnnotationScannerKit;
-import yyc.open.framework.microants.components.kit.common.validate.Asserts;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 import yyc.open.framework.microants.components.kit.report.entity.ReportData;
 import yyc.open.framework.microants.components.kit.report.handler.FileHandler;
 
-import java.io.File;
-import java.io.StringWriter;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
@@ -208,47 +198,8 @@ public class ReportTest {
         System.out.println(classSetMap);
     }
 
-    @Getter
-    @Setter
-    public class User {
-        private String index;
-        private Integer age;
-
-        public User(String index, Integer age) {
-            this.index = index;
-            this.age = age;
-        }
-    }
-
     @Test
     public void testWord() throws Exception {
-        Map<String, Object> resultMap = new HashMap<>();
-        Map<String, List<User>> testMap = new HashMap<>();
-        List<User> listOne = new ArrayList<>();
-        List<User> listTwo = new ArrayList<>();
-        listOne.add(new User("1.1 王大麻子", 11));
-        listOne.add(new User("1.2 李二狗", 11));
-        listTwo.add(new User("1.3 郑老六", 11));
-        listTwo.add(new User("1.4 吴大棒槌", 11));
-        testMap.put("classA", listOne);
-        testMap.put("classB", listTwo);
-        resultMap.put("content", testMap);
-
-        Gson gson = new GsonBuilder().create();
-        String s = gson.toJson(resultMap);
-        System.out.println(s);
-        String[] path = FileKit.splitWithSuffix(FileKit.getResourcePath("templates/test.ftl"), '/');
-        Asserts.isTrue(path.length == 2);
-
-        Configuration configuration = new Configuration(Configuration.VERSION_2_3_0);
-        configuration.setDefaultEncoding("UTF-8");
-        configuration.setDirectoryForTemplateLoading(new File(path[0]));
-        Template template = configuration.getTemplate(path[1]);
-        try (StringWriter sw = new StringWriter()) {
-            template.process(resultMap, sw);
-            sw.flush();
-            System.out.println(sw.getBuffer().toString());
-        }
     }
 
     @Test

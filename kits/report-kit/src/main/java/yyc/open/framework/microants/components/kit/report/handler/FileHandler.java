@@ -133,33 +133,8 @@ public class FileHandler<T> extends AbstractHandler<T> {
             cont.put(content.getChapter().get(i), contents);
         }
         report.put("content", cont);
-
-//        Map<String, List<Content>> testMap = new HashMap<>();
-//        List<Content> listOne = new ArrayList<>();
-//        List<Content> listTwo = new ArrayList<>();
-//        listOne.add(new Content("1.1 王大麻子"));
-////        listOne.add(new Content("1.1 王大麻子",null,null,null,null,null,null));
-//        listOne.add(new Content("1.2 李二狗"));
-//        listTwo.add(new Content("1.3 郑老六"));
-//        listTwo.add(new Content("1.4 吴大棒槌"));
-//        testMap.put("classA", listOne);
-//        testMap.put("classB", listTwo);
-//        report.put("content", testMap);
-
         return report;
     }
-
-//    @Getter
-//    @Setter
-//    public class User {
-//        private String index;
-//        private Integer age;
-//
-//        public User(String index, Integer age) {
-//            this.index = index;
-//            this.age = age;
-//        }
-//    }
 
     @Getter
     @Setter
@@ -169,10 +144,10 @@ public class FileHandler<T> extends AbstractHandler<T> {
         private String index;
         private String description;
         private String base64;
-        private List<String> text;
+        private List<String> texts;
         private List<String> tablesTitle;
-        private List<List<String>> tables;
-        private Map<String, Object> statistics;
+        private List<List<String>> tablesValue;
+        private Map<String, Object> stat;
 
         public static Content image(String index, String description, String image) {
             return new Content(index, description, image, null, null, null, null);

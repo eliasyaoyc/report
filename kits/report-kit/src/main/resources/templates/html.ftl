@@ -306,56 +306,56 @@
                         <#if value.description?? && value.description != "">
                             <div class="desc">${value.description}</div>
                         </#if>
-<#--                        <#if value.statistics??&&(value.statistics?size > 1)>-->
-<#--                            <ul class="table-box">-->
-<#--                                <#list value.statistics?keys as key>-->
-<#--                                    <li>-->
-<#--                                        <p>${key}</p><span>${value.statistics[key]}</span>-->
-<#--                                    </li>-->
-<#--                                </#list>-->
-<#--                            </ul>-->
-<#--                        </#if>-->
-<#--                        <#if value.statistics??&&(value.statistics?size = 1)>-->
-<#--                            <ul class="total-box">-->
-<#--                                <#list value.statistics?keys as key>-->
-<#--                                    <li>-->
-<#--                                        <p>${key}</p><span>${value.statistics[key]}</span>-->
-<#--                                    </li>-->
-<#--                                </#list>-->
-<#--                            </ul>-->
-<#--                        </#if>-->
+                        <#if value.stat?? && (value.stat?size > 1)>
+                            <ul class="table-box">
+                                <#list value.stat?keys as key>
+                                    <li>
+                                        <p>${key}</p><span>${value.stat[key]}</span>
+                                    </li>
+                                </#list>
+                            </ul>
+                        </#if>
+                        <#if value.stat??&&(value.stat?size = 1)>
+                            <ul class="total-box">
+                                <#list value.stat?keys as key>
+                                    <li>
+                                        <p>${key}</p><span>${value.stat[key]}</span>
+                                    </li>
+                                </#list>
+                            </ul>
+                        </#if>
                         <#if value.base64?? && value.base64 != "">
                             <div class="echarts-box">
                                 <img src="${value.base64}"/>
                             </div>
                         </#if>
-<#--                        <#if value.text?? && value.text?size > 0>-->
-<#--                            <div class="text">-->
-<#--                                <#list value.text as t>-->
-<#--                                    <p>${t}</p>-->
-<#--                                </#list>-->
-<#--                            </div>-->
-<#--                        </#if>>-->
-<#--                        <#if value.tables?? && value.tables?size > 0>-->
-<#--                        <table class="table">-->
-<#--                            <thead>-->
-<#--                            <tr>-->
-<#--                                <#list value.tablesTitle as tt>-->
-<#--                                    <th>${tt}</th>-->
-<#--                                </#list>-->
-<#--                            </tr>-->
-<#--                            </thead>-->
-<#--                            <tbody>-->
-<#--                            <#list value.tables as t1>-->
-<#--                                <tr>-->
-<#--                                    <#list value.tables as t2>-->
-<#--                                        <td>${t2}</td>-->
-<#--                                    </#list>-->
-<#--                                </tr>-->
-<#--                            </#list>-->
-<#--                            </tbody>-->
-<#--                        </table>-->
-<#--                        </#if>>-->
+                        <#if value.texts?? && (value.texts?size > 0)>
+                            <div class="text">
+                                <#list value.texts as t>
+                                    <p>${t}</p>
+                                </#list>
+                            </div>
+                        </#if>
+                        <#if value.tablesTitle?? && (value.tablesTitle?size > 0)>
+                           <table class="table">
+                             <thead>
+                             <tr>
+                                <#list value.tablesTitle as tt>
+                                    <th>${tt}</th>
+                                </#list>
+                             </tr>
+                             </thead>
+                             <tbody>
+                              <#list value.tablesValue as t1>
+                                <tr>
+                                    <#list t1 as tv>
+                                        <td>${tv}</td>
+                                    </#list>
+                                </tr>
+                              </#list>
+                             </tbody>
+                           </table>
+                        </#if>
                     </div>
                 </#list>
             </#list>
