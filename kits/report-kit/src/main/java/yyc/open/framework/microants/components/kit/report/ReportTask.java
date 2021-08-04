@@ -51,7 +51,7 @@ public class ReportTask extends Task {
                 rest.put("title", data.getTitle());
                 rest.put("legend", data.getLegendName());
                 rest.put("category", gson.toJson(data.getYDatas()));
-                rest.put("values", gson.toJson(data.getXdatas()));
+                rest.put("values", gson.toJson(data.getXdatas().get(0)));
                 break;
             case PIE:
                 List<String> types = new ArrayList<>();

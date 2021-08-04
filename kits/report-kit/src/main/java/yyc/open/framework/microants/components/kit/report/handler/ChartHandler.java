@@ -53,7 +53,7 @@ public class ChartHandler<T> extends AbstractHandler<T> {
 
             Result result = HttpKit.builder()
                     .post(String.format("http://127.0.0.1:%s", config.getPort()))
-                    .body(new GsonBuilder().create().toJson(req))
+                    .body(gson.toJson(req))
                     .build().get();
 
             if (result.getCode() != 200) {

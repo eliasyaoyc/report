@@ -4,7 +4,7 @@
         "text": "${title}",
         "subtext": "",
         "textStyle": {
-            "color": "red",
+            "color": "blue",
             "fontSize": 15,
             "fontWeight": "bolder"
         },
@@ -15,7 +15,7 @@
     },
     "legend": {
         "textStyle": {
-            "color": "red",
+            "color": "blue",
             "fontSize": 15,
             "fontWeight": "bolder"
         },
@@ -59,7 +59,7 @@
         "smooth": true,
         "dataFilter": "nearest",
         "lineStyle": {
-            "color": "red",
+            "color": "blue",
             "width": 4
         },
         "legendHoverLink": true,
