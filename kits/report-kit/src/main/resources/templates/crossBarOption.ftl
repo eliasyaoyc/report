@@ -31,7 +31,7 @@
     "series": {
         "name": "${legend}",
         "data": ${values},
-        "type": "bar"
+        "type": "bar",
         "barWidth": "30%"
     }
 }

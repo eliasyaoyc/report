@@ -100,7 +100,7 @@ public class Report {
 
                         @Override
                         public void onException(String taskId, String msg) {
-                            LOGGER.error("[Report] subTask{}-{} execute failed.", entity.getReportId(), taskId);
+                            LOGGER.error("[Report] subTask-{}-{} execute failed.", entity.getReportId(), taskId);
                             reportStatus.publishEvent(taskId, msg, ReportEvent.EventType.FAIL);
                             // Add to fail queue that ready to re-execute.
                             taskRegistry.addToFailQueue(taskId);

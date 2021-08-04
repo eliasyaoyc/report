@@ -58,20 +58,20 @@ public class ReportStatus {
 
         switch (type) {
             case CREATION:
-                LOGGER.info("[ReportStatus] report {} all subTask are all creation.", id);
+                LOGGER.info("[ReportStatus] report-{} all subTask are all creation.", id);
                 break;
             case PARTIALLY_COMPLETED:
-                LOGGER.info("[ReportStatus] task {} is completed.", id);
+                LOGGER.info("[ReportStatus] task-{} is completed.", id);
                 break;
             case REPORT:
-                LOGGER.info("[ReportStatus] report {} subTask are all finished.", id);
+                LOGGER.info("[ReportStatus] report-{} subTask are all finished.", id);
 
                 break;
             case COMPLETED:
-                LOGGER.info("[ReportStatus] report {} is generated completely", id);
+                LOGGER.info("[ReportStatus] report-{} is generated completely", id);
                 break;
             case FAIL:
-                LOGGER.info("[ReportStatus] task {} execute fail, add to fail-queue and wait to retry", event.getTaskId());
+                LOGGER.info("[ReportStatus] task-{} execute fail, add to fail-queue and wait to retry", event.getTaskId());
                 this.listeners.get(ALARM_LISTENER).onFailure(event);
                 break;
         }
