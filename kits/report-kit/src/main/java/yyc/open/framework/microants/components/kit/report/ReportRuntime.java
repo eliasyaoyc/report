@@ -70,6 +70,13 @@ public class ReportRuntime implements AutoCloseable {
             String ret = FileUtils.readFileToString(new File(FileKit.getResourcePath(GLOBAL_JSON_PATH)), StandardCharsets.UTF_8);
             Gson gson = new GsonBuilder().create();
             globalConfig = gson.fromJson(ret, ReportConfig.GlobalConfig.class);
+
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+                @Override
+                public void run() {
+                    close();
+                }
+            });
         } catch (IOException e) {
             throw new ReportException("[Report Runtime] initialize fail", e);
         }
@@ -146,7 +153,7 @@ public class ReportRuntime implements AutoCloseable {
         HashMap<String, Object> pa = new HashMap<>();
         pa.put("exit", "true");
         HttpKit.builder()
-                .post("http://localhost:" + globalConfig.getPort())
+                .post(String.format("http://127.0.0.1:%s", globalConfig.getPort()))
                 .body(pa)
                 .build()
                 .get();
