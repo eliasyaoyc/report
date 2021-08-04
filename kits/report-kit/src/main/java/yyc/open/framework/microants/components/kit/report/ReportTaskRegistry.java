@@ -8,6 +8,7 @@ import yyc.open.framework.microants.components.kit.common.validate.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * {@link ReportTaskRegistry}
@@ -79,7 +80,13 @@ public class ReportTaskRegistry {
      * @param taskId
      */
     public void addToFailQueue(@NonNull String taskId) {
+        if (!this.tasks.containsKey(taskId)) {
+            return;
+        }
+
         ReportTask failTask = this.tasks.remove(taskId);
-        this.failTasks.put(taskId, failTask);
+        if (!Objects.isNull(failTask)) {
+            this.failTasks.put(taskId, failTask);
+        }
     }
 }

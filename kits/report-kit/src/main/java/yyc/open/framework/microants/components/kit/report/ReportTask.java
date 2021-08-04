@@ -39,7 +39,10 @@ public class ReportTask extends Task {
                 rest.put("values", gson.toJson(data.getYDatas()));
                 break;
             case CROSS_BAR:
-                // TODO
+                rest.put("title", data.getTitle());
+                rest.put("legend", data.getLegendName());
+                rest.put("category", gson.toJson(data.getXdatas().get(0)));
+                rest.put("values", gson.toJson(data.getYDatas()));
                 break;
             case CROSS_MULTI_BAR:
                 // TODO
