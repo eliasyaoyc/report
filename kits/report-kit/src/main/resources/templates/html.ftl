@@ -319,7 +319,10 @@
                             <ul class="total-box">
                                 <#list value.stat?keys as key>
                                     <li>
-                                        <p>${key}</p><span>${value.stat[key]}</span>
+                                        <p>${key}<span>${value.stat[key]}</span></p>
+                                        <#if value.statDescription?? && value.statDescription != "">
+                                            ${value.statDescription}
+                                        </#if>
                                     </li>
                                 </#list>
                             </ul>

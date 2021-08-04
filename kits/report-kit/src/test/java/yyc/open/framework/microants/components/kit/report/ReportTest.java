@@ -69,7 +69,7 @@ public class ReportTest {
     private static ReportData total() {
         Map<String, Object> stat = new LinkedHashMap<>();
         stat.put("总量", 1020);
-        return ReportData.statistics(stat);
+        return ReportData.statistics(stat,"攻击成功数量102（10%）");
     }
 
     public static ReportData image() {

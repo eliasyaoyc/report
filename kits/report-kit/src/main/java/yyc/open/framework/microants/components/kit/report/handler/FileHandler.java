@@ -2,8 +2,6 @@ package yyc.open.framework.microants.components.kit.report.handler;
 
 
 import com.google.common.collect.Maps;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,10 +18,7 @@ import yyc.open.framework.microants.components.kit.report.ReportMetadata;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
 import yyc.open.framework.microants.components.kit.report.entity.ReportData;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -46,22 +41,39 @@ public class FileHandler<T> extends AbstractHandler<T> {
         ReportMetadata metadata = (ReportMetadata) task;
         LOGGER.info("[FileHandler] handle the report: {}, metadata: {} .", metadata.getReportId(), metadata);
 
-        Gson gson = new GsonBuilder().create();
-
+        BufferedWriter writer = null;
         try {
             // Generate html.
             String option = StringUtils.isNotEmpty(metadata.getTemplatePath()) ?
                     generateFreemarkerTemplate(metadata.getTemplatePath(), assembleReportEntity(metadata)) :
                     generateFreemarkerTemplateByDefault(metadata.getReportType().getTemplateName(), assembleReportEntity(metadata));
 
-            // Determine which file convert to.
+            String fileName = config.getOutputPath() + metadata.getReportId() + ".html";
+            File file = new File(fileName);
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
+            writer.write(option);
+            writer.flush();
 
+            // Determine which file convert to.
+            switch (metadata.getReportType()){
+                case PDF:
+
+                    break;
+                case WORD:
+                    break;
+            }
 
             callback.onReceived(metadata.getReportId(), "", ReportEvent.EventType.COMPLETED);
         } catch (Exception e) {
             String msg = String.format("[FileHandler] generate report encountered error: %s.", e);
             LOGGER.error(msg);
             callback.onException(metadata.getReportId(), msg);
+        } finally {
+            try {
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -126,7 +138,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
                 } else if (!data.getStatistics().isEmpty()) {
                     contents.add(Content.statistics(indices.get(j),
                             description.size() > j ? description.get(j) : null,
-                            data.getStatistics()));
+                            data.getStatistics(), data.getStatDescription()));
 
                 } else {
                     contents.add(new Content());
@@ -150,21 +162,22 @@ public class FileHandler<T> extends AbstractHandler<T> {
         private List<String> tablesTitle;
         private List<List<String>> tablesValue;
         private Map<String, Object> stat;
+        private String statDescription;
 
         public static Content image(String index, String description, String image) {
-            return new Content(index, description, image, null, null, null, null);
+            return new Content(index, description, image, null, null, null, null, null);
         }
 
         public static Content text(String index, String description, List<String> text) {
-            return new Content(index, description, null, text, null, null, null);
+            return new Content(index, description, null, text, null, null, null, null);
         }
 
         public static Content tables(String index, String description, List<List<String>> tables) {
-            return new Content(index, description, null, null, tables.remove(0), tables, null);
+            return new Content(index, description, null, null, tables.remove(0), tables, null, null);
         }
 
-        public static Content statistics(String index, String description, Map<String, Object> statistics) {
-            return new Content(index, description, null, null, null, null, statistics);
+        public static Content statistics(String index, String description, Map<String, Object> statistics, String statDescription) {
+            return new Content(index, description, null, null, null, null, statistics, statDescription);
         }
     }
 

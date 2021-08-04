@@ -50,6 +50,8 @@ public class ReportData {
 
     private Map<String, Object> statistics;
 
+    private String statDescription;
+
     private String base64;
 
     /**
@@ -87,6 +89,20 @@ public class ReportData {
         reportData.setStatistics(statistics);
         return reportData;
     }
+
+    /**
+     * Create statistics data.
+     *
+     * @param statistics
+     * @return
+     */
+    public static ReportData statistics(Map<String, Object> statistics,String description) {
+        ReportData reportData = new ReportData();
+        reportData.setStatistics(statistics);
+        reportData.setStatDescription(description);
+        return reportData;
+    }
+
 
     public static ReportData image(String image) {
         ReportData reportData = new ReportData();
