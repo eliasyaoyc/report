@@ -5,7 +5,6 @@ import org.apache.http.util.Asserts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import yyc.open.framework.microants.components.kit.common.validate.NonNull;
-import yyc.open.framework.microants.components.kit.report.entity.ReportEntity;
 import yyc.open.framework.microants.components.kit.report.exceptions.ReportException;
 import yyc.open.framework.microants.components.kit.report.handler.ReportHandlerFactory;
 
@@ -13,7 +12,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * {@link Report}
+ * {@link Report} core class generates report methods external provision.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2021/7/28
@@ -44,7 +43,7 @@ public class Report {
     /**
      * Generate the report that supports batch generation.
      */
-    public void generateReport(List<ReportEntity> reportEntities) {
+    public void generateReport(List<ReportMetadata> reportEntities) {
         generate(reportEntities, false);
     }
 
@@ -53,12 +52,12 @@ public class Report {
      * <p>
      * Generate the report, in additional supports parallel generation.
      */
-    private void generateReportParallel(List<ReportEntity> reportEntities) {
+    private void generateReportParallel(List<ReportMetadata> reportEntities) {
         generate(reportEntities, true);
     }
 
 
-    private void generate(List<ReportEntity> reportEntities, boolean parallel) {
+    private void generate(List<ReportMetadata> reportEntities, boolean parallel) {
         // 1. Check report status whether running
         if (checkReportState()) {
             throw new ReportException("[Report Runtime] has not started, please start first.");
@@ -144,4 +143,14 @@ public class Report {
         return ReportContextProvider.INSTANCE.getContext().getReportStatus() == null;
     }
 
+    /**
+     * Verity the last generation report whether valid.
+     * First, we should check whether has values what content type is charts.
+     * Next, checks report corresponding attributes is not empty.
+     *
+     * @param entity Report metadata.
+     */
+    boolean validReportEntity(ReportMetadata entity) {
+        return false;
+    }
 }

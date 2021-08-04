@@ -4,7 +4,6 @@ import com.google.common.collect.Maps;
 import org.apache.commons.collections4.CollectionUtils;
 import yyc.open.framework.microants.components.kit.common.uuid.UUIDsKit;
 import yyc.open.framework.microants.components.kit.common.validate.NonNull;
-import yyc.open.framework.microants.components.kit.report.entity.ReportEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +46,7 @@ public class ReportTaskRegistry {
      * @param entity data need to generate report.
      * @return
      */
-    public List<ReportTask> createTask(ReportConfig config, ReportEntity entity) {
+    public List<ReportTask> createTask(ReportConfig config, ReportMetadata entity) {
         List<ReportTask> tasks = new ArrayList<>();
         entity.getContent().getData().stream().forEach(data -> {
             data.stream().forEach(item -> {
@@ -81,6 +80,6 @@ public class ReportTaskRegistry {
      */
     public void addToFailQueue(@NonNull String taskId) {
         ReportTask failTask = this.tasks.remove(taskId);
-//        this.failTasks.put(taskId, failTask);
+        this.failTasks.put(taskId, failTask);
     }
 }

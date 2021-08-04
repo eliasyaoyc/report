@@ -10,7 +10,7 @@ import yyc.open.framework.microants.components.kit.report.ReportCallback;
 import yyc.open.framework.microants.components.kit.report.ReportConfig;
 import yyc.open.framework.microants.components.kit.report.ReportEvent;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
-import yyc.open.framework.microants.components.kit.report.entity.ReportEntity;
+import yyc.open.framework.microants.components.kit.report.ReportMetadata;
 
 import java.util.HashMap;
 
@@ -29,7 +29,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
 
     @Override
     public void onHandle(T task, ReportConfig config, ReportCallback callback) {
-        ReportEntity t = (ReportEntity) task;
+        ReportMetadata t = (ReportMetadata) task;
         LOGGER.info("[FileHandler] handle the report {}.", t.getReportId());
 
         Gson gson = new GsonBuilder().create();
@@ -43,7 +43,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
             // Determine which file convert to.
             callback.onReceived(t.getReportId(), "", ReportEvent.EventType.COMPLETED);
         } catch (Exception e) {
-            String msg = String.format("[FileHandler] generate report encountered error: {}.", e);
+            String msg = String.format("[FileHandler] generate report encountered error: %s.", e);
             LOGGER.error(msg);
             callback.onException(t.getReportId(), msg);
         }

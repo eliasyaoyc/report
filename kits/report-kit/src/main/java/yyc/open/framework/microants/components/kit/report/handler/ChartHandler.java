@@ -77,7 +77,7 @@ public class ChartHandler<T> extends AbstractHandler<T> {
 
             callback.onReceived(t.getTaskId(), ret, ReportEvent.EventType.PARTIALLY_COMPLETED);
         } catch (Exception e) {
-            String msg = String.format("[ChartHandler] generate echart encountered error: {}.", e);
+            String msg = String.format("[ChartHandler] generate echart encountered error: %s.", e.getMessage());
             LOGGER.error(msg);
             callback.onException(t.getTaskId(), msg);
         }

@@ -1,23 +1,23 @@
-package yyc.open.framework.microants.components.kit.report.entity;
+package yyc.open.framework.microants.components.kit.report;
 
 import lombok.Getter;
 import lombok.Setter;
 import yyc.open.framework.microants.components.kit.common.uuid.UUIDsKit;
-import yyc.open.framework.microants.components.kit.report.Task;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
+import yyc.open.framework.microants.components.kit.report.entity.ReportData;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@link ReportEntity}
+ * {@link ReportMetadata}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2021/8/1
  */
 @Getter
 @Setter
-public class ReportEntity extends Task {
+public class ReportMetadata extends Task {
     private String reportId = UUIDsKit.base64UUID();
 
     private String reportName = UUIDsKit.base64UUID();
@@ -44,13 +44,13 @@ public class ReportEntity extends Task {
      */
     private ReportContent content;
 
-    public ReportEntity(String reportId,
-                        String reportName,
-                        ReportEnums reportType,
-                        ReportTitle title,
-                        ReportInfo info,
-                        ReportCatalogue catalogue,
-                        ReportContent content) {
+    public ReportMetadata(String reportId,
+                          String reportName,
+                          ReportEnums reportType,
+                          ReportTitle title,
+                          ReportInfo info,
+                          ReportCatalogue catalogue,
+                          ReportContent content) {
         this.reportId = reportId;
         this.reportName = reportName;
         super.setReportType(reportType);
@@ -117,7 +117,7 @@ public class ReportEntity extends Task {
     /**
      * Construct `reportEntity` used builder.
      */
-    public static ReportEntityBuilder builder() {
-        return new ReportEntityBuilder();
+    public static ReportMedataBuilder builder() {
+        return new ReportMedataBuilder();
     }
 }

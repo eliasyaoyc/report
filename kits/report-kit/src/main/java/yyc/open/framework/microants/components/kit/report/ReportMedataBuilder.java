@@ -1,46 +1,47 @@
-package yyc.open.framework.microants.components.kit.report.entity;
+package yyc.open.framework.microants.components.kit.report;
 
 import yyc.open.framework.microants.components.kit.common.uuid.UUIDsKit;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
+import yyc.open.framework.microants.components.kit.report.entity.ReportData;
 
 import java.util.List;
 
 /**
- * {@link ReportEntityBuilder} The builder model for {@link ReportEntity}.
+ * {@link ReportMedataBuilder} The builder model for {@link ReportMetadata}.
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2021/8/2
  */
-public class ReportEntityBuilder {
+public class ReportMedataBuilder {
     private String reportId = UUIDsKit.base64UUID();
     private String reportName = UUIDsKit.base64UUID();
 
     private String templatePath;
     private ReportEnums reportType;
-    ReportEntity.ReportTitle title;
-    ReportEntity.ReportInfo info;
+    ReportMetadata.ReportTitle title;
+    ReportMetadata.ReportInfo info;
 
     // TODO Consider remove.
-    ReportEntity.ReportCatalogue catalogue;
-    ReportEntity.ReportContent content;
+    ReportMetadata.ReportCatalogue catalogue;
+    ReportMetadata.ReportContent content;
 
-    public ReportEntityBuilder reportId(String reportId) {
+    public ReportMedataBuilder reportId(String reportId) {
         this.reportId = reportId;
         return this;
     }
 
-    public ReportEntityBuilder reportName(String reportName) {
+    public ReportMedataBuilder reportName(String reportName) {
         this.reportName = reportName;
         return this;
     }
 
-    public ReportEntityBuilder templatePath(String templatePath) {
+    public ReportMedataBuilder templatePath(String templatePath) {
         this.templatePath = templatePath;
         return this;
     }
 
 
-    public ReportEntityBuilder type(ReportEnums type) {
+    public ReportMedataBuilder type(ReportEnums type) {
         this.reportType = type;
         return this;
     }
@@ -51,11 +52,11 @@ public class ReportEntityBuilder {
 
 
     public final static class TitleBuilder {
-        private ReportEntityBuilder builder;
+        private ReportMedataBuilder builder;
 
-        public TitleBuilder(ReportEntityBuilder builder) {
+        public TitleBuilder(ReportMedataBuilder builder) {
             this.builder = builder;
-            this.builder.title = new ReportEntity.ReportTitle();
+            this.builder.title = new ReportMetadata.ReportTitle();
         }
 
         public TitleBuilder background(String background) {
@@ -80,11 +81,11 @@ public class ReportEntityBuilder {
     }
 
     public final static class InfoBuilder {
-        private ReportEntityBuilder builder;
+        private ReportMedataBuilder builder;
 
-        InfoBuilder(ReportEntityBuilder builder) {
+        InfoBuilder(ReportMedataBuilder builder) {
             this.builder = builder;
-            this.builder.info = new ReportEntity.ReportInfo();
+            this.builder.info = new ReportMetadata.ReportInfo();
         }
 
         public InfoBuilder info(String label, String value) {
@@ -105,11 +106,11 @@ public class ReportEntityBuilder {
     }
 
     public final static class CatalogueBuilder {
-        private ReportEntityBuilder builder;
+        private ReportMedataBuilder builder;
 
-        public CatalogueBuilder(ReportEntityBuilder builder) {
+        public CatalogueBuilder(ReportMedataBuilder builder) {
             this.builder = builder;
-            this.builder.catalogue = new ReportEntity.ReportCatalogue();
+            this.builder.catalogue = new ReportMetadata.ReportCatalogue();
         }
 
         public CatalogueBuilder catalogue(String chapter, List<String> indices) {
@@ -130,11 +131,11 @@ public class ReportEntityBuilder {
     }
 
     public final static class ContentBuilder {
-        private ReportEntityBuilder builder;
+        private ReportMedataBuilder builder;
 
-        ContentBuilder(ReportEntityBuilder builder) {
+        ContentBuilder(ReportMedataBuilder builder) {
             this.builder = builder;
-            this.builder.content = new ReportEntity.ReportContent();
+            this.builder.content = new ReportMetadata.ReportContent();
         }
 
         public ContentBuilder content(String chapter, List<String> indices, List<String> description, List<ReportData> data) {
@@ -153,8 +154,8 @@ public class ReportEntityBuilder {
             return this;
         }
 
-        public ReportEntity build() {
-            return new ReportEntity(builder.reportId,
+        public ReportMetadata build() {
+            return new ReportMetadata(builder.reportId,
                     builder.reportName,
                     builder.reportType,
                     builder.title,

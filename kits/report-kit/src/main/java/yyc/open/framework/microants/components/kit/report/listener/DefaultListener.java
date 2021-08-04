@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import yyc.open.framework.microants.components.kit.report.ReportEvent;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
-import yyc.open.framework.microants.components.kit.report.entity.ReportEntity;
+import yyc.open.framework.microants.components.kit.report.ReportMetadata;
 
 import static yyc.open.framework.microants.components.kit.report.commons.ReportConstants.DEFAULT_LISTENER;
 import static yyc.open.framework.microants.components.kit.report.commons.ReportConstants.LISTENER;
@@ -23,7 +23,7 @@ public class DefaultListener implements Listener {
     public void onSuccess(ReportEvent event) {
         switch (event.getType()) {
             case REPORT:
-                ReportEntity reportEntity = event.getEntity();
+                ReportMetadata reportMetadata = event.getEntity();
                 // Send the report task.
             case COMPLETED:
                 LOGGER.info("");
