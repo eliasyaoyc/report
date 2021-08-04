@@ -4,6 +4,7 @@ import yyc.open.framework.microants.components.kit.common.uuid.UUIDsKit;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 import yyc.open.framework.microants.components.kit.report.entity.ReportData;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -89,14 +90,12 @@ public class ReportMedataBuilder {
         }
 
         public InfoBuilder info(String label, String value) {
-            this.builder.info.getLabels().add(label);
-            this.builder.info.getValues().add(value);
+            this.builder.info.getLabels().put(label, value);
             return this;
         }
 
-        public InfoBuilder info(List<String> labels, List<String> values) {
-            this.builder.info.getLabels().addAll(labels);
-            this.builder.info.getValues().addAll(values);
+        public InfoBuilder info(LinkedHashMap<String, String> labels) {
+            this.builder.info.getLabels().putAll(labels);
             return this;
         }
 
@@ -114,14 +113,12 @@ public class ReportMedataBuilder {
         }
 
         public CatalogueBuilder catalogue(String chapter, List<String> indices) {
-            this.builder.catalogue.getChapter().add(chapter);
-            this.builder.catalogue.getIndices().add(indices);
+            this.builder.catalogue.getChapters().put(chapter, indices);
             return this;
         }
 
-        public CatalogueBuilder catalogue(List<String> chapter, List<List<String>> indices) {
-            this.builder.catalogue.getChapter().addAll(chapter);
-            this.builder.catalogue.getIndices().addAll(indices);
+        public CatalogueBuilder catalogue(LinkedHashMap<String, List<String>> catalogues) {
+            this.builder.catalogue.getChapters().putAll(catalogues);
             return this;
         }
 

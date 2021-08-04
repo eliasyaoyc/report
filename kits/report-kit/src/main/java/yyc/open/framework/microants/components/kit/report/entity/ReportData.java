@@ -46,7 +46,9 @@ public class ReportData {
 
     private List<String> texts;
 
-    private List<Map<String, String>> tables;
+    private List<List<String>> tables;
+
+    private Map<String, Object> statistics;
 
     private String base64;
 
@@ -68,9 +70,27 @@ public class ReportData {
      * @param tables
      * @return
      */
-    public static ReportData table(List<Map<String, String>> tables) {
+    public static ReportData table(List<List<String>> tables) {
         ReportData reportData = new ReportData();
         reportData.setTables(tables);
+        return reportData;
+    }
+
+    /**
+     * Create statistics data.
+     *
+     * @param statistics
+     * @return
+     */
+    public static ReportData statistics(Map<String, Object> statistics) {
+        ReportData reportData = new ReportData();
+        reportData.setStatistics(statistics);
+        return reportData;
+    }
+
+    public static ReportData image(String image) {
+        ReportData reportData = new ReportData();
+        reportData.setBase64(image);
         return reportData;
     }
 
@@ -112,16 +132,5 @@ public class ReportData {
         reportData.setXdatas(xdatas);
         reportData.setYDatas(yDatas);
         return reportData;
-
-        /**
-         * Create echarts data.
-         *
-         * @param title
-         * @param type
-         * @param legendName
-         * @param xdatas
-         * @param yDatas
-         * @return
-         */
     }
 }

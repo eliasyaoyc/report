@@ -27,9 +27,9 @@ public class ReportHandlerFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReportHandlerFactory.class);
 
     private Map<String, Handler> handlers = Maps.newHashMap();
-    private ReportConfig config;
+    private final ReportConfig config;
 
-    private ReportHandlerFactory(ReportConfig config) {
+    private ReportHandlerFactory(@NonNull ReportConfig config) {
         this.config = config;
         // Construct handlers through processor annotation.
         ServiceLoader<Handler> handlers = ServiceLoader.load(Handler.class);

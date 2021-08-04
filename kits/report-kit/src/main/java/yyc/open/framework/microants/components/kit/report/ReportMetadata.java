@@ -1,5 +1,6 @@
 package yyc.open.framework.microants.components.kit.report;
 
+import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
 import yyc.open.framework.microants.components.kit.common.uuid.UUIDsKit;
@@ -8,6 +9,7 @@ import yyc.open.framework.microants.components.kit.report.entity.ReportData;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * {@link ReportMetadata}
@@ -77,8 +79,7 @@ public class ReportMetadata extends Task {
     @Getter
     @Setter
     public static class ReportInfo {
-        private List<String> labels = new ArrayList<>();
-        private List<String> values = new ArrayList<>();
+        private Map<String, String> labels = Maps.newLinkedHashMap();
     }
 
     /**
@@ -87,8 +88,7 @@ public class ReportMetadata extends Task {
     @Getter
     @Setter
     public static class ReportCatalogue {
-        private List<String> chapter = new ArrayList<>();
-        private List<List<String>> indices = new ArrayList<>();
+        private Map<String,List<String>> chapters = Maps.newLinkedHashMap();
     }
 
     /**

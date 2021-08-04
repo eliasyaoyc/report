@@ -5,7 +5,7 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-    <title>综合报表模板</title>
+    <title>${title}</title>
     <style>
         * {
             padding: 0;
@@ -266,178 +266,99 @@
     <div class="top">
         <img src="img_background.png"/>
         <div class="title">
-            <span>Comprehensive Securit Report</span>
-            <p>综合安全报表</p>
+            <span>${titleDesc}</span>
+            <p>${title}</p>
         </div>
         <div class="info">
-            <div class="item">
-                <div class="label">
-                    报告时间范围
+            <#list info?keys as key>
+                <div class="item">
+                    <div class="label">
+                        ${key}
+                    </div>
+                    <div class="value">
+                        ${info[key]}
+                    </div>
                 </div>
-                <div class="value">
-                    2021-07-01至2021-09-30
-                </div>
-            </div>
-            <div class="item">
-                <div class="label">
-                    报告生成时间
-                </div>
-                <div class="value">
-                    2021-10-01 08:00:00
-                </div>
-            </div>
+            </#list>
         </div>
         <div class="catalogue">
             <img src="img_directory.png"/>
-            <div class="item">
-                <p>第1章 整体摘要</p>
-                <ul>
-                    <li>1.1 安全概览</li>
-                    <li>1.2 平台状态</li>
-                </ul>
-            </div>
-            <div class="item">
-                <p>第2章 事件分析</p>
-                <ul>
-                    <li>2.1 告警类型占比</li>
-                    <li>2.2 威胁级别占比</li>
-                    <li>2.3 告警趋势</li>
-                    <li>2.4 web攻击数据统计</li>
-                    <li>2.5 隧道或可疑代理数量统计</li>
-                    <li>2.6 可疑访问数量统计</li>
-                </ul>
-            </div>
-            <div class="item">
-                <p>第3章 攻击者分析</p>
-                <ul>
-                    <li>3.1 攻击源TOP10</li>
-                    <li>3.2 全球攻击源TOP5</li>
-                </ul>
-            </div>
-            <div class="item">
-                <p>第4章 受害资产分析</p>
-                <ul>
-                    <li>4.1 受害IP TOP10</li>
-                    <li>4.2 受害URL TOP5</li>
-                    <li>4.3 受害域名TOP5</li>
-                </ul>
-            </div>
-            <div class="item">
-                <p>第5章 网络协议分析</p>
-                <ul>
-                    <li>5.1 网络日志趋势</li>
-                    <li>5.2 协议类型占比</li>
-                    <li>5.3 网络会话数量统计</li>
-                </ul>
-            </div>
-            <div class="item">
-                <p>第6章 系统运维</p>
-                <ul>
-                    <li>6.1 网卡实时信息</li>
-                </ul>
-            </div>
-            <div class="item">
-                <p>第7章 安全防护建议</p>
-                <ul>
-                    <li>7.1 安全防护建议</li>
-                </ul>
-            </div>
+            <#list catalogue?keys as key>
+                <div class="item">
+                    <p>key</p>
+                    <ul>
+                        <#list catalogue[key] as value>
+                            <li>${value}</li>
+                        </#list>
+                    </ul>
+                </div>
+            </#list>
         </div>
     </div>
     <div class="box-content">
         <div class="temp-box">
-            <div class="title">第N章 我是标题</div>
-
-            <div class="content">
-                <div class="small-title">1.1 总计（多）</div>
-                <div class="desc">我是组件描述</div>
-                <ul class="table-box">
-                    <li>
-                        <p>总告警</p><span>1020</span>
-                    </li>
-                    <li>
-                        <p>攻击成功</p><span>102</span>
-                    </li>
-                    <li>
-                        <p>外部攻击</p><span>820</span>
-                    </li>
-                    <li>
-                        <p>外联攻击</p><span>102</span>
-                    </li>
-                    <li>
-                        <p>横向攻击</p><span>98</span>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="content">
-                <div class="small-title">1.2 总计</div>
-                <div class="desc">我是组件描述</div>
-                <div class="total-box">
-                    <p>总量：<span>1020</span></p>
-                    攻击成功数量102（10%）
-                </div>
-            </div>
-
-            <div class="content">
-                <div class="small-title">1.3 echarts图表</div>
-                <div class="desc">我是组件描述</div>
-                <div class="echarts-box">
-                    <img src="echarts.png"/>
-                </div>
-            </div>
-
-            <div class="content">
-                <div class="small-title">1.4 表格</div>
-                <div class="desc">我是组件描述</div>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>接口名称</th>
-                        <th>状态</th>
-                        <th>类型</th>
-                        <th>链路模式</th>
-                        <th>接受流量</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>ens132</td>
-                        <td>连接中</td>
-                        <td>电口</td>
-                        <td>1000 Mbps</td>
-                        <td>131.21 kbps</td>
-                    </tr>
-                    <tr>
-                        <td>ens133</td>
-                        <td>连接中</td>
-                        <td>电口</td>
-                        <td>1000 Mbps</td>
-                        <td>231.21 kbps</td>
-                    </tr>
-                    <tr>
-                        <td>ens134</td>
-                        <td>连接中</td>
-                        <td>电口</td>
-                        <td>1000 Mbps</td>
-                        <td>631.21 kbps</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="content">
-                <div class="small-title">1.5 文字建议</div>
-                <div class="text">
-                    <p>1、公网网络边界部署抗DDOS、防火墙、WAF类网络防护设备，并将需要保护的资产添加至安全防护策略中，若已部署该类设备，请检查覆盖范围是否已涵盖所有资产。</p>
-                    <p>2、内网网络边界增加内部隔离机制，发现横向攻击后能及时将恶意软件、恶意行为进行拦截，阻止内部威胁的横向传播。</p>
-                    <p>3、办公终端网络建议部署防病毒、EDR、邮件安全网关类设备，降低被病毒感染、邮件钓鱼等网络攻击成功机率。</p>
-                    <p>4、定期进行安全基线检查及漏洞扫描检查，及时修复安全漏洞，避免被黑客利用系统漏洞进行攻击。</p>
-                    <p>5、制定并执行资产上架规范，控制业务开放端口及账号权限，定期对资产进行梳理，杜绝法外资产情况。</p>
-                    <p>6、制定并执行应急响应机制，及时感知、处理、响应安全事件。</p>
-                </div>
-            </div>
-
+            <#list content?keys as key>
+                <div class="title">${key}</div>
+                <#assign item = content[key]>
+                   <#list item as value>
+                    <div class="content">
+                        <div class="small-title">${value.index}</div>
+                        <#if value.description?? && value.description != "">
+                            <div class="desc">${value.description}</div>
+                        </#if>
+<#--                        <#if value.statistics??&&(value.statistics?size > 1)>-->
+<#--                            <ul class="table-box">-->
+<#--                                <#list value.statistics?keys as key>-->
+<#--                                    <li>-->
+<#--                                        <p>${key}</p><span>${value.statistics[key]}</span>-->
+<#--                                    </li>-->
+<#--                                </#list>-->
+<#--                            </ul>-->
+<#--                        </#if>-->
+<#--                        <#if value.statistics??&&(value.statistics?size = 1)>-->
+<#--                            <ul class="total-box">-->
+<#--                                <#list value.statistics?keys as key>-->
+<#--                                    <li>-->
+<#--                                        <p>${key}</p><span>${value.statistics[key]}</span>-->
+<#--                                    </li>-->
+<#--                                </#list>-->
+<#--                            </ul>-->
+<#--                        </#if>-->
+                        <#if value.base64?? && value.base64 != "">
+                            <div class="echarts-box">
+                                <img src="${value.base64}"/>
+                            </div>
+                        </#if>
+<#--                        <#if value.text?? && value.text?size > 0>-->
+<#--                            <div class="text">-->
+<#--                                <#list value.text as t>-->
+<#--                                    <p>${t}</p>-->
+<#--                                </#list>-->
+<#--                            </div>-->
+<#--                        </#if>>-->
+<#--                        <#if value.tables?? && value.tables?size > 0>-->
+<#--                        <table class="table">-->
+<#--                            <thead>-->
+<#--                            <tr>-->
+<#--                                <#list value.tablesTitle as tt>-->
+<#--                                    <th>${tt}</th>-->
+<#--                                </#list>-->
+<#--                            </tr>-->
+<#--                            </thead>-->
+<#--                            <tbody>-->
+<#--                            <#list value.tables as t1>-->
+<#--                                <tr>-->
+<#--                                    <#list value.tables as t2>-->
+<#--                                        <td>${t2}</td>-->
+<#--                                    </#list>-->
+<#--                                </tr>-->
+<#--                            </#list>-->
+<#--                            </tbody>-->
+<#--                        </table>-->
+<#--                        </#if>>-->
+                    </div>
+                </#list>
+            </#list>
         </div>
     </div>
 </div>

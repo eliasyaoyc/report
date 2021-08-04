@@ -1,11 +1,22 @@
 package yyc.open.framework.microants.components.kit.report;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import lombok.Getter;
+import lombok.Setter;
 import org.junit.Test;
+import yyc.open.framework.microants.components.kit.common.file.FileKit;
 import yyc.open.framework.microants.components.kit.common.reflect.AnnotationScannerKit;
+import yyc.open.framework.microants.components.kit.common.validate.Asserts;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 import yyc.open.framework.microants.components.kit.report.entity.ReportData;
+import yyc.open.framework.microants.components.kit.report.handler.FileHandler;
 
+import java.io.File;
+import java.io.StringWriter;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
@@ -55,8 +66,72 @@ public class ReportTest {
         return ReportData.echart("胸罩图例", ReportEnums.PIE, names, value);
     }
 
+    private static ReportData multiTotal() {
+        Map<String, Object> stat = new LinkedHashMap<>();
+        stat.put("总警告", 1020);
+        stat.put("攻击成功", 102);
+        stat.put("外部攻击", 820);
+        stat.put("外联攻击", 102);
+        stat.put("横向攻击", 98);
+        return ReportData.statistics(stat);
+    }
+
+    private static ReportData total() {
+        Map<String, Object> stat = new LinkedHashMap<>();
+        stat.put("总量", 1020);
+        return ReportData.statistics(stat);
+    }
+
+    public static ReportData image() {
+        return ReportData.image("/Users/eliasyao/Desktop/echarts.png");
+    }
+
+    public static ReportData tables() {
+        List<List<String>> tables = new ArrayList<>();
+        tables.add(Arrays.asList("接口名称", "状态", "类型", "链路模式", "接受流量"));
+        tables.add(Arrays.asList("ens132", "连接中", "电口", "1000 Mbs", "131.21 kbps"));
+        tables.add(Arrays.asList("ens133", "连接中", "电口", "1000 Mbs", "231.21 kbps"));
+        tables.add(Arrays.asList("ens134", "连接中", "电口", "1000 Mbs", "631.21 kbps"));
+        return ReportData.table(tables);
+    }
+
+    public static ReportData text() {
+        List<String> text = new ArrayList<>();
+        text.add("1、公网网络边界部署抗DDOS、防火墙、WAF类网络防护设备，并将需要保护的资产添加至安全防护策略中，若已部署该类设备，请检查覆盖范围是否已涵盖所有资产。");
+        text.add("2、内网网络边界增加内部隔离机制，发现横向攻击后能及时将恶意软件、恶意行为进行拦截，阻止内部威胁的横向传播。");
+        text.add("3、办公终端网络建议部署防病毒、EDR、邮件安全网关类设备，降低被病毒感染、邮件钓鱼等网络攻击成功机率。");
+        text.add("4、定期进行安全基线检查及漏洞扫描检查，及时修复安全漏洞，避免被黑客利用系统漏洞进行攻击。");
+        text.add("5、制定并执行资产上架规范，控制业务开放端口及账号权限，定期对资产进行梳理，杜绝法外资产情况。");
+        text.add("6、制定并执行应急响应机制，及时感知、处理、响应安全事件。");
+        return ReportData.text(text);
+    }
+
     @Test
     public void testHtml() {
+
+        ReportMetadata metadata = ReportMetadata.builder()
+                .type(ReportEnums.HTML)
+                .partTitle().title("综合安全报表").description("Comprehensive Security Report").background("base64")
+                .partInfo()
+                .info("报告时间范围", "2017-07-01至2021-09-30")
+                .info("报告生成时间", "2021-10-01 08:00:00")
+                .partCatalogue()
+                .catalogue("第一章 整体摘要", Arrays.asList("1.1 安全概览", "1.2 平台状态"))
+                .catalogue("第二章 事件分析", Arrays.asList("2.1 告警类型占比", "2.2 威胁级别占比"))
+                .partContent()
+                .content("第N 章 我是标题",
+                        Arrays.asList("1.1 总计（多）", "1.2 总计", "1.3 echarts 图表", "1.4 表格", "1.5 文字建议"),
+                        Arrays.asList("我是组件描述", "我是组件描述", "我是组件描述", "我是组件描述"),
+                        Arrays.asList(multiTotal(), total(), image(), tables(), text())
+                )
+                .build();
+
+        FileHandler fileHandler = new FileHandler();
+        fileHandler.generatePDF(metadata);
+    }
+
+    @Test
+    public void testAllEcharts() {
         Report report = ReportBuilder.ofDefault();
 
         ReportMetadata metadata = ReportMetadata.builder()
@@ -73,14 +148,14 @@ public class ReportTest {
                         Arrays.asList("1.1 总计（多）", "1.2 总计", "1.3 echarts 图表"),
                         Arrays.asList("我是组件描述", "我是组件描述", "我是组件描述"),
                         Arrays.asList(barEcharts(), crossBarEcharts(), lineEcharts(), pieEcharts())
-                        )
+                )
                 .build();
 
         report.generateReport(Arrays.asList(metadata));
     }
 
     @Test
-    public void testLine(){
+    public void testLine() {
         Report report = ReportBuilder.ofDefault();
 
 
@@ -133,8 +208,47 @@ public class ReportTest {
         System.out.println(classSetMap);
     }
 
+    @Getter
+    @Setter
+    public class User {
+        private String index;
+        private Integer age;
+
+        public User(String index, Integer age) {
+            this.index = index;
+            this.age = age;
+        }
+    }
+
     @Test
-    public void testWord() {
+    public void testWord() throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, List<User>> testMap = new HashMap<>();
+        List<User> listOne = new ArrayList<>();
+        List<User> listTwo = new ArrayList<>();
+        listOne.add(new User("1.1 王大麻子", 11));
+        listOne.add(new User("1.2 李二狗", 11));
+        listTwo.add(new User("1.3 郑老六", 11));
+        listTwo.add(new User("1.4 吴大棒槌", 11));
+        testMap.put("classA", listOne);
+        testMap.put("classB", listTwo);
+        resultMap.put("content", testMap);
+
+        Gson gson = new GsonBuilder().create();
+        String s = gson.toJson(resultMap);
+        System.out.println(s);
+        String[] path = FileKit.splitWithSuffix(FileKit.getResourcePath("templates/test.ftl"), '/');
+        Asserts.isTrue(path.length == 2);
+
+        Configuration configuration = new Configuration(Configuration.VERSION_2_3_0);
+        configuration.setDefaultEncoding("UTF-8");
+        configuration.setDirectoryForTemplateLoading(new File(path[0]));
+        Template template = configuration.getTemplate(path[1]);
+        try (StringWriter sw = new StringWriter()) {
+            template.process(resultMap, sw);
+            sw.flush();
+            System.out.println(sw.getBuffer().toString());
+        }
     }
 
     @Test

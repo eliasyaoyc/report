@@ -142,15 +142,4 @@ public class Report {
     boolean checkReportState() {
         return ReportContextProvider.INSTANCE.getContext().getReportStatus() == null;
     }
-
-    /**
-     * Verity the last generation report whether valid.
-     * First, we should check whether has values what content type is charts.
-     * Next, checks report corresponding attributes is not empty.
-     *
-     * @param entity Report metadata.
-     */
-    boolean validReportEntity(ReportMetadata entity) {
-        return false;
-    }
 }
