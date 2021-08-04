@@ -1,6 +1,6 @@
 <#--横向单柱状图-->
 {
-    "color": "rgba(0, 116, 227, 0.8)",
+    "color": ["rgba(0, 116, 227, 0.8)"],
     "title": {
         "text": "${title}"
     },
@@ -29,6 +29,18 @@
         "data": ${category}
     },
     "series": {
+        "label":{
+           "normal":{
+               "color":"#64e8ff",
+               "show":true,
+               "position":"right",
+               "textStyle":{
+                  "color":"#7F7F7F",
+                  "fontSize":15,
+                  "fontWeight":"bolder"
+                }
+              }
+        },
         "name": "${legend}",
         "data": ${values},
         "type": "bar",

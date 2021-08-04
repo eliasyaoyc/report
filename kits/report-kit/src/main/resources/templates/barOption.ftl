@@ -1,4 +1,5 @@
 {
+    "color": ["rgba(0, 116, 227, 0.8)"],
     "title": {
         "text": "${title}",
         "textStyle": {
