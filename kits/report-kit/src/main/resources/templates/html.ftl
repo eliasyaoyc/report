@@ -285,7 +285,7 @@
             <img src="img_directory.png"/>
             <#list catalogue?keys as key>
                 <div class="item">
-                    <p>key</p>
+                    <p>${key}</p>
                     <ul>
                         <#list catalogue[key] as value>
                             <li>${value}</li>
@@ -338,13 +338,13 @@
                         </#if>
                         <#if value.tablesTitle?? && (value.tablesTitle?size > 0)>
                            <table class="table">
-                             <thead>
+                             <tbody>
                              <tr>
                                 <#list value.tablesTitle as tt>
                                     <th>${tt}</th>
                                 </#list>
                              </tr>
-                             </thead>
+                             </tbody>
                              <tbody>
                               <#list value.tablesValue as t1>
                                 <tr>

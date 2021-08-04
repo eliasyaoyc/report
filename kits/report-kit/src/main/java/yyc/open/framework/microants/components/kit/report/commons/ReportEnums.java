@@ -65,6 +65,10 @@ public enum ReportEnums implements ReportEnumsInterface {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     /**
      * Determine the type whether belongs to chart.
      *

@@ -4,7 +4,6 @@ package yyc.open.framework.microants.components.kit.report.handler;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import freemarker.template.TemplateException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +20,10 @@ import yyc.open.framework.microants.components.kit.report.ReportMetadata;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
 import yyc.open.framework.microants.components.kit.report.entity.ReportData;
 
-import java.io.IOException;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -168,16 +170,15 @@ public class FileHandler<T> extends AbstractHandler<T> {
 
     @VisibleForTesting
     public void generatePDF(ReportMetadata metadata) {
-        Gson gson = new GsonBuilder().create();
-        Map<String, Object> stringObjectMap = assembleReportEntity(metadata);
-        String s = gson.toJson(stringObjectMap);
-        System.out.println(s);
         try {
             String option = generateFreemarkerTemplateByDefault(metadata.getReportType().getTemplateName(), assembleReportEntity(metadata));
             System.out.println(option);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (TemplateException e) {
+            File file = new File("/Users/eliasyao/Desktop/" + metadata.getReportId() + "." + metadata.getReportType().getName());
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
+            writer.write(option);
+            writer.flush();
+            System.out.println(option);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
