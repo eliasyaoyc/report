@@ -117,7 +117,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
                                 ReportData data = reportData.get(j);
                                 if (CollectionUtils.isNotEmpty(data.getTables())) {
                                     List<List<String>> tables = data.getTables();
-//                                    builder.table();
+                                    builder.table(tables, false);
 
                                 } else if (CollectionUtils.isNotEmpty(data.getTexts())) {
                                     data.getTexts().stream().forEach(text -> {
