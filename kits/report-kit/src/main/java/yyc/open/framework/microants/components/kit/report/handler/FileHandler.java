@@ -72,18 +72,20 @@ public class FileHandler<T> extends AbstractHandler<T> {
                             .fileName(metadata.getReportName() + ".docx");
                     if (!Objects.isNull(metadata.getTitle())) {
                         builder.image(metadata.getTitle().getBackground(), PictureType.PNG);
-                        builder.smallText(metadata.getTitle().getDescription());
-                        builder.text(metadata.getTitle().getTitle(), 48d);
+                        builder.smallText(metadata.getTitle().getDescription(), true);
+                        builder.text(metadata.getTitle().getTitle(), 48d, true);
                     }
 
                     if (!Objects.isNull(metadata.getInfo())) {
                         Map<String, String> labels = metadata.getInfo().getLabels();
                         List<String> keys = new ArrayList<>(labels.keySet());
                         List<String> values = new ArrayList<>(labels.values());
-                        builder.table(Arrays.asList(keys, values), true, true);
+                        builder.table(Arrays.asList(keys, values), true);
                     }
 
                     if (!Objects.isNull(metadata.getCatalogue())) {
+                        builder.blank();
+                        builder.image("/Users/eliasyao/Desktop/img_directory.png", PictureType.PNG);
                         Map<String, List<String>> chapters = metadata.getCatalogue().getChapters();
                         chapters.entrySet().stream().forEach(chapter -> {
                             builder.bigText(chapter.getKey());
@@ -105,6 +107,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
                             List<ReportData> reportData = content.getData().get(i);
 
                             for (int j = 0; j < indices.size(); j++) {
+                                builder.blank();
                                 builder.middleText(indices.get(j));
                                 if (description.size() > j) {
                                     builder.text(description.get(j), "696969", "SimSun", 12d, false);
@@ -113,7 +116,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
                                 ReportData data = reportData.get(j);
                                 if (CollectionUtils.isNotEmpty(data.getTables())) {
                                     List<List<String>> tables = data.getTables();
-                                    builder.table(tables, false, true);
+                                    builder.table(tables, false);
 
                                 } else if (CollectionUtils.isNotEmpty(data.getTexts())) {
                                     data.getTexts().stream().forEach(text -> {
@@ -127,7 +130,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
                                     Map<String, Object> statistics = data.getStatistics();
                                     List<String> keys = new ArrayList<>(statistics.keySet());
                                     List<String> values = statistics.values().stream().map(val -> val.toString()).collect(Collectors.toList());
-                                    builder.table(Arrays.asList(keys, values), true, true);
+                                    builder.table(Arrays.asList(keys, values), false);
                                 }
                             }
                         }
@@ -142,7 +145,9 @@ public class FileHandler<T> extends AbstractHandler<T> {
             callback.onException(metadata.getReportId(), String.format("[FileHandler] generate report encountered error: %s.", e));
         } finally {
             try {
-                writer.close();
+                if (writer != null){
+                    writer.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -317,7 +322,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
                         ReportData data = reportData.get(j);
                         if (CollectionUtils.isNotEmpty(data.getTables())) {
                             List<List<String>> tables = data.getTables();
-                            builder.table(tables, false, true);
+                            builder.table(tables, false);
 
                         } else if (CollectionUtils.isNotEmpty(data.getTexts())) {
                             data.getTexts().stream().forEach(text -> {
