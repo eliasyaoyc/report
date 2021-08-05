@@ -3,7 +3,6 @@ package yyc.open.framework.microants.components.kit.report.handler;
 
 import com.deepoove.poi.data.PictureType;
 import com.google.common.collect.Maps;
-import com.itextpdf.text.pdf.BaseFont;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +11,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xhtmlrenderer.pdf.ITextFontResolver;
-import org.xhtmlrenderer.pdf.ITextRenderer;
 import yyc.open.framework.microants.components.kit.common.annotations.VisibleForTesting;
 import yyc.open.framework.microants.components.kit.report.ReportCallback;
 import yyc.open.framework.microants.components.kit.report.ReportConfig;
@@ -84,7 +81,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
                         Map<String, String> labels = metadata.getInfo().getLabels();
                         List<String> keys = new ArrayList<>(labels.keySet());
                         List<String> values = new ArrayList<>(labels.values());
-                        builder.table(Arrays.asList(keys, values), true);
+                        builder.table(Arrays.asList(keys, values), true, true);
                     }
 
                     if (!Objects.isNull(metadata.getCatalogue())) {
@@ -117,7 +114,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
                                 ReportData data = reportData.get(j);
                                 if (CollectionUtils.isNotEmpty(data.getTables())) {
                                     List<List<String>> tables = data.getTables();
-                                    builder.table(tables, false);
+                                    builder.table(tables, false, true);
 
                                 } else if (CollectionUtils.isNotEmpty(data.getTexts())) {
                                     data.getTexts().stream().forEach(text -> {
@@ -131,7 +128,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
                                     Map<String, Object> statistics = data.getStatistics();
                                     List<String> keys = new ArrayList<>(statistics.keySet());
                                     List<String> values = statistics.values().stream().map(val -> val.toString()).collect(Collectors.toList());
-                                    builder.table(Arrays.asList(keys, values), true);
+                                    builder.table(Arrays.asList(keys, values), true, true);
                                 }
                             }
                         }
@@ -155,33 +152,6 @@ public class FileHandler<T> extends AbstractHandler<T> {
     }
 
     void convertToPdf(String htmlFile, String pdfFile) throws Exception {
-        // step 1
-        String url = new File(htmlFile).toURI().toURL().toString();
-        System.out.println(url);
-
-        // step 2
-        OutputStream os = new FileOutputStream(pdfFile);
-        ITextRenderer renderer = new ITextRenderer();
-        renderer.setDocument(url);
-
-//        // 图片为本地的绝对路径时,如http://www.baidu.com/a.jpg,则为<img src="a.jpg" />
-//        renderer.getSharedContext().setBaseURL("http://www.baidu.com/");
-//        // 图片为HTTP链接时，src只需填写相对路径，如D:/a.jpg,则为<img src="a.jpg" />
-//        renderer.getSharedContext().setBaseURL("file:/D:/");
-
-        // step 3 解决中文支持
-        ITextFontResolver fontResolver = renderer.getFontResolver();
-//        if ("linux".equals(getCurrentOperatingSystem())) {
-        fontResolver.addFont("/Users/eliasyao/Desktop/simsun.ttc", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-//        } else {
-//            fontResolver.addFont("c:/Windows/Fonts/simsun.ttc", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-//        }
-
-        renderer.layout();
-        renderer.createPDF(os);
-        os.close();
-
-        System.out.println("create pdf done!!");
     }
 
     /**
@@ -281,7 +251,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
     }
 
     @VisibleForTesting
-    public void generatePDF(ReportMetadata metadata) {
+    public void generateHTML(ReportMetadata metadata) {
         try {
             String option = generateFreemarkerTemplateByDefault(metadata.getReportType().getTemplateName(), assembleReportEntity(metadata));
             System.out.println(option);
@@ -292,8 +262,83 @@ public class FileHandler<T> extends AbstractHandler<T> {
             writer.write(option);
             writer.flush();
             System.out.println(option);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-            convertToPdf(html, pdf);
+    @VisibleForTesting
+    public void generateWord(ReportMetadata metadata) {
+        try {
+            FastWordKit.FastWordBuilder builder = FastWordKit.builder()
+                    .outputPath("/Users/eliasyao/Desktop/")
+                    .fileName(metadata.getReportName() + ".docx");
+            if (!Objects.isNull(metadata.getTitle())) {
+                builder.image(metadata.getTitle().getBackground(), PictureType.PNG);
+                builder.smallText(metadata.getTitle().getDescription(), true);
+                builder.text(metadata.getTitle().getTitle(), 48d, true);
+            }
+
+            if (!Objects.isNull(metadata.getInfo())) {
+                Map<String, String> labels = metadata.getInfo().getLabels();
+                List<String> keys = new ArrayList<>(labels.keySet());
+                List<String> values = new ArrayList<>(labels.values());
+                builder.table(Arrays.asList(keys, values), true);
+            }
+
+            if (!Objects.isNull(metadata.getCatalogue())) {
+                builder.blank();
+                builder.image("/Users/eliasyao/Desktop/img_directory.png", PictureType.PNG);
+                Map<String, List<String>> chapters = metadata.getCatalogue().getChapters();
+                chapters.entrySet().stream().forEach(chapter -> {
+                    builder.bigText(chapter.getKey());
+                    chapter.getValue().stream().forEach(index -> {
+                        builder.middleText(index);
+                    });
+                });
+            }
+
+            if (!Objects.isNull(metadata.getContent())) {
+                ReportMetadata.ReportContent content = metadata.getContent();
+
+                for (int i = 0; i < content.getChapter().size(); i++) {
+                    builder.blank();
+                    builder.bigText(content.getChapter().get(i));
+
+                    List<String> indices = content.getIndices().get(i);
+                    List<String> description = content.getDescription().get(i);
+                    List<ReportData> reportData = content.getData().get(i);
+
+                    for (int j = 0; j < indices.size(); j++) {
+                        builder.blank();
+                        builder.middleText(indices.get(j));
+                        if (description.size() > j) {
+                            builder.text(description.get(j), "696969", "SimSun", 12d, false);
+                        }
+
+                        ReportData data = reportData.get(j);
+                        if (CollectionUtils.isNotEmpty(data.getTables())) {
+                            List<List<String>> tables = data.getTables();
+                            builder.table(tables, false, true);
+
+                        } else if (CollectionUtils.isNotEmpty(data.getTexts())) {
+                            data.getTexts().stream().forEach(text -> {
+                                builder.text(text);
+                            });
+
+                        } else if (StringUtils.isNotEmpty(data.getBase64())) {
+                            builder.image(data.getBase64(), PictureType.PNG);
+
+                        } else if (!data.getStatistics().isEmpty()) {
+                            Map<String, Object> statistics = data.getStatistics();
+                            List<String> keys = new ArrayList<>(statistics.keySet());
+                            List<String> values = statistics.values().stream().map(val -> val.toString()).collect(Collectors.toList());
+                            builder.table(Arrays.asList(keys, values), false);
+                        }
+                    }
+                }
+            }
+            builder.build().create();
         } catch (Exception e) {
             e.printStackTrace();
         }

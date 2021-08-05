@@ -88,6 +88,11 @@ public class FastWordKit {
             return this;
         }
 
+        public FastWordBuilder text(@NonNull String content, Double size, boolean isCenter) {
+            text(content, "000000", "Microsoft YaHei", size, isCenter);
+            return this;
+        }
+
         public FastWordBuilder text(@NonNull String content, @NonNull boolean isCenter) {
             text(content, "000000", "Microsoft YaHei", 14d, isCenter);
             return this;
@@ -102,24 +107,53 @@ public class FastWordKit {
 
         public FastWordBuilder table(List<List<String>> rows, boolean isCenter) {
             List<RowRenderData> ret = new ArrayList<>();
+            List<List<String>> rows1 = rows;
 
-            if (rows.size() > 1) {
-                List<String> remove = rows.remove(1);
+            if (rows1.size() >= 2) {
+                List<String> remove = rows1.get(0);
                 String[] cont = remove.toArray(new String[remove.size()]);
                 RowRenderData data = Rows.of(cont).textColor("FFFFFF").bgColor("4472C4").center().create();
                 ret.add(data);
             }
 
-            rows.stream().forEach(row -> {
-                String[] cont = row.toArray(new String[row.size()]);
+            for (int i = 1; i < rows1.size(); i++) {
+                String[] subCont = rows1.get(i).toArray(new String[rows1.get(i).size()]);
+                RowRenderData subData = Rows.of(subCont).center().create();
+                ret.add(subData);
+            }
+
+            Tables.TableBuilder tableBuilder = isCenter ? Tables.of(ret.toArray(new RowRenderData[ret.size()])).center() :
+                    Tables.of(ret.toArray(new RowRenderData[ret.size()]));
+
+            if (rows1.size() > 2) {
+                tableBuilder.autoWidth();
+            }
+            this.documentBuilder.addTable(tableBuilder.create());
+            return this;
+        }
+
+        public FastWordBuilder table(List<List<String>> rows, boolean isCenter, boolean autoWidth) {
+            List<RowRenderData> ret = new ArrayList<>();
+
+            if (rows.size() > 1) {
+                List<String> remove = rows.get(0);
+                String[] cont = remove.toArray(new String[remove.size()]);
+                RowRenderData data = Rows.of(cont).textColor("FFFFFF").bgColor("4472C4").center().create();
+                ret.add(data);
+            }
+
+            for (int i = 1; i < rows.size(); i++) {
+                String[] cont = rows.get(i).toArray(new String[rows.get(i).size()]);
                 RowRenderData data = Rows.of(cont).center().create();
                 ret.add(data);
-            });
+            }
 
-            TableRenderData table = isCenter ? Tables.of(ret.toArray(new RowRenderData[ret.size()])).autoWidth().center().create() :
-                    Tables.of(ret.toArray(new RowRenderData[ret.size()])).autoWidth().create();
+            Tables.TableBuilder tableBuilder = isCenter ? Tables.of(ret.toArray(new RowRenderData[ret.size()])).center() :
+                    Tables.of(ret.toArray(new RowRenderData[ret.size()]));
 
-            this.documentBuilder.addTable(table);
+            tableBuilder = autoWidth ? tableBuilder.autoWidth() : tableBuilder;
+
+            this.documentBuilder.addTable(tableBuilder.create());
             return this;
         }
 
