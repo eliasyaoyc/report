@@ -12,11 +12,24 @@
     <artifactId>microants-components-thirdparty-kit</artifactId>
     <name>Microants Components ThirdParty Kit</name>
 
+    <properties>
+        <tl.poi.version>1.10.0</tl.poi.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
             <version>3.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.deepoove</groupId>
+            <artifactId>poi-tl</artifactId>
+            <version>${tl.poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>yyc.open.framework</groupId>
+            <artifactId>microants-components-common-kit</artifactId>
         </dependency>
     </dependencies>
 </project>

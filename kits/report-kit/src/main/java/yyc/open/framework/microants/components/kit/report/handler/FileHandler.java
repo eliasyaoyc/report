@@ -2,6 +2,7 @@ package yyc.open.framework.microants.components.kit.report.handler;
 
 
 import com.google.common.collect.Maps;
+import com.itextpdf.text.pdf.BaseFont;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,8 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xhtmlrenderer.pdf.ITextFontResolver;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 import yyc.open.framework.microants.components.kit.common.annotations.VisibleForTesting;
 import yyc.open.framework.microants.components.kit.report.ReportCallback;
 import yyc.open.framework.microants.components.kit.report.ReportConfig;
@@ -50,12 +53,18 @@ public class FileHandler<T> extends AbstractHandler<T> {
 
             String fileName = config.getOutputPath() + metadata.getReportId() + ".html";
             File file = new File(fileName);
+
+            //如果输出目标文件夹不存在，则创建
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
             writer.write(option);
             writer.flush();
 
             // Determine which file convert to.
-            switch (metadata.getReportType()){
+            switch (metadata.getReportType()) {
                 case PDF:
 
                     break;
@@ -77,9 +86,36 @@ public class FileHandler<T> extends AbstractHandler<T> {
         }
     }
 
-    void convertToPdf() {
+    void convertToPdf(String htmlFile, String pdfFile) throws Exception {
+        // step 1
+        String url = new File(htmlFile).toURI().toURL().toString();
+        System.out.println(url);
 
+        // step 2
+        OutputStream os = new FileOutputStream(pdfFile);
+        ITextRenderer renderer = new ITextRenderer();
+        renderer.setDocument(url);
+
+//        // 图片为本地的绝对路径时,如http://www.baidu.com/a.jpg,则为<img src="a.jpg" />
+//        renderer.getSharedContext().setBaseURL("http://www.baidu.com/");
+//        // 图片为HTTP链接时，src只需填写相对路径，如D:/a.jpg,则为<img src="a.jpg" />
+//        renderer.getSharedContext().setBaseURL("file:/D:/");
+
+        // step 3 解决中文支持
+        ITextFontResolver fontResolver = renderer.getFontResolver();
+//        if ("linux".equals(getCurrentOperatingSystem())) {
+        fontResolver.addFont("/Users/eliasyao/Desktop/simsun.ttc", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+//        } else {
+//            fontResolver.addFont("c:/Windows/Fonts/simsun.ttc", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+//        }
+
+        renderer.layout();
+        renderer.createPDF(os);
+        os.close();
+
+        System.out.println("create pdf done!!");
     }
+
 
     void convertToWord() {
 
@@ -186,11 +222,15 @@ public class FileHandler<T> extends AbstractHandler<T> {
         try {
             String option = generateFreemarkerTemplateByDefault(metadata.getReportType().getTemplateName(), assembleReportEntity(metadata));
             System.out.println(option);
-            File file = new File("/Users/eliasyao/Desktop/" + metadata.getReportId() + "." + metadata.getReportType().getName());
+            String html = "/Users/eliasyao/Desktop/" + metadata.getReportId() + ".html";
+            String pdf = "/Users/eliasyao/Desktop/" + metadata.getReportId() + ".pdf";
+            File file = new File(html);
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
             writer.write(option);
             writer.flush();
             System.out.println(option);
+
+            convertToPdf(html, pdf);
         } catch (Exception e) {
             e.printStackTrace();
         }
