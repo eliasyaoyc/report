@@ -56,7 +56,6 @@ public class FileHandler<T> extends AbstractHandler<T> {
                     String fileName = config.getOutputPath() + metadata.getReportId() + ".html";
                     File file = new File(fileName);
 
-                    //如果输出目标文件夹不存在，则创建
                     if (!file.getParentFile().exists()) {
                         file.getParentFile().mkdirs();
                     }

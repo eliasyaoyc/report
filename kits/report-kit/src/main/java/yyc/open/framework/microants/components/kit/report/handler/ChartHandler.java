@@ -45,10 +45,12 @@ public class ChartHandler<T> extends AbstractHandler<T> {
 
             Map<String, Object> opt = gson.fromJson(option, Map.class);
 
+            String imageName = t.getOutputPath() + t.getReportName() + t.getTaskId() + ".png";
+
             PhantomJS req = PhantomJS.builder()
                     .opt(opt)
                     .reqMethod("echarts")
-                    .file(t.getOutputPath() + t.getReportName() + t.getTaskId() + ".png")
+                    .file(imageName)
                     .build();
 
             Result result = HttpKit.builder()
@@ -67,15 +69,7 @@ public class ChartHandler<T> extends AbstractHandler<T> {
                 generateWatermark(config.getWatermark(), t.getOutputPath());
             }
 
-            // Get the base64.
-            String ret = "";
-
-//            if (StringUtils.isEmpty(ret)) {
-//                callback.onException(t.getTaskId(), "[ChartHandler] generate echart encounter error: base64 is empty.");
-//                return;
-//            }
-
-            callback.onReceived(t.getTaskId(), ret, ReportEvent.EventType.PARTIALLY_COMPLETED);
+            callback.onReceived(t.getTaskId(), imageName, ReportEvent.EventType.PARTIALLY_COMPLETED);
         } catch (Exception e) {
             String msg = String.format("[ChartHandler] generate echart encountered error: %s.", e.getMessage());
             LOGGER.error(msg);
