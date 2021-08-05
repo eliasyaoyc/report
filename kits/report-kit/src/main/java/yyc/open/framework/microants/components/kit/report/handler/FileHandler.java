@@ -139,9 +139,8 @@ public class FileHandler<T> extends AbstractHandler<T> {
 
             callback.onReceived(metadata.getReportId(), "", ReportEvent.EventType.COMPLETED);
         } catch (Exception e) {
-            String msg = String.format("[FileHandler] generate report encountered error: %s.", e);
-            LOGGER.error(msg);
-            callback.onException(metadata.getReportId(), msg);
+            LOGGER.error("[FileHandler] generate report encountered error: {}.", e);
+            callback.onException(metadata.getReportId(), String.format("[FileHandler] generate report encountered error: %s.", e));
         } finally {
             try {
                 writer.close();
@@ -204,7 +203,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
                             description.size() > j ? description.get(j) : null,
                             data.getBase64()));
 
-                } else if (!data.getStatistics().isEmpty()) {
+                } else if (data.getStatistics() != null) {
                     contents.add(Content.statistics(indices.get(j),
                             description.size() > j ? description.get(j) : null,
                             data.getStatistics(), data.getStatDescription()));

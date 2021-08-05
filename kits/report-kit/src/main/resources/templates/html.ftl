@@ -302,7 +302,9 @@
                 <#assign item = content[key]>
                    <#list item as value>
                     <div class="content">
-                        <div class="small-title">${value.index}</div>
+                        <#if value.index?? && value.index != "">
+                            <div class="small-title">${value.index}</div>
+                        </#if>
                         <#if value.description?? && value.description != "">
                             <div class="desc">${value.description}</div>
                         </#if>

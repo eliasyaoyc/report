@@ -71,12 +71,12 @@ public class ReportRuntime implements AutoCloseable {
             Gson gson = new GsonBuilder().create();
             globalConfig = gson.fromJson(ret, ReportConfig.GlobalConfig.class);
 
-            Runtime.getRuntime().addShutdownHook(new Thread() {
-                @Override
-                public void run() {
-                    close();
-                }
-            });
+//            Runtime.getRuntime().addShutdownHook(new Thread() {
+//                @Override
+//                public void run() {
+//                    close();
+//                }
+//            });
         } catch (IOException e) {
             throw new ReportException("[Report Runtime] initialize fail", e);
         }
@@ -103,18 +103,18 @@ public class ReportRuntime implements AutoCloseable {
 
         String p = System.getProperty("os.name").contains(Platforms.WINDOWS.getName()) ? path.substring(1) : path;
 
-        String command = new StringBuilder(p)
-                .append(" ")
-                .append(FileKit.getResourcePath(globalConfig.getEChartJsPath()))
-                .append(" -s -p ")
-                .append(globalConfig.getPort()).toString();
-
-        try {
-            Runtime.getRuntime().exec("chmod 777 " + p);
-            Runtime.getRuntime().exec(command);
-        } catch (IOException e) {
-            throw new ReportException(String.format("[Report Runtime] exec command: %s fail", command), e);
-        }
+//        String command = new StringBuilder(p)
+//                .append(" ")
+//                .append(FileKit.getResourcePath(globalConfig.getEChartJsPath()))
+//                .append(" -s -p ")
+//                .append(globalConfig.getPort()).toString();
+//
+//        try {
+//            Runtime.getRuntime().exec("chmod 777 " + p);
+//            Runtime.getRuntime().exec(command);
+//        } catch (IOException e) {
+//            throw new ReportException(String.format("[Report Runtime] exec command: %s fail", command), e);
+//        }
 
         ReportContextProvider.INSTANCE.setContext(this.constructContext());
 
