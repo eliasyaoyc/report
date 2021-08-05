@@ -162,8 +162,8 @@ public class FastWordKit {
 
     public void create() {
         Asserts.state(StringUtils.isNotEmpty(outputPath) && StringUtils.isNotEmpty(fileName), "OutputPath & FileName");
-        Asserts.state(fileName.contains(".docs") || fileName.contains(".doc"), "Word");
-        File file = new File(outputPath + fileName);
+        Asserts.state(fileName.contains(".docx") || fileName.contains(".doc"), "Word");
+        File file = new File(outputPath + "/" + fileName);
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
         }

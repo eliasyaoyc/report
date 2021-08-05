@@ -1,6 +1,7 @@
 package yyc.open.framework.microants.components.kit.report.handler;
 
 
+import com.deepoove.poi.data.PictureType;
 import com.google.common.collect.Maps;
 import com.itextpdf.text.pdf.BaseFont;
 import lombok.AllArgsConstructor;
@@ -20,11 +21,11 @@ import yyc.open.framework.microants.components.kit.report.ReportEvent;
 import yyc.open.framework.microants.components.kit.report.ReportMetadata;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
 import yyc.open.framework.microants.components.kit.report.entity.ReportData;
+import yyc.open.framework.microants.components.kit.thirdpart.xwpdt.FastWordKit;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static yyc.open.framework.microants.components.kit.report.commons.ReportConstants.FILE_HANDLE;
 import static yyc.open.framework.microants.components.kit.report.commons.ReportConstants.HANDLER;
@@ -46,29 +47,96 @@ public class FileHandler<T> extends AbstractHandler<T> {
 
         BufferedWriter writer = null;
         try {
-            // Generate html.
-            String option = StringUtils.isNotEmpty(metadata.getTemplatePath()) ?
-                    generateFreemarkerTemplate(metadata.getTemplatePath(), assembleReportEntity(metadata)) :
-                    generateFreemarkerTemplateByDefault(metadata.getReportType().getTemplateName(), assembleReportEntity(metadata));
-
-            String fileName = config.getOutputPath() + metadata.getReportId() + ".html";
-            File file = new File(fileName);
-
-            //如果输出目标文件夹不存在，则创建
-            if (!file.getParentFile().exists()) {
-                file.getParentFile().mkdirs();
-            }
-
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
-            writer.write(option);
-            writer.flush();
 
             // Determine which file convert to.
             switch (metadata.getReportType()) {
+                case HTML:
+                    // Generate html.
+                    String option = StringUtils.isNotEmpty(metadata.getTemplatePath()) ?
+                            generateFreemarkerTemplate(metadata.getTemplatePath(), assembleReportEntity(metadata)) :
+                            generateFreemarkerTemplateByDefault(metadata.getReportType().getTemplateName(), assembleReportEntity(metadata));
+
+                    String fileName = config.getOutputPath() + metadata.getReportId() + ".html";
+                    File file = new File(fileName);
+
+                    //如果输出目标文件夹不存在，则创建
+                    if (!file.getParentFile().exists()) {
+                        file.getParentFile().mkdirs();
+                    }
+
+                    writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
+                    writer.write(option);
+                    writer.flush();
                 case PDF:
 
                     break;
                 case WORD:
+                    FastWordKit.FastWordBuilder builder = FastWordKit.builder()
+                            .outputPath(config.getOutputPath())
+                            .fileName(metadata.getReportName() + ".docx");
+                    if (!Objects.isNull(metadata.getTitle())) {
+                        builder.image(metadata.getTitle().getBackground(), PictureType.PNG);
+                        builder.smallText(metadata.getTitle().getDescription());
+                        builder.text(metadata.getTitle().getTitle(), 48d);
+                    }
+
+                    if (!Objects.isNull(metadata.getInfo())) {
+                        Map<String, String> labels = metadata.getInfo().getLabels();
+                        List<String> keys = new ArrayList<>(labels.keySet());
+                        List<String> values = new ArrayList<>(labels.values());
+                        builder.table(Arrays.asList(keys, values), true);
+                    }
+
+                    if (!Objects.isNull(metadata.getCatalogue())) {
+                        Map<String, List<String>> chapters = metadata.getCatalogue().getChapters();
+                        chapters.entrySet().stream().forEach(chapter -> {
+                            builder.bigText(chapter.getKey());
+                            chapter.getValue().stream().forEach(index -> {
+                                builder.middleText(index);
+                            });
+                        });
+                    }
+
+                    if (!Objects.isNull(metadata.getContent())) {
+                        ReportMetadata.ReportContent content = metadata.getContent();
+
+                        for (int i = 0; i < content.getChapter().size(); i++) {
+                            builder.blank();
+                            builder.bigText(content.getChapter().get(i));
+
+                            List<String> indices = content.getIndices().get(i);
+                            List<String> description = content.getDescription().get(i);
+                            List<ReportData> reportData = content.getData().get(i);
+
+                            for (int j = 0; j < indices.size(); j++) {
+                                builder.middleText(indices.get(j));
+                                if (description.size() > j) {
+                                    builder.text(description.get(j), "696969", "SimSun", 12d, false);
+                                }
+
+                                ReportData data = reportData.get(j);
+                                if (CollectionUtils.isNotEmpty(data.getTables())) {
+                                    List<List<String>> tables = data.getTables();
+//                                    builder.table();
+
+                                } else if (CollectionUtils.isNotEmpty(data.getTexts())) {
+                                    data.getTexts().stream().forEach(text -> {
+                                        builder.text(text);
+                                    });
+
+                                } else if (StringUtils.isNotEmpty(data.getBase64())) {
+                                    builder.image(data.getBase64(), PictureType.PNG);
+
+                                } else if (!data.getStatistics().isEmpty()) {
+                                    Map<String, Object> statistics = data.getStatistics();
+                                    List<String> keys = new ArrayList<>(statistics.keySet());
+                                    List<String> values = statistics.values().stream().map(val -> val.toString()).collect(Collectors.toList());
+                                    builder.table(Arrays.asList(keys, values), true);
+                                }
+                            }
+                        }
+                    }
+                    builder.build().create();
                     break;
             }
 
@@ -114,11 +182,6 @@ public class FileHandler<T> extends AbstractHandler<T> {
         os.close();
 
         System.out.println("create pdf done!!");
-    }
-
-
-    void convertToWord() {
-
     }
 
     /**
