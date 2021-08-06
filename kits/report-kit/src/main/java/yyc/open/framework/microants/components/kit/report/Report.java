@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import yyc.open.framework.microants.components.kit.common.validate.NonNull;
 import yyc.open.framework.microants.components.kit.report.exceptions.ReportException;
+import yyc.open.framework.microants.components.kit.report.handler.FileHandler;
 import yyc.open.framework.microants.components.kit.report.handler.ReportHandlerFactory;
 
 import java.util.List;
@@ -38,6 +39,19 @@ public class Report {
                 .ReportRegistryEnum
                 .INSTANCE
                 .getReportRegistry(status);
+    }
+
+    /**
+     * Convert html to pdf.
+     *
+     * @param htmlPath html path.
+     */
+    public void convertHTMLToPdf(String htmlPath) {
+        try {
+            FileHandler.convertToPdf(htmlPath);
+        } catch (Exception e) {
+            LOGGER.error("[Report] convert html to pdf failure {}", e);
+        }
     }
 
     /**
@@ -74,7 +88,7 @@ public class Report {
 
             List<ReportTask> tasks = taskRegistry.createTask(config, entity);
             if (CollectionUtils.isEmpty(tasks)) {
-                report(entity,parallel);
+                report(entity, parallel);
                 return;
             }
 
@@ -112,7 +126,7 @@ public class Report {
             try {
                 // The block waits for all subtasks to complete.
                 latch.await();
-                report(entity,parallel);
+                report(entity, parallel);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

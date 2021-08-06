@@ -12,9 +12,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import yyc.open.framework.microants.components.kit.common.annotations.VisibleForTesting;
+import yyc.open.framework.microants.components.kit.common.validate.Asserts;
 import yyc.open.framework.microants.components.kit.report.*;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
+import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 import yyc.open.framework.microants.components.kit.report.entity.ReportData;
+import yyc.open.framework.microants.components.kit.report.exceptions.ReportException;
 import yyc.open.framework.microants.components.kit.thirdpart.xwpdt.FastWordKit;
 
 import java.io.*;
@@ -45,28 +48,8 @@ public class FileHandler<T> extends AbstractHandler<T> {
 
         BufferedWriter writer = null;
         try {
-
             // Determine which file convert to.
             switch (metadata.getReportType()) {
-                case HTML:
-                    // Generate html.
-                    String option = StringUtils.isNotEmpty(metadata.getTemplatePath()) ?
-                            generateFreemarkerTemplate(metadata.getTemplatePath(), assembleReportEntity(metadata)) :
-                            generateFreemarkerTemplateByDefault(metadata.getReportType().getTemplateName(), assembleReportEntity(metadata));
-
-                    String fileName = config.getOutputPath() + metadata.getReportId() + ".html";
-                    File file = new File(fileName);
-
-                    if (!file.getParentFile().exists()) {
-                        file.getParentFile().mkdirs();
-                    }
-
-                    writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
-                    writer.write(option);
-                    writer.flush();
-                case PDF:
-
-                    break;
                 case WORD:
                     FastWordKit.FastWordBuilder builder = FastWordKit.builder()
                             .outputPath(config.getOutputPath())
@@ -138,6 +121,28 @@ public class FileHandler<T> extends AbstractHandler<T> {
                     }
                     builder.build().create();
                     break;
+
+                default:
+                    // Generate html.
+                    String option = StringUtils.isNotEmpty(metadata.getTemplatePath()) ?
+                            generateFreemarkerTemplate(metadata.getTemplatePath(), assembleReportEntity(metadata)) :
+                            generateFreemarkerTemplateByDefault(metadata.getReportType().getTemplateName(), assembleReportEntity(metadata));
+
+                    String fileName = config.getOutputPath() + metadata.getReportId() + ".html";
+                    File file = new File(fileName);
+
+                    if (!file.getParentFile().exists()) {
+                        file.getParentFile().mkdirs();
+                    }
+
+                    writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
+                    writer.write(option);
+                    writer.flush();
+
+                    // Determine whether convert to pdf.
+                    if (metadata.getReportType() == ReportEnums.PDF) {
+                        convertToPdf(fileName);
+                    }
             }
 
             callback.onReceived(metadata.getReportId(), "", ReportEvent.EventType.COMPLETED);
@@ -155,7 +160,17 @@ public class FileHandler<T> extends AbstractHandler<T> {
         }
     }
 
-    void convertToPdf(String htmlFile, String pdfFile) throws Exception {
+    public static void convertToPdf(String htmlPath) throws Exception {
+        Asserts.isTrue(htmlPath.contains(".html"), "html file.");
+
+        File file = new File(htmlPath);
+        if (!file.exists()) {
+            throw new ReportException("HTML is empty.");
+        }
+
+        String newName = file.getName().replace(".html", ".pdf");
+        String filePath = file.getParent();
+        ReportPlatforms.pdfConvertCommand(htmlPath, newName, filePath);
     }
 
     /**

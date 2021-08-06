@@ -1,11 +1,14 @@
 # Report Kit
+
 This kit support that generate echart picture(e.g. bar, line, pie etc.) and file creation.
 
 # Supports
+
 * Multiple chart generation(e.g. Bar、Cross Bar、Pie、Hollow Pie、Line etc).
 * Multiple file generation(e.g. Excel、Html、Pdf、Word etc).
 * Task status(e.g. progress).
 * Report generation failure retry mechanism.
+* Support HTML convert to PDF.
 
 # Example
 
