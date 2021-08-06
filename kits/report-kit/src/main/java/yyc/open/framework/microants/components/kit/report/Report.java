@@ -74,6 +74,7 @@ public class Report {
 
             List<ReportTask> tasks = taskRegistry.createTask(config, entity);
             if (CollectionUtils.isEmpty(tasks)) {
+                report(entity,parallel);
                 return;
             }
 
@@ -111,25 +112,28 @@ public class Report {
             try {
                 // The block waits for all subtasks to complete.
                 latch.await();
-
-                // Start execute root task(report).
-                reportStatus.publishEvent(entity.getReportId(), ReportEvent.EventType.REPORT);
-                this.handlerFactory.handle(entity, parallel, new ReportCallback() {
-                    @Override
-                    public void onReceived(String taskId, String result, ReportEvent.EventType type) {
-                        reportStatus.publishEvent(taskId, ReportEvent.EventType.COMPLETED);
-                    }
-
-                    @Override
-                    public void onException(String id, String msg) {
-                        LOGGER.error("[Report] {} execute failed.", id);
-                        reportStatus.publishEvent(id, msg, ReportEvent.EventType.FAIL);
-                        // Add to fail queue that ready to re-execute.
-                        taskRegistry.addToFailQueue(id);
-                    }
-                });
+                report(entity,parallel);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            }
+        });
+    }
+
+    private void report(ReportMetadata metadata, boolean parallel) {
+        // Start execute root task(report).
+        reportStatus.publishEvent(metadata.getReportId(), ReportEvent.EventType.REPORT);
+        this.handlerFactory.handle(metadata, parallel, new ReportCallback() {
+            @Override
+            public void onReceived(String taskId, String result, ReportEvent.EventType type) {
+                reportStatus.publishEvent(taskId, ReportEvent.EventType.COMPLETED);
+            }
+
+            @Override
+            public void onException(String id, String msg) {
+                LOGGER.error("[Report] {} execute failed.", id);
+                reportStatus.publishEvent(id, msg, ReportEvent.EventType.FAIL);
+                // Add to fail queue that ready to re-execute.
+                taskRegistry.addToFailQueue(id);
             }
         });
     }

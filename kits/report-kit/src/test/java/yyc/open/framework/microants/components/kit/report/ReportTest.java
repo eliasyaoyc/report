@@ -5,7 +5,6 @@ import yyc.open.framework.microants.components.kit.common.reflect.AnnotationScan
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 import yyc.open.framework.microants.components.kit.report.entity.ReportData;
-import yyc.open.framework.microants.components.kit.report.handler.FileHandler;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
@@ -99,6 +98,8 @@ public class ReportTest {
     @Test
     public void testHtml() {
 
+        Report report = ReportBuilder.ofDefault();
+
         ReportMetadata metadata = ReportMetadata.builder()
                 .type(ReportEnums.HTML)
                 .partTitle().title("综合安全报表").description("Comprehensive Security Report").background("base64")
@@ -110,18 +111,18 @@ public class ReportTest {
                 .catalogue("第二章 事件分析", Arrays.asList("2.1 告警类型占比", "2.2 威胁级别占比"))
                 .partContent()
                 .content("第N 章 我是标题",
-                        Arrays.asList("1.1 总计（多）", "1.2 总计", "1.3 echarts 图表", "1.4 表格", "1.5 文字建议"),
+                        Arrays.asList("1.1 总计（多）", "1.2 总计", "1.4 表格", "1.5 文字建议", "1.6 柱状图", "1.7 横向柱状图", "1.8 折线图", "1.9 饼图"),
                         Arrays.asList("我是组件描述", "我是组件描述", "我是组件描述", "我是组件描述"),
-                        Arrays.asList(multiTotal(), total(), image(), tables(), text())
+                        Arrays.asList(multiTotal(), total(), tables(), text(), barEcharts(), crossBarEcharts(), lineEcharts(), pieEcharts())
                 )
                 .build();
 
-        FileHandler fileHandler = new FileHandler();
-        fileHandler.generateHTML(metadata);
+        report.generateReport(Arrays.asList(metadata));
     }
 
     @Test
     public void testWord() {
+        Report report = ReportBuilder.ofDefault();
         ReportMetadata metadata = ReportMetadata.builder()
                 .type(ReportEnums.WORD)
                 .partTitle().title("综合安全报表").description("Comprehensive Security Report").background("/Users/eliasyao/Desktop/img_background.png")
@@ -133,14 +134,13 @@ public class ReportTest {
                 .catalogue("第二章 事件分析", Arrays.asList("2.1 告警类型占比", "2.2 威胁级别占比"))
                 .partContent()
                 .content("第N 章 我是标题",
-                        Arrays.asList("1.1 总计（多）", "1.2 总计", "1.3 echarts 图表", "1.4 表格", "1.5 文字建议"),
+                        Arrays.asList("1.1 总计（多）", "1.2 总计", "1.4 表格", "1.5 文字建议", "1.6 柱状图", "1.7 横向柱状图", "1.8 折线图", "1.9 饼图"),
                         Arrays.asList("我是组件描述", "我是组件描述", "我是组件描述", "我是组件描述"),
-                        Arrays.asList(multiTotal(), total(), image(), tables(), text())
+                        Arrays.asList(multiTotal(), total(), tables(), text(), barEcharts(), crossBarEcharts(), lineEcharts(), pieEcharts())
                 )
                 .build();
 
-        FileHandler fileHandler = new FileHandler();
-        fileHandler.generateWord(metadata);
+        report.generateReport(Arrays.asList(metadata));
     }
 
     @Test
@@ -164,8 +164,8 @@ public class ReportTest {
                 .catalogue("第二章 事件分析", Arrays.asList("2.1 告警类型占比", "2.2 威胁级别占比"))
                 .partContent()
                 .content("第N 章 我是标题",
-                        Arrays.asList("1.1 总计（多）", "1.2 总计", "1.3 echarts 图表","1.4 饼图"),
-                        Arrays.asList("我是组件描述", "我是组件描述", "我是组件描述","我是饼图"),
+                        Arrays.asList("1.1 总计（多）", "1.2 总计", "1.3 echarts 图表", "1.4 饼图"),
+                        Arrays.asList("我是组件描述", "我是组件描述", "我是组件描述", "我是饼图"),
                         Arrays.asList(barEcharts(), crossBarEcharts(), lineEcharts(), pieEcharts())
                 )
                 .build();
@@ -188,8 +188,8 @@ public class ReportTest {
                 .catalogue("第二章 事件分析", Arrays.asList("2.1 告警类型占比", "2.2 威胁级别占比"))
                 .partContent()
                 .content("第N 章 我是标题",
-                        Arrays.asList("1.1 总计（多）", "1.2 总计", "1.3 echarts 图表","1.4 饼图"),
-                        Arrays.asList("我是组件描述", "我是组件描述", "我是组件描述","我是饼图"),
+                        Arrays.asList("1.1 总计（多）", "1.2 总计", "1.3 echarts 图表", "1.4 饼图"),
+                        Arrays.asList("我是组件描述", "我是组件描述", "我是组件描述", "我是饼图"),
                         Arrays.asList(barEcharts(), crossBarEcharts(), lineEcharts(), pieEcharts())
                 )
                 .build();

@@ -63,6 +63,7 @@ public class ReportData {
     public static ReportData text(List<String> texts) {
         ReportData reportData = new ReportData();
         reportData.setTexts(texts);
+        reportData.setType(ReportEnums.TABLE);
         return reportData;
     }
 
@@ -75,6 +76,7 @@ public class ReportData {
     public static ReportData table(List<List<String>> tables) {
         ReportData reportData = new ReportData();
         reportData.setTables(tables);
+        reportData.setType(ReportEnums.TABLE);
         return reportData;
     }
 
@@ -87,6 +89,7 @@ public class ReportData {
     public static ReportData statistics(Map<String, Object> statistics) {
         ReportData reportData = new ReportData();
         reportData.setStatistics(statistics);
+        reportData.setType(ReportEnums.TABLE);
         return reportData;
     }
 
@@ -100,6 +103,7 @@ public class ReportData {
         ReportData reportData = new ReportData();
         reportData.setStatistics(statistics);
         reportData.setStatDescription(description);
+        reportData.setType(ReportEnums.TABLE);
         return reportData;
     }
 
@@ -107,6 +111,7 @@ public class ReportData {
     public static ReportData image(String image) {
         ReportData reportData = new ReportData();
         reportData.setBase64(image);
+        reportData.setType(ReportEnums.TABLE);
         return reportData;
     }
 

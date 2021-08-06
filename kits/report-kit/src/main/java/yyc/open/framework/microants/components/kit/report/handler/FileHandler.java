@@ -12,10 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import yyc.open.framework.microants.components.kit.common.annotations.VisibleForTesting;
-import yyc.open.framework.microants.components.kit.report.ReportCallback;
-import yyc.open.framework.microants.components.kit.report.ReportConfig;
-import yyc.open.framework.microants.components.kit.report.ReportEvent;
-import yyc.open.framework.microants.components.kit.report.ReportMetadata;
+import yyc.open.framework.microants.components.kit.report.*;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
 import yyc.open.framework.microants.components.kit.report.entity.ReportData;
 import yyc.open.framework.microants.components.kit.thirdpart.xwpdt.FastWordKit;
@@ -39,6 +36,10 @@ public class FileHandler<T> extends AbstractHandler<T> {
 
     @Override
     public void onHandle(T task, ReportConfig config, ReportCallback callback) {
+        if (task instanceof ReportTask) {
+            return;
+        }
+
         ReportMetadata metadata = (ReportMetadata) task;
         LOGGER.info("[FileHandler] handle the report: {}, metadata: {} .", metadata.getReportId(), metadata);
 
@@ -88,9 +89,9 @@ public class FileHandler<T> extends AbstractHandler<T> {
                         builder.image("/Users/eliasyao/Desktop/img_directory.png", PictureType.PNG);
                         Map<String, List<String>> chapters = metadata.getCatalogue().getChapters();
                         chapters.entrySet().stream().forEach(chapter -> {
-                            builder.bigText(chapter.getKey());
+                            builder.bigText(chapter.getKey(), true);
                             chapter.getValue().stream().forEach(index -> {
-                                builder.middleText(index);
+                                builder.middleText(index, true);
                             });
                         });
                     }
@@ -145,7 +146,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
             callback.onException(metadata.getReportId(), String.format("[FileHandler] generate report encountered error: %s.", e));
         } finally {
             try {
-                if (writer != null){
+                if (writer != null) {
                     writer.close();
                 }
             } catch (IOException e) {
@@ -294,9 +295,9 @@ public class FileHandler<T> extends AbstractHandler<T> {
                 builder.image("/Users/eliasyao/Desktop/img_directory.png", PictureType.PNG);
                 Map<String, List<String>> chapters = metadata.getCatalogue().getChapters();
                 chapters.entrySet().stream().forEach(chapter -> {
-                    builder.bigText(chapter.getKey());
+                    builder.bigText(chapter.getKey(), true);
                     chapter.getValue().stream().forEach(index -> {
-                        builder.middleText(index);
+                        builder.middleText(index, true);
                     });
                 });
             }
@@ -332,7 +333,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
                         } else if (StringUtils.isNotEmpty(data.getBase64())) {
                             builder.image(data.getBase64(), PictureType.PNG);
 
-                        } else if (!data.getStatistics().isEmpty()) {
+                        } else if (data.getStatistics() != null) {
                             Map<String, Object> statistics = data.getStatistics();
                             List<String> keys = new ArrayList<>(statistics.keySet());
                             List<String> values = statistics.values().stream().map(val -> val.toString()).collect(Collectors.toList());

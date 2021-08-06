@@ -11,7 +11,7 @@
         "orient": "vertical",
         "x": "left",
         "textStyle": {
-            "color": "red",
+            "color": "blue",
             "fontSize": 15,
             "fontWeight": "bolder"
         }
@@ -28,7 +28,7 @@
                 "show": true,
                 "position": "top",
                 "textStyle": {
-                    "color":"red",
+                    "color":"blue",
                     "fontSize": "15",
                     "fontWeight": "bold"
                 }

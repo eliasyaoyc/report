@@ -106,11 +106,16 @@ public class ReportMetadata extends Task {
     public void setSubTaskExecutionResult(String taskId, String base64) {
         List<List<ReportData>> data = this.getContent().getData();
         data.stream().forEach(d -> {
-            d.stream().forEach(i -> {
-                if (i.getTaskId().equals(taskId)) {
-                    i.setBase64(base64);
+            d.stream().filter(i -> ReportEnums.isCharts(i.getType())).forEach(echart -> {
+                if (echart.getTaskId().equals(taskId)) {
+                    echart.setBase64(base64);
                 }
             });
+//            d.stream().forEach(i -> {
+//                if (i.getTaskId().equals(taskId)) {
+//                    i.setBase64(base64);
+//                }
+//            });
         });
     }
 
