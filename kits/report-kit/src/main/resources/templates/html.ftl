@@ -243,7 +243,6 @@
 
         .echarts-box {
             width: 100%;
-            max-height: 300px;
             text-align: center;
         }
 
@@ -331,7 +330,7 @@
                         </#if>
                         <#if value.base64?? && value.base64 != "">
                             <div class="echarts-box">
-                                <img src="${value.base64}" height="350" width="800"/>
+                                <img src="${value.base64}"/>
                             </div>
                         </#if>
                         <#if value.texts?? && (value.texts?size > 0)>
