@@ -1,12 +1,9 @@
 package yyc.open.framework.microants.components.kit.report;
 
 import org.junit.Test;
-import yyc.open.framework.microants.components.kit.common.reflect.AnnotationScannerKit;
-import yyc.open.framework.microants.components.kit.report.commons.Processor;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 import yyc.open.framework.microants.components.kit.report.entity.ReportData;
 
-import java.lang.annotation.Annotation;
 import java.util.*;
 
 /**
@@ -145,8 +142,25 @@ public class ReportTest {
 
     @Test
     public void testPdf() {
-        Map<Class<? extends Annotation>, Set<Class<?>>> classSetMap = AnnotationScannerKit.scanClassesByAnnotations("yyc.open.framework.microants.components.kit.report", Processor.class);
-        System.out.println(classSetMap);
+        Report report = ReportBuilder.ofDefault();
+        ReportMetadata metadata = ReportMetadata.builder()
+                .type(ReportEnums.PDF)
+                .partTitle().title("综合安全报表").description("Comprehensive Security Report").background("/Users/eliasyao/Desktop/img_background.png")
+                .partInfo()
+                .info("报告时间范围", "2017-07-01至2021-09-30")
+                .info("报告生成时间", "2021-10-01 08:00:00")
+                .partCatalogue()
+                .catalogue("第一章 整体摘要", Arrays.asList("1.1 安全概览", "1.2 平台状态"))
+                .catalogue("第二章 事件分析", Arrays.asList("2.1 告警类型占比", "2.2 威胁级别占比"))
+                .partContent()
+                .content("第N 章 我是标题",
+                        Arrays.asList("1.1 总计（多）", "1.2 总计", "1.4 表格", "1.5 文字建议", "1.6 柱状图", "1.7 横向柱状图", "1.8 折线图", "1.9 饼图"),
+                        Arrays.asList("我是组件描述", "我是组件描述", "我是组件描述", "我是组件描述"),
+                        Arrays.asList(multiTotal(), total(), tables(), text(), barEcharts(), crossBarEcharts(), lineEcharts(), pieEcharts())
+                )
+                .build();
+
+        report.generateReport(Arrays.asList(metadata));
     }
 
     @Test

@@ -113,17 +113,6 @@ public class ReportBuilder {
     }
 
     /**
-     * Sets up the echarts template path.
-     *
-     * @param eChartJsPath
-     * @return
-     */
-    public ReportBuilder eChartJsPath(String eChartJsPath) {
-        this.reportConfig.setEChartJsPath(eChartJsPath);
-        return this;
-    }
-
-    /**
      * Sets up the max task number can be received in once time.
      *
      * @param maxTaskNum

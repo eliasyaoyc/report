@@ -2,7 +2,6 @@ package yyc.open.framework.microants.components.kit.report;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import lombok.Getter;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,36 +32,6 @@ public class ReportRuntime implements AutoCloseable {
 
     {
         this.running = new AtomicBoolean(false);
-    }
-
-    @Getter
-    enum Platforms {
-        WINDOWS("Windows", "exec/phantomjs-windows.exe"),
-        MACOS("Mac OS X", "exec/phantomjs-macosx"),
-        UNIX("Unix", "exec/phantomjs-linux");
-
-        String name;
-        String path;
-
-        Platforms(String name, String path) {
-            this.name = name;
-            this.path = path;
-        }
-
-        /**
-         * Returns the corresponding platform through input parma.
-         *
-         * @param name
-         * @return
-         */
-        static Platforms getPlatforms(String name) {
-            for (Platforms pf : Platforms.values()) {
-                if (name.equals(pf.getName())) {
-                    return pf;
-                }
-            }
-            throw new IllegalArgumentException("[Report Runtime] input parameter is not support.");
-        }
     }
 
     private void initialize() {
@@ -97,24 +66,7 @@ public class ReportRuntime implements AutoCloseable {
             return;
         }
 
-        String property = System.getProperty("os.name");
-        Platforms platforms = Platforms.getPlatforms(property);
-        String path = FileKit.getResourcePath(platforms.getPath());
-
-        String p = System.getProperty("os.name").contains(Platforms.WINDOWS.getName()) ? path.substring(1) : path;
-
-//        String command = new StringBuilder(p)
-//                .append(" ")
-//                .append(FileKit.getResourcePath(globalConfig.getEChartJsPath()))
-//                .append(" -s -p ")
-//                .append(globalConfig.getPort()).toString();
-//
-//        try {
-//            Runtime.getRuntime().exec("chmod 777 " + p);
-//            Runtime.getRuntime().exec(command);
-//        } catch (IOException e) {
-//            throw new ReportException(String.format("[Report Runtime] exec command: %s fail", command), e);
-//        }
+        ReportPlatforms.runPhantomStartCommand(globalConfig.getPort());
 
         ReportContextProvider.INSTANCE.setContext(this.constructContext());
 

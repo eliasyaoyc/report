@@ -21,7 +21,6 @@ public class ReportConfig {
     private Boolean horizontal;
     private Integer port;
     private Boolean parallel;
-    private String eChartJsPath;
     AlarmConfig alarm;
     private Integer maxTaskNum;
     private String outputPath;
@@ -38,7 +37,6 @@ public class ReportConfig {
         Boolean horizontal;
         Boolean parallel;
         Boolean chart;
-        String eChartJsPath;
         AlarmConfig alarm;
         List<String> colors;
         Integer maxTaskNum;

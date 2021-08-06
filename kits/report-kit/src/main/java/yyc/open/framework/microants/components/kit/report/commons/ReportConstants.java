@@ -61,6 +61,4 @@ public interface ReportConstants {
     String FILE_HANDLE = "fileHandler";
     String ALARM_LISTENER = "alarmListener";
     String DEFAULT_LISTENER = "defaultListener";
-
-    String EMPTY = "empty";
 }
