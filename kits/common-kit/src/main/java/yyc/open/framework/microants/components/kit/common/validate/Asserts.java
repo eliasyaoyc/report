@@ -2,7 +2,6 @@ package yyc.open.framework.microants.components.kit.common.validate;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import sun.jvm.hotspot.runtime.ConstructionException;
 
 import java.util.Collection;
 import java.util.Map;
@@ -17,7 +16,6 @@ import java.util.Objects;
 public class Asserts {
 
     private Asserts() {
-        throw new ConstructionException("Can't instance through constructor.");
     }
 
     /**
