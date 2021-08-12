@@ -99,6 +99,11 @@ public class ReportMedataBuilder {
             return this;
         }
 
+        public InfoBuilder image(String url) {
+            this.builder.info.setImage(url);
+            return this;
+        }
+
         public CatalogueBuilder partCatalogue() {
             return new CatalogueBuilder(this.builder);
         }

@@ -59,7 +59,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
                             .outputPath(config.getOutputPath())
                             .fileName(metadata.getReportName() + ".docx");
                     if (!Objects.isNull(metadata.getTitle())) {
-                        builder.image(metadata.getTitle().getBackground(), PictureType.PNG);
+                        builder.image(metadata.getTitle().getBackground(), PictureType.suggestFileType(metadata.getTitle().getBackground()));
                         builder.smallText(metadata.getTitle().getDescription(), true);
                         builder.text(metadata.getTitle().getTitle(), 48d, true);
                     }
@@ -69,11 +69,11 @@ public class FileHandler<T> extends AbstractHandler<T> {
                         List<String> keys = new ArrayList<>(labels.keySet());
                         List<String> values = new ArrayList<>(labels.values());
                         builder.table(Arrays.asList(keys, values), true);
+                        builder.blank();
+                        builder.image(metadata.getInfo().getImage(), PictureType.suggestFileType(metadata.getInfo().getImage()));
                     }
 
                     if (!Objects.isNull(metadata.getCatalogue())) {
-                        builder.blank();
-                        builder.image("/Users/eliasyao/Desktop/img_directory.png", PictureType.PNG);
                         Map<String, List<String>> chapters = metadata.getCatalogue().getChapters();
                         chapters.entrySet().stream().forEach(chapter -> {
                             builder.bigText(chapter.getKey(), true);
@@ -194,6 +194,10 @@ public class FileHandler<T> extends AbstractHandler<T> {
         ReportMetadata.ReportInfo info = entity.getInfo();
         if (!info.getLabels().isEmpty()) {
             report.put("info", info.getLabels());
+        }
+
+        if (!info.getImage().isEmpty()) {
+            report.put("infoImage", info.getImage());
         }
 
         ReportMetadata.ReportCatalogue catalogue = entity.getCatalogue();

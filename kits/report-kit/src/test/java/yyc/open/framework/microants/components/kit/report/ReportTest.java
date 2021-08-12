@@ -14,6 +14,8 @@ import java.util.*;
  */
 public class ReportTest {
     private ReportRuntime runtime;
+    private static final String DIRECTION_URL = "/Users/eliasyao/Desktop/microants-components/kits/report-kit/src/main/resources/templates/img_directory.png";
+    private static final String BACKGROUND_URL = "/Users/eliasyao/Desktop/microants-components/kits/report-kit/src/main/resources/templates/img_background.png";
 
     {
         runtime = new ReportRuntime();
@@ -68,10 +70,6 @@ public class ReportTest {
         return ReportData.statistics(stat, "攻击成功数量102（10%）");
     }
 
-    public static ReportData image() {
-        return ReportData.image("/Users/eliasyao/Desktop/echarts.png");
-    }
-
     public static ReportData tables() {
         List<List<String>> tables = new ArrayList<>();
         tables.add(Arrays.asList("接口名称", "状态", "类型", "链路模式", "接受流量"));
@@ -99,10 +97,11 @@ public class ReportTest {
 
         ReportMetadata metadata = ReportMetadata.builder()
                 .type(ReportEnums.HTML)
-                .partTitle().title("综合安全报表").description("Comprehensive Security Report").background("base64")
+                .partTitle().title("综合安全报表").description("Comprehensive Security Report").background(BACKGROUND_URL)
                 .partInfo()
                 .info("报告时间范围", "2017-07-01至2021-09-30")
                 .info("报告生成时间", "2021-10-01 08:00:00")
+                .image(DIRECTION_URL)
                 .partCatalogue()
                 .catalogue("第一章 整体摘要", Arrays.asList("1.1 安全概览", "1.2 平台状态"))
                 .catalogue("第二章 事件分析", Arrays.asList("2.1 告警类型占比", "2.2 威胁级别占比"))
@@ -122,10 +121,11 @@ public class ReportTest {
         Report report = ReportBuilder.ofDefault();
         ReportMetadata metadata = ReportMetadata.builder()
                 .type(ReportEnums.WORD)
-                .partTitle().title("综合安全报表").description("Comprehensive Security Report").background("/Users/eliasyao/Desktop/img_background.png")
+                .partTitle().title("综合安全报表").description("Comprehensive Security Report").background(BACKGROUND_URL)
                 .partInfo()
                 .info("报告时间范围", "2017-07-01至2021-09-30")
                 .info("报告生成时间", "2021-10-01 08:00:00")
+                .image(DIRECTION_URL)
                 .partCatalogue()
                 .catalogue("第一章 整体摘要", Arrays.asList("1.1 安全概览", "1.2 平台状态"))
                 .catalogue("第二章 事件分析", Arrays.asList("2.1 告警类型占比", "2.2 威胁级别占比"))
@@ -145,10 +145,11 @@ public class ReportTest {
         Report report = ReportBuilder.ofDefault();
         ReportMetadata metadata = ReportMetadata.builder()
                 .type(ReportEnums.PDF)
-                .partTitle().title("综合安全报表").description("Comprehensive Security Report").background("/Users/eliasyao/Desktop/img_background.png")
+                .partTitle().title("综合安全报表").description("Comprehensive Security Report").background(BACKGROUND_URL)
                 .partInfo()
                 .info("报告时间范围", "2017-07-01至2021-09-30")
                 .info("报告生成时间", "2021-10-01 08:00:00")
+                .image(DIRECTION_URL)
                 .partCatalogue()
                 .catalogue("第一章 整体摘要", Arrays.asList("1.1 安全概览", "1.2 平台状态"))
                 .catalogue("第二章 事件分析", Arrays.asList("2.1 告警类型占比", "2.2 威胁级别占比"))
@@ -169,10 +170,11 @@ public class ReportTest {
 
         ReportMetadata metadata = ReportMetadata.builder()
                 .type(ReportEnums.HTML)
-                .partTitle().title("综合安全报表").description("Comprehensive Security Report").background("base64")
+                .partTitle().title("综合安全报表").description("Comprehensive Security Report").background(BACKGROUND_URL)
                 .partInfo()
                 .info("报告时间范围", "2017-07-01至2021-09-30")
                 .info("报告生成时间", "2021-10-01 08:00:00")
+                .image(DIRECTION_URL)
                 .partCatalogue()
                 .catalogue("第一章 整体摘要", Arrays.asList("1.1 安全概览", "1.2 平台状态"))
                 .catalogue("第二章 事件分析", Arrays.asList("2.1 告警类型占比", "2.2 威胁级别占比"))
@@ -193,10 +195,11 @@ public class ReportTest {
 
         ReportMetadata metadata = ReportMetadata.builder()
                 .type(ReportEnums.WORD)
-                .partTitle().title("综合安全报表").description("Comprehensive Security Report").background("/Users/eliasyao/Desktop/img_background.png")
+                .partTitle().title("综合安全报表").description("Comprehensive Security Report").background(BACKGROUND_URL)
                 .partInfo()
                 .info("报告时间范围", "2017-07-01至2021-09-30")
                 .info("报告生成时间", "2021-10-01 08:00:00")
+                .image(DIRECTION_URL)
                 .partCatalogue()
                 .catalogue("第一章 整体摘要", Arrays.asList("1.1 安全概览", "1.2 平台状态"))
                 .catalogue("第二章 事件分析", Arrays.asList("2.1 告警类型占比", "2.2 威胁级别占比"))
@@ -218,10 +221,11 @@ public class ReportTest {
 
         ReportMetadata metadata = ReportMetadata.builder()
                 .type(ReportEnums.HTML)
-                .partTitle().title("综合安全报表").description("Comprehensive Security Report").background("base64")
+                .partTitle().title("综合安全报表").description("Comprehensive Security Report").background(BACKGROUND_URL)
                 .partInfo()
                 .info("报告时间范围", "2017-07-01至2021-09-30")
                 .info("报告生成时间", "2021-10-01 08:00:00")
+                .image(DIRECTION_URL)
                 .partCatalogue()
                 .catalogue("第一章 整体摘要", Arrays.asList("1.1 安全概览", "1.2 平台状态"))
                 .catalogue("第二章 事件分析", Arrays.asList("2.1 告警类型占比", "2.2 威胁级别占比"))
@@ -242,10 +246,11 @@ public class ReportTest {
 
         ReportMetadata metadata = ReportMetadata.builder()
                 .type(ReportEnums.HTML)
-                .partTitle().title("综合安全报表").description("Comprehensive Security Report").background("base64")
+                .partTitle().title("综合安全报表").description("Comprehensive Security Report").background(BACKGROUND_URL)
                 .partInfo()
                 .info("报告时间范围", "2017-07-01至2021-09-30")
                 .info("报告生成时间", "2021-10-01 08:00:00")
+                .image(DIRECTION_URL)
                 .partCatalogue()
                 .catalogue("第一章 整体摘要", Arrays.asList("1.1 安全概览", "1.2 平台状态"))
                 .catalogue("第二章 事件分析", Arrays.asList("2.1 告警类型占比", "2.2 威胁级别占比"))

@@ -263,7 +263,9 @@
 <body>
 <div class="main">
     <div class="top">
-        <img src="img_background.png"/>
+        <#if background?? && background != "">
+            <img src="${background}"/>
+        </#if>
         <div class="title">
             <span>${titleDesc}</span>
             <p>${title}</p>
@@ -281,7 +283,9 @@
             </#list>
         </div>
         <div class="catalogue">
-            <img src="img_directory.png"/>
+            <#if infoImage?? && infoImage != "">
+                <img src="${infoImage}"/>
+            </#if>
             <#list catalogue?keys as key>
                 <div class="item">
                     <p>${key}</p>
@@ -299,7 +303,7 @@
             <#list content?keys as key>
                 <div class="title">${key}</div>
                 <#assign item = content[key]>
-                   <#list item as value>
+                <#list item as value>
                     <div class="content">
                         <#if value.index?? && value.index != "">
                             <div class="small-title">${value.index}</div>
@@ -341,24 +345,24 @@
                             </div>
                         </#if>
                         <#if value.tablesTitle?? && (value.tablesTitle?size > 0)>
-                           <table class="table">
-                             <tbody>
-                             <tr>
-                                <#list value.tablesTitle as tt>
-                                    <th>${tt}</th>
-                                </#list>
-                             </tr>
-                             </tbody>
-                             <tbody>
-                              <#list value.tablesValue as t1>
+                            <table class="table">
+                                <tbody>
                                 <tr>
-                                    <#list t1 as tv>
-                                        <td>${tv}</td>
+                                    <#list value.tablesTitle as tt>
+                                        <th>${tt}</th>
                                     </#list>
                                 </tr>
-                              </#list>
-                             </tbody>
-                           </table>
+                                </tbody>
+                                <tbody>
+                                <#list value.tablesValue as t1>
+                                    <tr>
+                                        <#list t1 as tv>
+                                            <td>${tv}</td>
+                                        </#list>
+                                    </tr>
+                                </#list>
+                                </tbody>
+                            </table>
                         </#if>
                     </div>
                 </#list>

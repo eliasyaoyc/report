@@ -80,6 +80,7 @@ public class ReportMetadata extends Task {
     @Setter
     public static class ReportInfo {
         private Map<String, String> labels = Maps.newLinkedHashMap();
+        private String image;
     }
 
     /**
