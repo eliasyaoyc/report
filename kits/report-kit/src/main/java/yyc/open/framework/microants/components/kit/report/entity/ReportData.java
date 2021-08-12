@@ -5,9 +5,7 @@ import lombok.Setter;
 import yyc.open.framework.microants.components.kit.common.validate.Nullable;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -131,27 +129,27 @@ public class ReportData {
      * @param yDatas
      * @return ReportData instance.
      */
-    public static ReportData echart(String title,
-                                    ReportEnums type,
-                                    List<Object[]> xdatas,
-                                    Object[] yDatas) {
-        return echart(title, "", type, "", xdatas, yDatas);
+    public static ReportData echarts(String title,
+                                     ReportEnums type,
+                                     List<Object[]> xdatas,
+                                     Object[] yDatas) {
+        return echarts(title, "", type, "", xdatas, yDatas);
     }
 
-    public static ReportData echart(String title,
-                                    ReportEnums type,
-                                    String legendName,
-                                    List<Object[]> xdatas,
-                                    Object[] yDatas) {
-        return echart(title, "", type, legendName, xdatas, yDatas);
+    public static ReportData echarts(String title,
+                                     ReportEnums type,
+                                     String legendName,
+                                     List<Object[]> xdatas,
+                                     Object[] yDatas) {
+        return echarts(title, "", type, legendName, xdatas, yDatas);
     }
 
-    public static ReportData echart(String title,
-                                    String templateUrl,
-                                    ReportEnums type,
-                                    String legendName,
-                                    List<Object[]> xdatas,
-                                    Object[] yDatas) {
+    public static ReportData echarts(String title,
+                                     String templateUrl,
+                                     ReportEnums type,
+                                     String legendName,
+                                     List<Object[]> xdatas,
+                                     Object[] yDatas) {
         ReportData reportData = new ReportData();
         reportData.setTitle(title);
         reportData.setType(type);
@@ -160,5 +158,20 @@ public class ReportData {
         reportData.setXdatas(xdatas);
         reportData.setYDatas(yDatas);
         return reportData;
+    }
+
+    public static ReportData echarts(String title, Map<String, Object> message, ReportEnums type) {
+        List<String> keys = new ArrayList<>(message.keySet());
+        List<String> values = message.values().stream().map(val -> val.toString()).collect(Collectors.toList());
+
+        List<Object[]> k = new ArrayList<>();
+
+        if (type == ReportEnums.LINE) {
+            k.add(values.toArray());
+            return echarts(title, type, k, keys.toArray());
+        }
+
+        k.add(keys.toArray());
+        return echarts(title, type, k, values.toArray());
     }
 }

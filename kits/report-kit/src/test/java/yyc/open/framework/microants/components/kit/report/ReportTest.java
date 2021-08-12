@@ -27,7 +27,7 @@ public class ReportTest {
         List<Object[]> names = new ArrayList<>();
         names.add(name);
         Integer[] value = {3364, 13899, 2181, 21798, 1796, 1300};
-        return ReportData.echart("水果", ReportEnums.BAR, "水果图例", names, value);
+        return ReportData.echarts("水果", ReportEnums.BAR, "水果图例", names, value);
     }
 
     private static ReportData crossBarEcharts() {
@@ -35,7 +35,7 @@ public class ReportTest {
         List<Object[]> names = new ArrayList<>();
         names.add(name);
         Integer[] value = {3364, 13899, 2181, 21798, 1796, 1300};
-        return ReportData.echart("水果", ReportEnums.CROSS_BAR, "水果图例", names, value);
+        return ReportData.echarts("水果", ReportEnums.CROSS_BAR, "水果图例", names, value);
     }
 
     private static ReportData lineEcharts() {
@@ -43,7 +43,7 @@ public class ReportTest {
         List<Object[]> names = new ArrayList<>();
         names.add(name);
         String[] value = {"A", "B", "C", "D", "E", "F", "G"};
-        return ReportData.echart("字母使用人数", ReportEnums.LINE, "字母图例", names, value);
+        return ReportData.echarts("字母使用人数", ReportEnums.LINE, "字母图例", names, value);
     }
 
     private static ReportData pieEcharts() {
@@ -51,7 +51,7 @@ public class ReportTest {
         List<Object[]> names = new ArrayList<>();
         names.add(name);
         Integer[] value = {43364, 13899, 12000, 2181, 21798, 1796, 1300};
-        return ReportData.echart("字母图例", ReportEnums.PIE, names, value);
+        return ReportData.echarts("字母图例", ReportEnums.PIE, names, value);
     }
 
     private static ReportData multiTotal() {
