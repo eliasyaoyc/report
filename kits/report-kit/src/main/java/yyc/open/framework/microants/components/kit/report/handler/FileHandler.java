@@ -48,9 +48,13 @@ public class FileHandler<T> extends AbstractHandler<T> {
 
         BufferedWriter writer = null;
         try {
+            String fileName = null;
+
             // Determine which file convert to.
             switch (metadata.getReportType()) {
                 case WORD:
+                    fileName = config.getOutputPath() + metadata.getReportName() + ".docx";
+
                     FastWordKit.FastWordBuilder builder = FastWordKit.builder()
                             .outputPath(config.getOutputPath())
                             .fileName(metadata.getReportName() + ".docx");
@@ -128,7 +132,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
                             generateFreemarkerTemplate(metadata.getTemplatePath(), assembleReportEntity(metadata)) :
                             generateFreemarkerTemplateByDefault(metadata.getReportType().getTemplateName(), assembleReportEntity(metadata));
 
-                    String fileName = config.getOutputPath() + metadata.getReportId() + ".html";
+                    fileName = config.getOutputPath() + metadata.getReportId() + ".html";
                     File file = new File(fileName);
 
                     if (!file.getParentFile().exists()) {
@@ -141,11 +145,11 @@ public class FileHandler<T> extends AbstractHandler<T> {
 
                     // Determine whether convert to pdf.
                     if (metadata.getReportType() == ReportEnums.PDF) {
-                        convertToPdf(fileName);
+                        fileName = convertToPdf(fileName);
                     }
             }
 
-            callback.onReceived(metadata.getReportId(), "", ReportEvent.EventType.COMPLETED);
+            callback.onReceived(metadata.getReportId(), fileName, ReportEvent.EventType.COMPLETED);
         } catch (Exception e) {
             LOGGER.error("[FileHandler] generate report encountered error: {}.", e);
             callback.onException(metadata.getReportId(), String.format("[FileHandler] generate report encountered error: %s.", e));
@@ -160,7 +164,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
         }
     }
 
-    public static void convertToPdf(String htmlPath) throws Exception {
+    public static String convertToPdf(String htmlPath) {
         Asserts.isTrue(htmlPath.contains(".html"), "html file.");
 
         File file = new File(htmlPath);
@@ -171,6 +175,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
         String newName = file.getName().replace(".html", ".pdf");
         String filePath = file.getParent();
         ReportPlatforms.pdfConvertCommand(htmlPath, newName, filePath);
+        return newName;
     }
 
     /**

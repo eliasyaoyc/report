@@ -2,7 +2,6 @@ package yyc.open.framework.microants.components.kit.report;
 
 import lombok.Getter;
 import lombok.Setter;
-import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 
 import java.util.List;
 
@@ -16,7 +15,6 @@ import java.util.List;
 @Setter
 public class ReportConfig {
     private List<String> colors;
-    private ReportEnums type;
     private String watermark;
     private Boolean horizontal;
     private Integer port;
@@ -24,10 +22,6 @@ public class ReportConfig {
     AlarmConfig alarm;
     private Integer maxTaskNum;
     private String outputPath;
-
-    protected void setType(String type) {
-        this.type = ReportEnums.getType(type);
-    }
 
     @Getter
     @Setter

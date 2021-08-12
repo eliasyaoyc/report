@@ -51,7 +51,7 @@ public class ReportTaskRegistry {
         List<ReportTask> tasks = new ArrayList<>();
         entity.getContent().getData().stream().forEach(data -> {
             data.stream().forEach(item -> {
-                if (ReportEnums.isCharts(item.getType())){
+                if (ReportEnums.isCharts(item.getType())) {
                     String taskId = UUIDsKit.base64UUID();
                     ReportTask task = ReportTask.builder()
                             .reportId(entity.getReportId())
@@ -66,24 +66,6 @@ public class ReportTaskRegistry {
                     item.setTaskId(taskId);
                     tasks.add(task);
                 }
-
-//                if (CollectionUtils.isEmpty(item.getTexts())
-//                        && CollectionUtils.isEmpty(item.getTables())) {
-//
-//                    String taskId = UUIDsKit.base64UUID();
-//                    ReportTask task = ReportTask.builder()
-//                            .reportId(entity.getReportId())
-//                            .reportName(entity.getReportName())
-//                            .outputPath(config.getOutputPath())
-//                            .templatePath(item.getTemplateUrl())
-//                            .taskId(taskId)
-//                            .data(ReportTask.parseReportData(item))
-//                            .build();
-//                    task.setReportType(item.getType());
-//
-//                    item.setTaskId(taskId);
-//                    tasks.add(task);
-//                }
             });
         });
         this.reportStatus.publishEvent(entity.getReportId(), ReportEvent.EventType.CREATION);

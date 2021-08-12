@@ -1,11 +1,16 @@
 package yyc.open.framework.microants.components.starter.report.autoconfigure;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import yyc.open.framework.microants.components.kit.report.Report;
+import yyc.open.framework.microants.components.kit.report.ReportBuilder;
+import yyc.open.framework.microants.components.kit.report.ReportConfig;
 import yyc.open.framework.microants.components.kit.report.ReportRuntime;
 
 import static yyc.open.framework.microants.components.starter.report.autoconfigure.MicroantsReportProperties.MICROANTS_FILE;
@@ -20,12 +25,31 @@ import static yyc.open.framework.microants.components.starter.report.autoconfigu
 @EnableConfigurationProperties(MicroantsReportProperties.class)
 public class MicroantsReportAutoConfiguration {
 
+    @Autowired
+    private MicroantsReportProperties properties;
+
     @Bean
     @Primary
     @ConditionalOnClass(MicroantsReportProperties.class)
     @ConditionalOnProperty(prefix = MICROANTS_FILE, value = "echart", havingValue = "enabled")
-    public void reportRuntime() {
+    public ReportRuntime reportEchartsRuntime() {
         ReportRuntime runtime = new ReportRuntime();
-        runtime.start();
+        runtime.start(true);
+        return runtime;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(value = ReportRuntime.class)
+    public ReportRuntime reportRuntime() {
+        ReportRuntime runtime = new ReportRuntime();
+        runtime.start(false);
+        return runtime;
+    }
+
+    @Bean
+    @ConditionalOnClass(MicroantsReportProperties.class)
+    public Report report() {
+        ReportConfig reportConfig = properties.getReportConfig();
+        return ReportBuilder.builder().config(reportConfig).build();
     }
 }

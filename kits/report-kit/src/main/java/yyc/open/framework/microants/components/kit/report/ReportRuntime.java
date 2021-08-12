@@ -40,12 +40,12 @@ public class ReportRuntime implements AutoCloseable {
             Gson gson = new GsonBuilder().create();
             globalConfig = gson.fromJson(ret, ReportConfig.GlobalConfig.class);
 
-//            Runtime.getRuntime().addShutdownHook(new Thread() {
-//                @Override
-//                public void run() {
-//                    close();
-//                }
-//            });
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+                @Override
+                public void run() {
+                    close();
+                }
+            });
         } catch (IOException e) {
             throw new ReportException("[Report Runtime] initialize fail", e);
         }
@@ -54,7 +54,7 @@ public class ReportRuntime implements AutoCloseable {
     /**
      * Start the phantomjs plugin.
      */
-    public void start() {
+    public void start(boolean echarts) {
         if (this.running.get()) {
             logger.error("[Report Runtime] already running, please shutdown first.");
             return;
@@ -66,7 +66,9 @@ public class ReportRuntime implements AutoCloseable {
             return;
         }
 
-        ReportPlatforms.runPhantomStartCommand(globalConfig.getPort());
+        if (echarts) {
+            ReportPlatforms.runPhantomStartCommand(globalConfig.getPort());
+        }
 
         ReportContextProvider.INSTANCE.setContext(this.constructContext());
 

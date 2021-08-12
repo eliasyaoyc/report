@@ -2,7 +2,6 @@ package yyc.open.framework.microants.components.kit.report;
 
 import org.apache.http.util.Asserts;
 import yyc.open.framework.microants.components.kit.common.BeansKit;
-import yyc.open.framework.microants.components.kit.common.validate.NonNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -53,18 +52,6 @@ public class ReportBuilder {
 
     public ReportBuilder colors(List<String> colors) {
         this.reportConfig.setColors(colors);
-        return this;
-    }
-
-    /**
-     * Setup the report type.
-     *
-     * @param type
-     * @return
-     */
-    @NonNull
-    public ReportBuilder type(String type) {
-        this.reportConfig.setType(type);
         return this;
     }
 

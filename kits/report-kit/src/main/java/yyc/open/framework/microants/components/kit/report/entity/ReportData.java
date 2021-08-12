@@ -5,8 +5,10 @@ import lombok.Setter;
 import yyc.open.framework.microants.components.kit.common.validate.Nullable;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * {@link ReportData}
@@ -58,7 +60,7 @@ public class ReportData {
      * Create text data.
      *
      * @param texts
-     * @return
+     * @return ReportData instance.
      */
     public static ReportData text(List<String> texts) {
         ReportData reportData = new ReportData();
@@ -67,11 +69,16 @@ public class ReportData {
         return reportData;
     }
 
+    public static ReportData text(String texts, String sperator) {
+        List<String> data = Arrays.stream(texts.split(sperator)).collect(Collectors.toList());
+        return text(data);
+    }
+
     /**
      * Create table data.
      *
      * @param tables
-     * @return
+     * @return ReportData instance.
      */
     public static ReportData table(List<List<String>> tables) {
         ReportData reportData = new ReportData();
@@ -84,7 +91,7 @@ public class ReportData {
      * Create statistics data.
      *
      * @param statistics
-     * @return
+     * @return ReportData instance.
      */
     public static ReportData statistics(Map<String, Object> statistics) {
         ReportData reportData = new ReportData();
@@ -99,7 +106,7 @@ public class ReportData {
      * @param statistics
      * @return
      */
-    public static ReportData statistics(Map<String, Object> statistics,String description) {
+    public static ReportData statistics(Map<String, Object> statistics, String description) {
         ReportData reportData = new ReportData();
         reportData.setStatistics(statistics);
         reportData.setStatDescription(description);
@@ -122,7 +129,7 @@ public class ReportData {
      * @param type
      * @param xdatas
      * @param yDatas
-     * @return
+     * @return ReportData instance.
      */
     public static ReportData echart(String title,
                                     ReportEnums type,

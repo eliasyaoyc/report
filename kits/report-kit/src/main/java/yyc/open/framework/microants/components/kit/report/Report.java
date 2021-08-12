@@ -1,5 +1,6 @@
 package yyc.open.framework.microants.components.kit.report;
 
+import com.google.common.collect.Maps;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.http.util.Asserts;
 import org.slf4j.Logger;
@@ -10,6 +11,7 @@ import yyc.open.framework.microants.components.kit.report.handler.FileHandler;
 import yyc.open.framework.microants.components.kit.report.handler.ReportHandlerFactory;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -57,8 +59,8 @@ public class Report {
     /**
      * Generate the report that supports batch generation.
      */
-    public void generateReport(List<ReportMetadata> reportEntities) {
-        generate(reportEntities, false);
+    public Map<String, String> generateReport(List<ReportMetadata> reportEntities) {
+        return generate(reportEntities, false);
     }
 
     /**
@@ -66,20 +68,22 @@ public class Report {
      * <p>
      * Generate the report, in additional supports parallel generation.
      */
-    private void generateReportParallel(List<ReportMetadata> reportEntities) {
-        generate(reportEntities, true);
+    private Map<String, String> generateReportParallel(List<ReportMetadata> reportEntities) {
+        return generate(reportEntities, true);
     }
 
 
-    private void generate(List<ReportMetadata> reportEntities, boolean parallel) {
+    private Map<String, String> generate(List<ReportMetadata> reportEntities, boolean parallel) {
         // 1. Check report status whether running
         if (checkReportState()) {
             throw new ReportException("[Report Runtime] has not started, please start first.");
         }
 
         if (CollectionUtils.isEmpty(reportEntities)) {
-            return;
+            return null;
         }
+
+        Map<String, String> rest = Maps.newHashMapWithExpectedSize(reportEntities.size());
 
         // 2. Create the task collections.
         reportEntities.stream().forEach(entity -> {
@@ -88,7 +92,6 @@ public class Report {
 
             List<ReportTask> tasks = taskRegistry.createTask(config, entity);
             if (CollectionUtils.isEmpty(tasks)) {
-                report(entity, parallel);
                 return;
             }
 
@@ -126,20 +129,22 @@ public class Report {
             try {
                 // The block waits for all subtasks to complete.
                 latch.await();
-                report(entity, parallel);
+                report(rest, entity, parallel);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         });
+        return rest;
     }
 
-    private void report(ReportMetadata metadata, boolean parallel) {
+    private void report(Map<String, String> rest, ReportMetadata metadata, boolean parallel) {
         // Start execute root task(report).
         reportStatus.publishEvent(metadata.getReportId(), ReportEvent.EventType.REPORT);
         this.handlerFactory.handle(metadata, parallel, new ReportCallback() {
             @Override
             public void onReceived(String taskId, String result, ReportEvent.EventType type) {
                 reportStatus.publishEvent(taskId, ReportEvent.EventType.COMPLETED);
+                rest.put(metadata.getReportId(), result);
             }
 
             @Override

@@ -88,7 +88,7 @@ public class ReportMetadata extends Task {
     @Getter
     @Setter
     public static class ReportCatalogue {
-        private Map<String,List<String>> chapters = Maps.newLinkedHashMap();
+        private Map<String, List<String>> chapters = Maps.newLinkedHashMap();
     }
 
     /**
@@ -111,11 +111,6 @@ public class ReportMetadata extends Task {
                     echart.setBase64(base64);
                 }
             });
-//            d.stream().forEach(i -> {
-//                if (i.getTaskId().equals(taskId)) {
-//                    i.setBase64(base64);
-//                }
-//            });
         });
     }
 
