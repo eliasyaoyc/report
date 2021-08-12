@@ -1,11 +1,17 @@
 package yyc.open.framework.microants.components.kit.report;
 
+import com.google.common.collect.Maps;
+import org.apache.commons.collections4.CollectionUtils;
 import yyc.open.framework.microants.components.kit.common.uuid.UUIDsKit;
+import yyc.open.framework.microants.components.kit.common.validate.Asserts;
+import yyc.open.framework.microants.components.kit.common.validate.NonNull;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
 import yyc.open.framework.microants.components.kit.report.entity.ReportData;
+import yyc.open.framework.microants.components.kit.report.exceptions.ReportDynamicCatalogueException;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * {@link ReportMedataBuilder} The builder model for {@link ReportMetadata}.
@@ -157,6 +163,10 @@ public class ReportMedataBuilder {
         }
 
         public ReportMetadata build() {
+            if (builder.catalogue == null && builder.content != null) {
+                // dynamic generate catalogue.
+                builder.catalogue = dynamicGenerateCatalogue(builder.content);
+            }
             return new ReportMetadata(builder.reportId,
                     builder.reportName,
                     builder.reportType,
@@ -164,6 +174,29 @@ public class ReportMedataBuilder {
                     builder.info,
                     builder.catalogue,
                     builder.content);
+        }
+
+        /**
+         * Dynamic generate catalogue through content.
+         *
+         * @param content report content including text, echarts etc.
+         */
+        private ReportMetadata.ReportCatalogue dynamicGenerateCatalogue(@NonNull ReportMetadata.ReportContent content) {
+            Asserts.isNull(content, "Content is empty.");
+            List<String> chapter = content.getChapter();
+            List<List<String>> indices = content.getIndices();
+            if (CollectionUtils.isEmpty(chapter) && CollectionUtils.isEmpty(indices)) {
+                throw new ReportDynamicCatalogueException("Chapter and Indices both empty.");
+            }
+            ReportMetadata.ReportCatalogue catalogue = new ReportMetadata.ReportCatalogue();
+            Map<String, List<String>> val = Maps.newLinkedHashMap();
+
+            for (int i = 0; i < chapter.size(); i++) {
+                val.put(chapter.get(i), indices.get(i));
+            }
+
+            catalogue.setChapters(val);
+            return catalogue;
         }
     }
 }
