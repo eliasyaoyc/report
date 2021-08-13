@@ -2,16 +2,13 @@ package yyc.open.framework.microants.components.kit.report;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import yyc.open.framework.microants.components.kit.common.file.FileKit;
 import yyc.open.framework.microants.components.kit.http.HttpKit;
 import yyc.open.framework.microants.components.kit.report.exceptions.ReportException;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -36,7 +33,8 @@ public class ReportRuntime implements AutoCloseable {
 
     private void initialize() {
         try {
-            String ret = FileUtils.readFileToString(new File(FileKit.getResourcePath(GLOBAL_JSON_PATH)), StandardCharsets.UTF_8);
+            String ret = FileKit.readFileAsStream(GLOBAL_JSON_PATH);
+
             Gson gson = new GsonBuilder().create();
             globalConfig = gson.fromJson(ret, ReportConfig.GlobalConfig.class);
 

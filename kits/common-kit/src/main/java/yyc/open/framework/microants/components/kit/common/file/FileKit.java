@@ -3,7 +3,7 @@ package yyc.open.framework.microants.components.kit.common.file;
 import com.google.common.base.Strings;
 import yyc.open.framework.microants.components.kit.common.validate.Asserts;
 
-import java.io.File;
+import java.io.*;
 
 /**
  * {@link FileKit}
@@ -49,5 +49,15 @@ public class FileKit {
             String newDir = directory.startsWith("/") ? directory : "/" + directory;
             new File(System.getProperty("user.dir") + newDir).mkdirs();
         }
+    }
+
+    public static String readFileAsStream(String path) throws IOException {
+        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        char[] buff = new char[inputStream.available()];
+        bufferedReader.read(buff, 0, inputStream.available());
+        return new String(buff);
     }
 }
