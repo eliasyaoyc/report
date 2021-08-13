@@ -126,13 +126,17 @@ public class ReportRuntime implements AutoCloseable {
             return;
         }
 
-        HashMap<String, Object> pa = new HashMap<>();
-        pa.put("exit", "true");
-        HttpKit.builder()
-                .post(String.format("http://127.0.0.1:%s", globalConfig.getPort()))
-                .body(pa)
-                .build()
-                .get();
+        try {
+            HashMap<String, Object> pa = new HashMap<>();
+            pa.put("exit", "true");
+            HttpKit.builder()
+                    .post(String.format("http://127.0.0.1:%s", globalConfig.getPort()))
+                    .body(pa)
+                    .build()
+                    .get();
+        } catch (Exception e) {
+            // ignore.
+        }
 
         ReportContextProvider.INSTANCE.close();
 
