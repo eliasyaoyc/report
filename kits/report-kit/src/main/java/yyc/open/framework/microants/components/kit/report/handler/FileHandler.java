@@ -36,9 +36,11 @@ import static yyc.open.framework.microants.components.kit.report.commons.ReportC
 @Processor(name = FILE_HANDLE, type = HANDLER)
 public class FileHandler<T> extends AbstractHandler<T> {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileHandler.class);
+    private ReportConfig reportConfig;
 
     @Override
     public void onHandle(T task, ReportConfig config, ReportCallback callback) {
+        this.reportConfig = config;
         if (task instanceof ReportTask) {
             return;
         }
@@ -145,7 +147,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
 
                     // Determine whether convert to pdf.
                     if (metadata.getReportType() == ReportEnums.PDF) {
-                        fileName = convertToPdf(fileName);
+                        fileName = convertToPdf(fileName, this.reportConfig);
                     }
             }
 
@@ -164,7 +166,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
         }
     }
 
-    public static String convertToPdf(String htmlPath) {
+    public static String convertToPdf(String htmlPath, ReportConfig config) {
         Asserts.isTrue(htmlPath.contains(".html"), "html file.");
 
         File file = new File(htmlPath);
@@ -174,7 +176,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
 
         String newName = file.getName().replace(".html", ".pdf");
         String filePath = file.getParent();
-        ReportPlatforms.pdfConvertCommand(htmlPath, newName, filePath);
+        ReportPlatforms.pdfConvertCommand(htmlPath, newName, filePath, config.getExecPath(), config.getJsPdfPath());
         return newName;
     }
 

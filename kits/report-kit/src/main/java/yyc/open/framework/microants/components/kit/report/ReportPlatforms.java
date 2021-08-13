@@ -14,9 +14,9 @@ import java.io.IOException;
  */
 @Getter
 public enum ReportPlatforms {
-    WINDOWS("Windows", "exec/phantomjs-windows.exe"),
-    MACOS("Mac OS X", "exec/phantomjs-macosx"),
-    UNIX("Unix", "exec/phantomjs-linux");
+    WINDOWS("Windows", "phantomjs-windows.exe"),
+    MACOS("Mac OS X", "phantomjs-macosx"),
+    UNIX("Unix", "phantomjs-linux");
 
     String name;
     String path;
@@ -41,18 +41,18 @@ public enum ReportPlatforms {
         throw new IllegalArgumentException("[Report Runtime] input parameter is not support.");
     }
 
-    public static void runPhantomStartCommand(int port) {
+    public static void runPhantomStartCommand(ReportConfig.GlobalConfig config) {
         String property = System.getProperty("os.name");
         ReportPlatforms platforms = ReportPlatforms.getPlatforms(property);
-        String path = FileKit.getResourcePath(platforms.getPath());
+        String path = FileKit.getResourcePath(config.getExecPath() + platforms);
 
         String p = System.getProperty("os.name").contains(ReportPlatforms.WINDOWS.getName()) ? path.substring(1) : path;
 
         String command = new StringBuilder(p)
                 .append(" ")
-                .append(FileKit.getResourcePath("js/echarts-util.js"))
+                .append(FileKit.getResourcePath(config.getJsPath()))
                 .append(" -s -p ")
-                .append(port).toString();
+                .append(config.getPort()).toString();
 
         try {
             Runtime.getRuntime().exec("chmod 777 " + p);
@@ -62,16 +62,31 @@ public enum ReportPlatforms {
         }
     }
 
-    public static void pdfConvertCommand(String htmlPath, String pdfName, String outputPath) {
+    public static void runPhantomStartCommand(int port, String execPath, String jsPath) {
+        String command = new StringBuilder(execPath)
+                .append(" ")
+                .append(jsPath)
+                .append(" -s -p ")
+                .append(port).toString();
+
+        try {
+            Runtime.getRuntime().exec("chmod 777 " + execPath);
+            Runtime.getRuntime().exec(command);
+        } catch (IOException e) {
+            throw new ReportException(String.format("[Report Runtime] exec command: %s fail", command), e);
+        }
+    }
+
+    public static void pdfConvertCommand(String htmlPath, String pdfName, String outputPath, String execPath, String jsPdfPath) {
         String property = System.getProperty("os.name");
         ReportPlatforms platforms = ReportPlatforms.getPlatforms(property);
-        String path = FileKit.getResourcePath(platforms.getPath());
+        String path = FileKit.getResourcePath(execPath + platforms);
 
         String p = System.getProperty("os.name").contains(ReportPlatforms.WINDOWS.getName()) ? path.substring(1) : path;
 
         String command = new StringBuilder(p)
                 .append(" ")
-                .append(FileKit.getResourcePath("js/html2pdf.js"))
+                .append(FileKit.getResourcePath(jsPdfPath))
                 .append(" " + htmlPath)
                 .append(" " + pdfName)
                 .append(" " + outputPath)

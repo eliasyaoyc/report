@@ -65,7 +65,31 @@ public class ReportRuntime implements AutoCloseable {
         }
 
         if (echarts) {
-            ReportPlatforms.runPhantomStartCommand(globalConfig.getPort());
+            ReportPlatforms.runPhantomStartCommand(globalConfig);
+        }
+
+        ReportContextProvider.INSTANCE.setContext(this.constructContext());
+
+        this.running.compareAndSet(false, true);
+    }
+
+    /**
+     * Start the phantomjs plugin, Just for SpringBoot.
+     */
+    public void start(boolean echarts, String execPath, String jsPath) {
+        if (this.running.get()) {
+            logger.error("[Report Runtime] already running, please shutdown first.");
+            return;
+        }
+
+        this.initialize();
+        if (Objects.isNull(this.globalConfig)) {
+            logger.error("[Report Runtime] Global config initialize not success yet.");
+            return;
+        }
+
+        if (echarts) {
+            ReportPlatforms.runPhantomStartCommand(globalConfig.getPort(), execPath, jsPath);
         }
 
         ReportContextProvider.INSTANCE.setContext(this.constructContext());

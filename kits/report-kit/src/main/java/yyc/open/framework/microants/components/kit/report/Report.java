@@ -50,7 +50,7 @@ public class Report {
      */
     public void convertHTMLToPdf(String htmlPath) {
         try {
-            FileHandler.convertToPdf(htmlPath);
+            FileHandler.convertToPdf(htmlPath, config);
         } catch (Exception e) {
             LOGGER.error("[Report] convert html to pdf failure {}", e);
         }

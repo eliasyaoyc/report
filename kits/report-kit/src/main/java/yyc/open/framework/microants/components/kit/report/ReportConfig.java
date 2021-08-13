@@ -22,6 +22,10 @@ public class ReportConfig {
     AlarmConfig alarm;
     private Integer maxTaskNum;
     private String outputPath;
+    private String jsPath;
+    private String execPath;
+    private String templatesPath;
+    private String jsPdfPath;
 
     @Getter
     @Setter
@@ -35,6 +39,10 @@ public class ReportConfig {
         List<String> colors;
         Integer maxTaskNum;
         String outputPath;
+        String jsPath;
+        String execPath;
+        String templatesPath;
+        String jsPdfPath;
     }
 
     @Getter

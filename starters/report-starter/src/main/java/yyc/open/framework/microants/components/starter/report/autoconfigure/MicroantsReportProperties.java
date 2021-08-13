@@ -28,4 +28,8 @@ public class MicroantsReportProperties {
     private Boolean parallel;
     private Integer maxTaskNum;
     private String outputPath;
+    private String jsPath;
+    private String execPath;
+    private String templatesPath;
+    private String jsPdfPath;
 }
