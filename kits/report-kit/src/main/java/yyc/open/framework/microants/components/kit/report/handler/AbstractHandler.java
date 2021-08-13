@@ -48,9 +48,9 @@ public abstract class AbstractHandler<T> implements Handler<T> {
         }
     }
 
-    String generateFreemarkerTemplateByDefault(String templateName, Map<String, Object> data) throws
+    String generateFreemarkerTemplateByDefault(String path, String templateName, Map<String, Object> data) throws
             IOException, TemplateException {
-        return generateFreemarkerTemplate(FileKit.getResourcePath(templateName), data);
+        return generateFreemarkerTemplate(FileKit.getResourcePath(path + templateName), data);
     }
 
     /**

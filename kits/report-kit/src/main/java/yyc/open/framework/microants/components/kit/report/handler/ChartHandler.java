@@ -41,7 +41,7 @@ public class ChartHandler<T> extends AbstractHandler<T> {
         try {
             String option = StringUtils.isNotEmpty(t.getTemplatePath()) ?
                     generateFreemarkerTemplate(t.getTemplatePath(), gson.fromJson(t.getData(), Map.class)) :
-                    generateFreemarkerTemplateByDefault(t.getReportType().getTemplateName(), gson.fromJson(t.getData(), Map.class));
+                    generateFreemarkerTemplateByDefault(config.getTemplatesPath(), t.getReportType().getTemplateName(), gson.fromJson(t.getData(), Map.class));
 
             Map<String, Object> opt = gson.fromJson(option, Map.class);
 

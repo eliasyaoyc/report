@@ -132,7 +132,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
                     // Generate html.
                     String option = StringUtils.isNotEmpty(metadata.getTemplatePath()) ?
                             generateFreemarkerTemplate(metadata.getTemplatePath(), assembleReportEntity(metadata)) :
-                            generateFreemarkerTemplateByDefault(metadata.getReportType().getTemplateName(), assembleReportEntity(metadata));
+                            generateFreemarkerTemplateByDefault(config.getTemplatesPath(), metadata.getReportType().getTemplateName(), assembleReportEntity(metadata));
 
                     fileName = config.getOutputPath() + metadata.getReportId() + ".html";
                     File file = new File(fileName);
@@ -283,7 +283,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
     @VisibleForTesting
     public void generateHTML(ReportMetadata metadata) {
         try {
-            String option = generateFreemarkerTemplateByDefault(metadata.getReportType().getTemplateName(), assembleReportEntity(metadata));
+            String option = generateFreemarkerTemplateByDefault("templates/", metadata.getReportType().getTemplateName(), assembleReportEntity(metadata));
             System.out.println(option);
             String html = "/Users/eliasyao/Desktop/" + metadata.getReportId() + ".html";
             String pdf = "/Users/eliasyao/Desktop/" + metadata.getReportId() + ".pdf";

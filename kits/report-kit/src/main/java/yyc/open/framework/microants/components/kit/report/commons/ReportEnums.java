@@ -11,7 +11,7 @@ import yyc.open.framework.microants.components.kit.report.commons.ReportConstant
  */
 interface ReportEnumsInterface {
     default String getTemplateName() {
-        return "templates/html.ftl";
+        return "html.ftl";
     }
 }
 
@@ -19,37 +19,37 @@ public enum ReportEnums implements ReportEnumsInterface {
     BAR(Charts.BAR) {
         @Override
         public String getTemplateName() {
-            return "templates/barOption.ftl";
+            return "barOption.ftl";
         }
     },
     CROSS_BAR(Charts.CROSS_BAR) {
         @Override
         public String getTemplateName() {
-            return "templates/crossBarOption.ftl";
+            return "crossBarOption.ftl";
         }
     },
     CROSS_MULTI_BAR(Charts.CROSS_MULTI_BAR) {
         @Override
         public String getTemplateName() {
-            return "templates/crossMultiBarOption.ftl";
+            return "crossMultiBarOption.ftl";
         }
     },
     LINE(Charts.LINE) {
         @Override
         public String getTemplateName() {
-            return "templates/lineOption.ftl";
+            return "lineOption.ftl";
         }
     },
     PIE(Charts.PIE) {
         @Override
         public String getTemplateName() {
-            return "templates/pieOption.ftl";
+            return "pieOption.ftl";
         }
     },
     HOLLOW_PIE(Charts.HOLLOW_PIE) {
         @Override
         public String getTemplateName() {
-            return "templates/hollowPieOption.ftl";
+            return "hollowPieOption.ftl";
         }
     },
 
