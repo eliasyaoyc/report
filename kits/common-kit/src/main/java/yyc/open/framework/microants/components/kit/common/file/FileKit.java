@@ -3,6 +3,8 @@ package yyc.open.framework.microants.components.kit.common.file;
 import com.google.common.base.Strings;
 import yyc.open.framework.microants.components.kit.common.validate.Asserts;
 
+import java.io.File;
+
 /**
  * {@link FileKit}
  *
@@ -30,5 +32,22 @@ public class FileKit {
      */
     public static String getResourcePath(String path) {
         return Thread.currentThread().getContextClassLoader().getResource(path).getPath();
+    }
+
+    /**
+     * Create directory through current relative path.
+     *
+     * @param directory need to created directory.
+     */
+    public static void createPath(String directory) {
+        File file = new File(directory);
+        if (file.isDirectory()) {
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+        } else {
+            String newDir = directory.startsWith("/") ? directory : "/" + directory;
+            new File(System.getProperty("user.dir") + newDir).mkdirs();
+        }
     }
 }

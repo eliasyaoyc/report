@@ -105,7 +105,7 @@ public class Report {
                         public void onReceived(String taskId, String result, ReportEvent.EventType type) {
                             switch (type) {
                                 case PARTIALLY_COMPLETED:
-                                    reportStatus.publishEvent(taskId, ReportEvent.EventType.PARTIALLY_COMPLETED);
+                                    reportStatus.publishEvent(taskId, result, ReportEvent.EventType.PARTIALLY_COMPLETED);
                                     latch.countDown();
                                     // Add task result.
                                     entity.setSubTaskExecutionResult(taskId, result);

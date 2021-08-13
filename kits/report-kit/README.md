@@ -58,8 +58,8 @@ public class ReportTest {
 - [ ] Parallel report generation.
 - [x] Generate from fail-point.
 - [x] Improved fault tolerance for report generation failures.
-- [ ] Optimize the process by which users assemble report data.
-- [ ] Optimize the same image generation repeatedly.(Checksum).
+- [x] Optimize the process by which users assemble report data.
+- [x] Optimize the same image generation repeatedly.(Checksum).
 
 # Use-case
 

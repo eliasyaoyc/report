@@ -3,12 +3,18 @@ package yyc.open.framework.microants.components.kit.report;
 import com.google.common.collect.Maps;
 import yyc.open.framework.microants.components.kit.common.uuid.UUIDsKit;
 import yyc.open.framework.microants.components.kit.common.validate.NonNull;
+import yyc.open.framework.microants.components.kit.report.commons.Processor;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
+import yyc.open.framework.microants.components.kit.report.listener.Listener;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.zip.CRC32;
+
+import static yyc.open.framework.microants.components.kit.report.commons.ReportConstants.*;
 
 /**
  * {@link ReportTaskRegistry}
@@ -16,15 +22,34 @@ import java.util.Objects;
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2021/7/30
  */
-public class ReportTaskRegistry {
+@Processor(name = REGISTER_LISTENER, type = LISTENER)
+public class ReportTaskRegistry implements Listener {
     private ReportStatus reportStatus;
     private Map<String, ReportTask> tasks;
     private Map<String, ReportTask> failTasks;
+    private Map<Long, String /*checksum, image file*/> paths;
 
     private ReportTaskRegistry(ReportStatus reportStatus) {
         this.reportStatus = reportStatus;
         this.tasks = Maps.newConcurrentMap();
         this.failTasks = Maps.newConcurrentMap();
+        this.paths = Maps.newConcurrentMap();
+    }
+
+    @Override
+    public void onSuccess(ReportEvent event) {
+        if (event.getType() == ReportEvent.EventType.PARTIALLY_COMPLETED) {
+            // Notice：the partially completed event only scoped to echarts generation.
+            String taskId = event.getTaskId();
+            ReportTask task = this.tasks.get(taskId);
+            Long checksum = checksum(task);
+            this.paths.put(checksum, event.getMessage());
+        }
+    }
+
+    @Override
+    public void onFailure(ReportEvent event) {
+
     }
 
     public enum ReportRegistryEnum {
@@ -64,12 +89,28 @@ public class ReportTaskRegistry {
                     task.setReportType(item.getType());
 
                     item.setTaskId(taskId);
-                    tasks.add(task);
+
+                    // Calculate task checksum.
+                    Long checksum = checksum(task);
+                    if (this.paths.containsKey(checksum)) {
+                        // Find the duplicate task so used result directly.
+                        String path = this.paths.get(checksum);
+                        entity.setSubTaskExecutionResult(taskId, path);
+                    } else {
+                        tasks.add(task);
+                        this.tasks.put(taskId, task);
+                    }
                 }
             });
         });
         this.reportStatus.publishEvent(entity.getReportId(), ReportEvent.EventType.CREATION);
         return tasks;
+    }
+
+    private static Long checksum(ReportTask task) {
+        CRC32 crc32 = new CRC32();
+        crc32.update(task.getData().getBytes(StandardCharsets.UTF_8), 0, task.getData().length());
+        return crc32.getValue();
     }
 
     /**
