@@ -1,6 +1,5 @@
 package yyc.open.framework.microants.components.starter.report.autoconfigure;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -25,9 +24,6 @@ import static yyc.open.framework.microants.components.starter.report.autoconfigu
 @EnableConfigurationProperties(MicroantsReportProperties.class)
 public class MicroantsReportAutoConfiguration {
 
-    @Autowired
-    private MicroantsReportProperties properties;
-
     @Bean
     @Primary
     @ConditionalOnClass(MicroantsReportProperties.class)
@@ -48,7 +44,7 @@ public class MicroantsReportAutoConfiguration {
 
     @Bean
     @ConditionalOnClass(MicroantsReportProperties.class)
-    public Report report() {
+    public Report report(MicroantsReportProperties properties) {
         ReportConfig reportConfig = properties.getReportConfig();
         return ReportBuilder.builder().config(reportConfig).build();
     }
