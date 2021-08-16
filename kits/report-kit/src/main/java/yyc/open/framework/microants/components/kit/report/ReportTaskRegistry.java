@@ -3,9 +3,7 @@ package yyc.open.framework.microants.components.kit.report;
 import com.google.common.collect.Maps;
 import yyc.open.framework.microants.components.kit.common.uuid.UUIDsKit;
 import yyc.open.framework.microants.components.kit.common.validate.NonNull;
-import yyc.open.framework.microants.components.kit.report.commons.Processor;
 import yyc.open.framework.microants.components.kit.report.commons.ReportEnums;
-import yyc.open.framework.microants.components.kit.report.listener.Listener;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -14,16 +12,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.zip.CRC32;
 
-import static yyc.open.framework.microants.components.kit.report.commons.ReportConstants.*;
-
 /**
  * {@link ReportTaskRegistry}
  *
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2021/7/30
  */
-@Processor(name = REGISTER_LISTENER, type = LISTENER)
-public class ReportTaskRegistry implements Listener {
+public class ReportTaskRegistry {
     private ReportStatus reportStatus;
     private Map<String, ReportTask> tasks;
     private Map<String, ReportTask> failTasks;
@@ -36,20 +31,11 @@ public class ReportTaskRegistry implements Listener {
         this.paths = Maps.newConcurrentMap();
     }
 
-    @Override
-    public void onSuccess(ReportEvent event) {
-        if (event.getType() == ReportEvent.EventType.PARTIALLY_COMPLETED) {
-            // Notice：the partially completed event only scoped to echarts generation.
-            String taskId = event.getTaskId();
-            ReportTask task = this.tasks.get(taskId);
-            Long checksum = checksum(task);
-            this.paths.put(checksum, event.getMessage());
-        }
-    }
-
-    @Override
-    public void onFailure(ReportEvent event) {
-
+    public void updateChecksum(String taskId, String path) {
+        // Notice：the partially completed event only scoped to echarts generation.
+        ReportTask task = this.tasks.get(taskId);
+        Long checksum = checksum(task);
+        this.paths.put(checksum, path);
     }
 
     public enum ReportRegistryEnum {

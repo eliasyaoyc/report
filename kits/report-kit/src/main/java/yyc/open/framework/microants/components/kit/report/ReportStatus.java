@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.ServiceLoader;
 
 import static yyc.open.framework.microants.components.kit.report.commons.ReportConstants.ALARM_LISTENER;
-import static yyc.open.framework.microants.components.kit.report.commons.ReportConstants.REGISTER_LISTENER;
 
 /**
  * {@link ReportStatus}
@@ -63,7 +62,6 @@ public class ReportStatus {
                 break;
             case PARTIALLY_COMPLETED:
                 LOGGER.info("[ReportStatus] task-{} is completed.", id);
-                this.listeners.get(REGISTER_LISTENER).onSuccess(event);
                 break;
             case REPORT:
                 LOGGER.info("[ReportStatus] report-{} subTask are all finished.", id);
