@@ -62,7 +62,9 @@ public enum ReportPlatforms {
         LOGGER.info("[ReportPlatforms] command: {}", command);
 
         try {
-            Runtime.getRuntime().exec("chmod 777 " + path);
+            if (!property.contains(WINDOWS.getName())) {
+                Runtime.getRuntime().exec("chmod 777 " + path);
+            }
             Runtime.getRuntime().exec(command);
         } catch (IOException e) {
             throw new ReportException(String.format("[Report Runtime] exec command: %s fail", command), e);
@@ -77,7 +79,9 @@ public enum ReportPlatforms {
                 .append(port).toString();
 
         try {
-            Runtime.getRuntime().exec("chmod 777 " + execPath);
+            if (!System.getProperty("os.name").contains(WINDOWS.getName())) {
+                Runtime.getRuntime().exec("chmod 777 " + execPath);
+            }
             Runtime.getRuntime().exec(command);
         } catch (IOException e) {
             throw new ReportException(String.format("[Report Runtime] exec command: %s fail", command), e);
@@ -99,7 +103,9 @@ public enum ReportPlatforms {
                 .append(" " + outputPath)
                 .toString();
         try {
-            Runtime.getRuntime().exec("chmod 777 " + p);
+            if (!property.contains(WINDOWS.getName())) {
+                Runtime.getRuntime().exec("chmod 777 " + p);
+            }
             Runtime.getRuntime().exec(command);
         } catch (IOException e) {
             throw new ReportException(String.format("[Report Runtime] exec command: %s fail", command), e);
