@@ -103,6 +103,47 @@ public class FileKit {
         return tempFile(sourceFile, false);
     }
 
+    public static String tempFile(String sourceFile, String targetPath) throws IOException {
+        return tempFile(sourceFile, targetPath, false);
+    }
+
+    public static String tempFile(String sourceFile, String targetPath, boolean repeated) throws IOException {
+        InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(sourceFile);
+        String name = FilenameKit.getName(sourceFile);
+
+        String tempPath = targetPath.endsWith(File.separator) ?
+                targetPath + name :
+                targetPath + File.separator + name;
+
+        File tempFile = new File(tempPath);
+        if (tempFile.exists() && !repeated) {
+            return tempFile.getAbsolutePath();
+        }
+        IOUtils.copy(input, new FileOutputStream(tempFile));
+        String absolutePath = tempFile.getAbsolutePath();
+        // Resolve window path issues.
+        if (absolutePath.startsWith(File.separator) && System.getProperty("os.name").contains("Windows")) {
+            absolutePath.substring(1);
+        }
+        return absolutePath;
+    }
+
+
+    public static String tempPath() {
+        String tempPath = System.getProperty("java.io.tmpdir").endsWith(File.separator) ?
+                System.getProperty("java.io.tmpdir") :
+                System.getProperty("java.io.tmpdir") + File.separator;
+        return tempPath;
+    }
+
+    public static String createDir(String path) {
+        File file = new File(path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        return path;
+    }
+
     public static void main(String[] args) {
         InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("/Users/eliasyao/Desktop/microants-components/kits/report-kit/target/classes/js/echarts-util.js");
         System.out.println(resourceAsStream);
