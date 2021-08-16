@@ -1,6 +1,8 @@
 package yyc.open.framework.microants.components.kit.report;
 
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import yyc.open.framework.microants.components.kit.common.file.FileKit;
 import yyc.open.framework.microants.components.kit.report.exceptions.ReportException;
 
@@ -15,11 +17,16 @@ import java.io.IOException;
 @Getter
 public enum ReportPlatforms {
     WINDOWS("Windows", "phantomjs-windows.exe"),
+
     MACOS("Mac OS X", "phantomjs-macosx"),
+
     UNIX("Unix", "phantomjs-linux");
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReportPlatforms.class);
 
     String name;
     String path;
+
 
     ReportPlatforms(String name, String path) {
         this.name = name;
@@ -44,18 +51,18 @@ public enum ReportPlatforms {
     public static void runPhantomStartCommand(ReportConfig.GlobalConfig config) {
         String property = System.getProperty("os.name");
         ReportPlatforms platforms = ReportPlatforms.getPlatforms(property);
-        String path = FileKit.getResourcePath(config.getExecPath() + platforms);
+        String path = FileKit.getResourcePath(config.getExecPath() + platforms.getPath());
 
-        String p = System.getProperty("os.name").contains(ReportPlatforms.WINDOWS.getName()) ? path.substring(1) : path;
-
-        String command = new StringBuilder(p)
+        String command = new StringBuilder(path)
                 .append(" ")
                 .append(FileKit.getResourcePath(config.getJsPath()))
                 .append(" -s -p ")
                 .append(config.getPort()).toString();
 
+        LOGGER.info("[ReportPlatforms] command: {}", command);
+
         try {
-            Runtime.getRuntime().exec("chmod 777 " + p);
+            Runtime.getRuntime().exec("chmod 777 " + path);
             Runtime.getRuntime().exec(command);
         } catch (IOException e) {
             throw new ReportException(String.format("[Report Runtime] exec command: %s fail", command), e);

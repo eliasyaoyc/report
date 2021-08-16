@@ -31,7 +31,9 @@ public class FileKit {
      * @return
      */
     public static String getResourcePath(String path) {
-        return Thread.currentThread().getContextClassLoader().getResource(path).getPath();
+        String p = Thread.currentThread().getContextClassLoader().getResource(path).getPath();
+        boolean windows = System.getProperty("os.name").contains("Windows");
+        return windows ? p.substring(1) : p;
     }
 
     /**
