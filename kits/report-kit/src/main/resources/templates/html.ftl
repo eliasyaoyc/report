@@ -267,8 +267,12 @@
             <img src="${background}"/>
         </#if>
         <div class="title">
-            <span>${titleDesc}</span>
-            <p>${title}</p>
+            <#if titleDesc?? && titleDesc != "">
+                <span>${titleDesc}</span>
+            </#if>
+            <#if title?? && title != "">
+                <p>${title}</p>
+            </#if>
         </div>
         <div class="info">
             <#list info?keys as key>
