@@ -9,7 +9,7 @@
   "jsPath": "js/echarts-util.js",
   "jsPdfPath": "js/html2pdf.js",
   "execPath": "exec/",
-  "templatePath": "templates/",
+  "templatesPath": "templates/",
   "colors": [
     "rgba(0, 116, 227, 1)",
     "rgba(0, 116, 227, 0.8)",
