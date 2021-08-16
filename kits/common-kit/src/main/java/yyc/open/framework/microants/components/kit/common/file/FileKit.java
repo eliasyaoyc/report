@@ -104,7 +104,7 @@ public class FileKit {
     }
 
     public static void main(String[] args) {
-        String property = System.getProperty("java.io.tmpdir");
-        System.out.println(property);
+        InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("/Users/eliasyao/Desktop/microants-components/kits/report-kit/target/classes/js/echarts-util.js");
+        System.out.println(resourceAsStream);
     }
 }
