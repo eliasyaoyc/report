@@ -168,10 +168,25 @@ public class ReportData {
 
         if (type == ReportEnums.LINE) {
             k.add(values.toArray());
-            return echarts(title, type, k, keys.toArray());
+            return echarts(title, type, title, k, keys.toArray());
         }
 
         k.add(keys.toArray());
-        return echarts(title, type, k, values.toArray());
+        return echarts(title, type, title, k, values.toArray());
+    }
+
+    public static ReportData echarts(String title, String legendName, Map<String, Object> message, ReportEnums type) {
+        List<String> keys = new ArrayList<>(message.keySet());
+        List<String> values = message.values().stream().map(val -> val.toString()).collect(Collectors.toList());
+
+        List<Object[]> k = new ArrayList<>();
+
+        if (type == ReportEnums.LINE) {
+            k.add(values.toArray());
+            return echarts(title, type, legendName, k, keys.toArray());
+        }
+
+        k.add(keys.toArray());
+        return echarts(title, type, legendName, k, values.toArray());
     }
 }
