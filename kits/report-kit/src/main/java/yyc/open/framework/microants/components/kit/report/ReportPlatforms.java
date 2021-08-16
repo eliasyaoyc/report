@@ -20,7 +20,7 @@ public enum ReportPlatforms {
 
     MACOS("Mac OS X", "phantomjs-macosx"),
 
-    UNIX("Unix", "phantomjs-linux");
+    UNIX("Linux", "phantomjs-linux");
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReportPlatforms.class);
 
@@ -45,23 +45,25 @@ public enum ReportPlatforms {
                 return pf;
             }
         }
-        throw new IllegalArgumentException("[Report Runtime] input parameter is not support.");
+        String message = String.format("[Report Runtime] current system : %s is not support.", name);
+        throw new IllegalArgumentException(message);
     }
 
     public static void runPhantomStartCommand(ReportConfig.GlobalConfig config) {
-        String property = System.getProperty("os.name");
-        ReportPlatforms platforms = ReportPlatforms.getPlatforms(property);
-        String path = FileKit.getResourcePath(config.getExecPath() + platforms.getPath());
-
-        String command = new StringBuilder(path)
-                .append(" ")
-                .append(FileKit.getResourcePath(config.getJsPath()))
-                .append(" -s -p ")
-                .append(config.getPort()).toString();
-
-        LOGGER.info("[ReportPlatforms] command: {}", command);
-
+        String command = "";
         try {
+            String property = System.getProperty("os.name");
+            ReportPlatforms platforms = ReportPlatforms.getPlatforms(property);
+            String path = FileKit.tempFile(config.getExecPath() + platforms.getPath());
+
+            command = new StringBuilder(path)
+                    .append(" ")
+                    .append(FileKit.tempFile(config.getJsPath()))
+                    .append(" -s -p ")
+                    .append(config.getPort()).toString();
+
+            LOGGER.info("[ReportPlatforms] command: {}", command);
+
             if (!property.contains(WINDOWS.getName())) {
                 Runtime.getRuntime().exec("chmod 777 " + path);
             }
@@ -71,40 +73,24 @@ public enum ReportPlatforms {
         }
     }
 
-    public static void runPhantomStartCommand(int port, String execPath, String jsPath) {
-        String command = new StringBuilder(execPath)
-                .append(" ")
-                .append(jsPath)
-                .append(" -s -p ")
-                .append(port).toString();
-
-        try {
-            if (!System.getProperty("os.name").contains(WINDOWS.getName())) {
-                Runtime.getRuntime().exec("chmod 777 " + execPath);
-            }
-            Runtime.getRuntime().exec(command);
-        } catch (IOException e) {
-            throw new ReportException(String.format("[Report Runtime] exec command: %s fail", command), e);
-        }
-    }
-
     public static void pdfConvertCommand(String htmlPath, String pdfName, String outputPath, String execPath, String jsPdfPath) {
+        String command = "";
         String property = System.getProperty("os.name");
         ReportPlatforms platforms = ReportPlatforms.getPlatforms(property);
-        String path = FileKit.getResourcePath(execPath + platforms);
 
-        String p = System.getProperty("os.name").contains(ReportPlatforms.WINDOWS.getName()) ? path.substring(1) : path;
-
-        String command = new StringBuilder(p)
-                .append(" ")
-                .append(FileKit.getResourcePath(jsPdfPath))
-                .append(" " + htmlPath)
-                .append(" " + pdfName)
-                .append(" " + outputPath)
-                .toString();
         try {
+            String path = FileKit.tempFile(execPath + platforms);
+
+            command = new StringBuilder(path)
+                    .append(" ")
+                    .append(FileKit.getResourcePath(jsPdfPath))
+                    .append(" " + htmlPath)
+                    .append(" " + pdfName)
+                    .append(" " + outputPath)
+                    .toString();
+
             if (!property.contains(WINDOWS.getName())) {
-                Runtime.getRuntime().exec("chmod 777 " + p);
+                Runtime.getRuntime().exec("chmod 777 " + path);
             }
             Runtime.getRuntime().exec(command);
         } catch (IOException e) {

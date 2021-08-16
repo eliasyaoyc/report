@@ -1,6 +1,6 @@
 package yyc.open.framework.microants.components.kit.common.file;
 
-import com.google.common.base.Strings;
+import org.apache.commons.io.IOUtils;
 import yyc.open.framework.microants.components.kit.common.validate.Asserts;
 
 import java.io.*;
@@ -13,9 +13,17 @@ import java.io.*;
  */
 public class FileKit {
 
+    public static String suffix(String path) {
+        return suffix(path, '.');
+    }
+
     public static String suffix(String path, Character flag) {
         Asserts.hasText(path);
-        return Strings.commonSuffix(path, flag.toString());
+        int i = path.lastIndexOf(flag);
+        if (i <= 0) {
+            return path;
+        }
+        return path.substring(i);
     }
 
     public static String[] splitWithSuffix(String path, Character flag) {
@@ -61,5 +69,42 @@ public class FileKit {
         char[] buff = new char[inputStream.available()];
         bufferedReader.read(buff, 0, inputStream.available());
         return new String(buff);
+    }
+
+    /**
+     * Returns the temp file through source file that avoid can't read file from jar.
+     *
+     * @param sourceFile the source file.
+     * @param repeated   whether repeated generation.
+     * @return the temp fil.
+     */
+    public static String tempFile(String sourceFile, boolean repeated) throws IOException {
+        InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(sourceFile);
+        String name = FilenameKit.getName(sourceFile);
+
+        String tempPath = System.getProperty("java.io.tmpdir").endsWith("/") ?
+                System.getProperty("java.io.tmpdir") + name :
+                System.getProperty("java.io.tmpdir") + "/" + name;
+
+        File tempFile = new File(tempPath);
+        if (tempFile.exists() && !repeated) {
+            return tempFile.getAbsolutePath();
+        }
+        IOUtils.copy(input, new FileOutputStream(tempFile));
+        String absolutePath = tempFile.getAbsolutePath();
+        // Resolve window path issues.
+        if (absolutePath.startsWith("/") && System.getProperty("os.name").contains("Windows")) {
+            absolutePath.substring(1);
+        }
+        return absolutePath;
+    }
+
+    public static String tempFile(String sourceFile) throws IOException {
+        return tempFile(sourceFile, false);
+    }
+
+    public static void main(String[] args) {
+        String property = System.getProperty("java.io.tmpdir");
+        System.out.println(property);
     }
 }
