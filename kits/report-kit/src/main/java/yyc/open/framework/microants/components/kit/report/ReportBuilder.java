@@ -3,6 +3,7 @@ package yyc.open.framework.microants.components.kit.report;
 import org.apache.http.util.Asserts;
 import yyc.open.framework.microants.components.kit.common.BeansKit;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -178,6 +179,10 @@ public class ReportBuilder {
         Asserts.check(globalConfig != null, "Report Runtime initialize fail.");
 
         BeansKit.copyPropertiesIsNull(globalConfig, reportConfig);
+
+        if (!reportConfig.getOutputPath().endsWith(File.separator)) {
+            reportConfig.setOutputPath(reportConfig.getOutputPath() + File.separator);
+        }
 
         // Create report status.
         return new Report(reportConfig, status);

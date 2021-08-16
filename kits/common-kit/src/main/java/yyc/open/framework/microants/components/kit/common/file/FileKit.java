@@ -56,7 +56,7 @@ public class FileKit {
                 file.mkdirs();
             }
         } else {
-            String newDir = directory.startsWith("/") ? directory : "/" + directory;
+            String newDir = directory.startsWith(File.separator) ? directory : File.separator + directory;
             new File(System.getProperty("user.dir") + newDir).mkdirs();
         }
     }
@@ -82,9 +82,9 @@ public class FileKit {
         InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(sourceFile);
         String name = FilenameKit.getName(sourceFile);
 
-        String tempPath = System.getProperty("java.io.tmpdir").endsWith("/") ?
+        String tempPath = System.getProperty("java.io.tmpdir").endsWith(File.separator) ?
                 System.getProperty("java.io.tmpdir") + name :
-                System.getProperty("java.io.tmpdir") + "/" + name;
+                System.getProperty("java.io.tmpdir") + File.separator + name;
 
         File tempFile = new File(tempPath);
         if (tempFile.exists() && !repeated) {
@@ -93,7 +93,7 @@ public class FileKit {
         IOUtils.copy(input, new FileOutputStream(tempFile));
         String absolutePath = tempFile.getAbsolutePath();
         // Resolve window path issues.
-        if (absolutePath.startsWith("/") && System.getProperty("os.name").contains("Windows")) {
+        if (absolutePath.startsWith(File.separator) && System.getProperty("os.name").contains("Windows")) {
             absolutePath.substring(1);
         }
         return absolutePath;
