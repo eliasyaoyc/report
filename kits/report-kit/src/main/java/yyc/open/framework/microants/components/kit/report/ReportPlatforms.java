@@ -34,7 +34,7 @@ public enum ReportPlatforms {
      */
     public static ReportPlatforms getPlatforms(String name) {
         for (ReportPlatforms pf : ReportPlatforms.values()) {
-            if (name.equals(pf.getName())) {
+            if (name.startsWith(pf.getName())) {
                 return pf;
             }
         }
