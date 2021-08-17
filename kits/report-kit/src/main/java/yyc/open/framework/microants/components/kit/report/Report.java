@@ -92,6 +92,8 @@ public class Report {
 
             List<ReportTask> tasks = taskRegistry.createTask(config, entity);
             if (CollectionUtils.isEmpty(tasks)) {
+                // Notice：in situation that task collections is empty also needs to generation report.
+                report(rest, entity, parallel);
                 return;
             }
 
