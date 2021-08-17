@@ -12,6 +12,8 @@ import yyc.open.framework.microants.components.kit.report.ReportBuilder;
 import yyc.open.framework.microants.components.kit.report.ReportConfig;
 import yyc.open.framework.microants.components.kit.report.ReportRuntime;
 
+import java.io.File;
+
 /**
  * {@link MicroantsReportAutoConfiguration}
  *
@@ -28,6 +30,20 @@ public class MicroantsReportAutoConfiguration {
     public Report report(MicroantsReportProperties properties) {
         ReportConfig reportConfig = new ReportConfig();
         BeansKit.copyProperties(properties, reportConfig);
+
+        if (!new File(reportConfig.getOutputPath()).isAbsolute()) {
+            String parentPath = System.getProperty("user.dir");
+            File file;
+            if (parentPath.endsWith(File.separator) || reportConfig.getOutputPath().startsWith(File.separator)) {
+                file = new File(parentPath + reportConfig.getOutputPath());
+            } else {
+                file = new File(parentPath + File.separator + reportConfig.getOutputPath());
+            }
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            reportConfig.setOutputPath(file.getAbsolutePath());
+        }
 
         ReportRuntime reportRuntime = new ReportRuntime();
         reportRuntime.start(properties.getEchart());
