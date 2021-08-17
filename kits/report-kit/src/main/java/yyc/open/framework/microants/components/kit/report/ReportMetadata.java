@@ -108,7 +108,7 @@ public class ReportMetadata extends Task {
         List<List<ReportData>> data = this.getContent().getData();
         data.stream().forEach(d -> {
             d.stream().filter(i -> ReportEnums.isCharts(i.getType())).forEach(echart -> {
-                if (echart.getTaskId().equals(taskId)) {
+                if (echart.getTaskId() != null && echart.getTaskId().equals(taskId)) {
                     echart.setBase64(base64);
                 }
             });

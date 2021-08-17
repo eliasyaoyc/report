@@ -76,6 +76,10 @@ public enum ReportEnums implements ReportEnumsInterface {
      * @return
      */
     public static boolean isCharts(ReportEnums type) {
+        if (type == null) {
+            return false;
+        }
+
         if (type == ReportEnums.BAR ||
                 type == ReportEnums.CROSS_BAR ||
                 type == ReportEnums.CROSS_MULTI_BAR ||
