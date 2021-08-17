@@ -163,7 +163,7 @@ public class ReportMedataBuilder {
         }
 
         public ReportMetadata build() {
-            if (builder.catalogue == null && builder.content != null) {
+            if ((builder.catalogue == null || builder.catalogue.getChapters().isEmpty()) && builder.content != null) {
                 // dynamic generate catalogue.
                 builder.catalogue = dynamicGenerateCatalogue(builder.content);
             }
@@ -182,7 +182,7 @@ public class ReportMedataBuilder {
          * @param content report content including text, echarts etc.
          */
         private ReportMetadata.ReportCatalogue dynamicGenerateCatalogue(@NonNull ReportMetadata.ReportContent content) {
-            Asserts.isNull(content, "Content is empty.");
+            Asserts.notNull(content, "Content is empty.");
             List<String> chapter = content.getChapter();
             List<List<String>> indices = content.getIndices();
             if (CollectionUtils.isEmpty(chapter) && CollectionUtils.isEmpty(indices)) {

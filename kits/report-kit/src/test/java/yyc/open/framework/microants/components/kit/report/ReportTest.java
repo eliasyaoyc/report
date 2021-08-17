@@ -97,7 +97,7 @@ public class ReportTest {
 
         ReportMetadata metadata = ReportMetadata.builder()
                 .type(ReportEnums.HTML)
-                .partTitle().title("综合安全报表").description("Comprehensive Security Report").background(BACKGROUND_URL)
+                .partTitle().title("综合安全报表").description("").background(BACKGROUND_URL)
                 .partInfo()
                 .info("报告时间范围", "2017-07-01至2021-09-30")
                 .info("报告生成时间", "2021-10-01 08:00:00")
