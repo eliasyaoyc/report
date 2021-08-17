@@ -45,7 +45,7 @@ public class ChartHandler<T> extends AbstractHandler<T> {
 
             Map<String, Object> opt = gson.fromJson(option, Map.class);
 
-            String imageName = t.getOutputPath() + t.getReportName() + t.getTaskId() + ".png";
+            String imageName = t.getOutputPath() + t.getTaskId() + ".png";
 
             PhantomJS req = PhantomJS.builder()
                     .opt(opt)
