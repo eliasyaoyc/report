@@ -10,6 +10,7 @@ import yyc.open.framework.microants.components.kit.report.exceptions.ReportExcep
 import yyc.open.framework.microants.components.kit.report.handler.FileHandler;
 import yyc.open.framework.microants.components.kit.report.handler.ReportHandlerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -59,7 +60,7 @@ public class Report {
     /**
      * Generate the report that supports batch generation.
      */
-    public Map<String, String> generateReport(List<ReportMetadata> reportEntities) {
+    public Map<String, List<String>> generateReport(List<ReportMetadata> reportEntities) {
         return generate(reportEntities, false);
     }
 
@@ -68,12 +69,12 @@ public class Report {
      * <p>
      * Generate the report, in additional supports parallel generation.
      */
-    private Map<String, String> generateReportParallel(List<ReportMetadata> reportEntities) {
+    private Map<String, List<String>> generateReportParallel(List<ReportMetadata> reportEntities) {
         return generate(reportEntities, true);
     }
 
 
-    private Map<String, String> generate(List<ReportMetadata> reportEntities, boolean parallel) {
+    private Map<String, List<String>> generate(List<ReportMetadata> reportEntities, boolean parallel) {
         // 1. Check report status whether running
         if (checkReportState()) {
             throw new ReportException("[Report Runtime] has not started, please start first.");
@@ -83,7 +84,7 @@ public class Report {
             return null;
         }
 
-        Map<String, String> rest = Maps.newHashMapWithExpectedSize(reportEntities.size());
+        Map<String, List<String>> rest = Maps.newHashMapWithExpectedSize(reportEntities.size());
 
         // 2. Create the task collections.
         reportEntities.stream().forEach(entity -> {
@@ -141,14 +142,16 @@ public class Report {
         return rest;
     }
 
-    private void report(Map<String, String> rest, ReportMetadata metadata, boolean parallel) {
+    private void report(Map<String, List<String>> rest, ReportMetadata metadata, boolean parallel) {
         // Start execute root task(report).
         reportStatus.publishEvent(metadata.getReportId(), ReportEvent.EventType.REPORT);
         this.handlerFactory.handle(metadata, parallel, new ReportCallback() {
             @Override
             public void onReceived(String taskId, String result, ReportEvent.EventType type) {
                 reportStatus.publishEvent(taskId, ReportEvent.EventType.COMPLETED);
-                rest.put(metadata.getReportId(), result);
+                List<String> value = rest.getOrDefault(metadata.getReportId(), new ArrayList<>());
+                value.add(result);
+                rest.put(metadata.getReportId(), value);
             }
 
             @Override

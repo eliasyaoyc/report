@@ -134,7 +134,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
                             generateFreemarkerTemplate(metadata.getTemplatePath(), assembleReportEntity(metadata)) :
                             generateFreemarkerTemplateByDefault(config.getTemplatesPath(), metadata.getReportType().getTemplateName(), assembleReportEntity(metadata));
 
-                    fileName = config.getOutputPath() + metadata.getReportId() + ".html";
+                    fileName = config.getOutputPath() + metadata.getReportName() + ".html";
                     File file = new File(fileName);
 
                     if (!file.getParentFile().exists()) {
@@ -177,7 +177,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
         String newName = file.getName().replace(".html", ".pdf");
         String filePath = file.getParent();
         ReportPlatforms.pdfConvertCommand(htmlPath, newName, filePath, config.getExecPath(), config.getJsPdfPath());
-        return newName;
+        return htmlPath.replace(".html", ".pdf");
     }
 
     /**
