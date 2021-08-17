@@ -21,6 +21,7 @@ import yyc.open.framework.microants.components.kit.report.exceptions.ReportExcep
 import yyc.open.framework.microants.components.kit.thirdpart.xwpdt.FastWordKit;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -141,7 +142,9 @@ public class FileHandler<T> extends AbstractHandler<T> {
                         file.getParentFile().mkdirs();
                     }
 
-                    writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
+                    LOGGER.info("[FileHandler] write html json: {}", option);
+
+                    writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
                     writer.write(option);
                     writer.flush();
 
