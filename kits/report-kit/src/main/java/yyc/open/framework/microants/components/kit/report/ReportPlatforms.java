@@ -85,11 +85,11 @@ public enum ReportPlatforms {
         ReportPlatforms platforms = ReportPlatforms.getPlatforms(property);
 
         try {
-            String path = FileKit.tempFile(execPath + platforms);
+            String path = FileKit.tempFile(execPath + platforms.getPath());
 
             command = new StringBuilder(path)
                     .append(" ")
-                    .append(FileKit.getResourcePath(jsPdfPath))
+                    .append(FileKit.tempFile(jsPdfPath))
                     .append(" " + htmlPath)
                     .append(" " + pdfName)
                     .append(" " + outputPath)
