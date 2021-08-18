@@ -16,6 +16,7 @@ import javax.annotation.Nonnull;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.CRC32;
 
 /**
@@ -44,11 +45,6 @@ public class ReportTaskRegistry {
 
     private ReportTaskRegistry(ReportStatus reportStatus, final String output) {
         this.reportStatus = reportStatus;
-        this.tasks = Maps.newConcurrentMap();
-        this.failTasks = Maps.newConcurrentMap();
-        this.paths = Maps.newConcurrentMap();
-        this.base64Maps = Maps.newConcurrentMap();
-        this.reports = Maps.newConcurrentMap();
         this.output = output;
         load(output);
     }
@@ -58,11 +54,20 @@ public class ReportTaskRegistry {
      */
     private void load(String path) {
         Asserts.hasText(path);
-        this.reports = gson.fromJson(readJsonFile(this.output + METADATA_FILE + "/report.json"), Map.class);
-        this.tasks = gson.fromJson(readJsonFile(this.output + METADATA_FILE + "/tasks.json"), Map.class);
-        this.failTasks = gson.fromJson(readJsonFile(this.output + METADATA_FILE + "/failTasks.json"), Map.class);
-        this.paths = gson.fromJson(readJsonFile(this.output + METADATA_FILE + "/paths.json"), Map.class);
-        this.base64Maps = gson.fromJson(readJsonFile(this.output + METADATA_FILE + "/base64Maps.json"), Map.class);
+        this.reports = gson.fromJson(readJsonFile(this.output + METADATA_FILE + "/report.json"), ConcurrentHashMap.class) == null ? new ConcurrentHashMap<>() :
+                gson.fromJson(readJsonFile(this.output + METADATA_FILE + "/report.json"), ConcurrentHashMap.class);
+
+        this.tasks = gson.fromJson(readJsonFile(this.output + METADATA_FILE + "/tasks.json"), ConcurrentHashMap.class) == null ? new ConcurrentHashMap<>() :
+                gson.fromJson(readJsonFile(this.output + METADATA_FILE + "/tasks.json"), ConcurrentHashMap.class);
+
+        this.failTasks = gson.fromJson(readJsonFile(this.output + METADATA_FILE + "/failTasks.json"), ConcurrentHashMap.class) == null ? new ConcurrentHashMap<>() :
+                gson.fromJson(readJsonFile(this.output + METADATA_FILE + "/failTasks.json"), ConcurrentHashMap.class);
+
+        this.paths = gson.fromJson(readJsonFile(this.output + METADATA_FILE + "/paths.json"), ConcurrentHashMap.class) == null ? new ConcurrentHashMap<>() :
+                gson.fromJson(readJsonFile(this.output + METADATA_FILE + "/paths.json"), ConcurrentHashMap.class);
+
+        this.base64Maps = gson.fromJson(readJsonFile(this.output + METADATA_FILE + "/base64Maps.json"), ConcurrentHashMap.class) == null ? new ConcurrentHashMap<>() :
+                gson.fromJson(readJsonFile(this.output + METADATA_FILE + "/base64Maps.json"), ConcurrentHashMap.class);
     }
 
     String readJsonFile(String fileName) {
@@ -110,19 +115,22 @@ public class ReportTaskRegistry {
             String file = f.getAbsolutePath().endsWith(File.separator) ? f.getAbsolutePath() : f.getAbsolutePath() + File.separator;
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file + "report.json"), StandardCharsets.UTF_8));
             writer.write(reports);
+            writer.flush();
 
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file + "tasks.json"), StandardCharsets.UTF_8));
             writer.write(tasks);
+            writer.flush();
 
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file + "failTasks.json"), StandardCharsets.UTF_8));
             writer.write(failTasks);
+            writer.flush();
 
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file + "paths.json"), StandardCharsets.UTF_8));
             writer.write(paths);
+            writer.flush();
 
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file + "base64Maps.json"), StandardCharsets.UTF_8));
             writer.write(base64Maps);
-
             writer.flush();
         } catch (IOException e) {
             e.printStackTrace();

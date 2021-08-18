@@ -105,11 +105,12 @@ public class Report {
         reportEntities.stream().forEach(entity -> {
 
             // Create report dir.
-            File outputPath = new File(config.getOutputPath() + entity.getReportId() + "/");
+            File outputPath = new File(config.getOutputPath() + entity.getReportId());
             if (!outputPath.exists()) {
                 outputPath.mkdirs();
             }
-            entity.setPath(outputPath.getAbsolutePath());
+            entity.setPath(outputPath.getAbsolutePath().endsWith(File.separator) ? outputPath.getAbsolutePath() :
+                    outputPath.getAbsolutePath() + File.separator);
 
             // Check report type whether is null (type is required parameter).
             Asserts.check(entity.getReportType() != null, "[Constructor Report] the report type is must, please setup before build.");

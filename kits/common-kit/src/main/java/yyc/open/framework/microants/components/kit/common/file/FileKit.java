@@ -2,6 +2,7 @@ package yyc.open.framework.microants.components.kit.common.file;
 
 import com.google.common.collect.Maps;
 import org.apache.commons.io.IOUtils;
+import sun.misc.BASE64Encoder;
 import yyc.open.framework.microants.components.kit.common.validate.Asserts;
 
 import java.io.*;
@@ -71,6 +72,36 @@ public class FileKit {
         char[] buff = new char[inputStream.available()];
         bufferedReader.read(buff, 0, inputStream.available());
         return new String(buff);
+    }
+
+    public static String getBase64FromPath(String path) {
+        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
+        return getBase64FromInputStream(inputStream);
+    }
+
+    public static String getBase64FromInputStream(InputStream in) {
+        byte[] data = null;
+        try {
+            ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
+            byte[] buff = new byte[100];
+            int rc = 0;
+            while ((rc = in.read(buff, 0, 100)) > 0) {
+                swapStream.write(buff, 0, rc);
+            }
+            data = swapStream.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        BASE64Encoder encoder = new BASE64Encoder();
+        return "data:img/jpg;base64," + encoder.encode(data);
     }
 
     /**
