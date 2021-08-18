@@ -157,7 +157,6 @@ public class FastWordKit {
             return this;
         }
 
-
         public FastWordBuilder image(String url, PictureType type) {
             try {
                 PictureRenderData background = Pictures.ofStream(new FileInputStream(url), type)
@@ -169,6 +168,16 @@ public class FastWordKit {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+            return this;
+        }
+
+        public FastWordBuilder image(FileInputStream stream, PictureType type) {
+            PictureRenderData background = Pictures.ofStream(stream, type)
+                    .center()
+                    .fitSize()
+                    .create();
+            this.documentBuilder.addParagraph(Paragraphs.of(background).create());
+            this.blank();
             return this;
         }
 
