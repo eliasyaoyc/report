@@ -56,10 +56,10 @@ public class FileHandler<T> extends AbstractHandler<T> {
             // Determine which file convert to.
             switch (metadata.getReportType()) {
                 case WORD:
-                    fileName = config.getOutputPath() + metadata.getReportId() + ".docx";
+                    fileName = metadata.getPath() + metadata.getReportId() + ".docx";
 
                     FastWordKit.FastWordBuilder builder = FastWordKit.builder()
-                            .outputPath(config.getOutputPath())
+                            .outputPath(metadata.getPath())
                             .fileName(metadata.getReportId() + ".docx");
                     if (!Objects.isNull(metadata.getTitle())) {
                         builder.image(metadata.getTitle().getBackground(), PictureType.suggestFileType(metadata.getTitle().getBackground()));
@@ -135,7 +135,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
                             generateFreemarkerTemplate(metadata.getTemplatePath(), assembleReportEntity(metadata)) :
                             generateFreemarkerTemplateByDefault(config.getTemplatesPath(), metadata.getReportType().getTemplateName(), assembleReportEntity(metadata));
 
-                    fileName = config.getOutputPath() + metadata.getReportId() + ".html";
+                    fileName = metadata.getPath() + metadata.getReportId() + ".html";
                     File file = new File(fileName);
 
                     if (!file.getParentFile().exists()) {

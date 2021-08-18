@@ -1,9 +1,11 @@
 package yyc.open.framework.microants.components.kit.common.file;
 
+import com.google.common.collect.Maps;
 import org.apache.commons.io.IOUtils;
 import yyc.open.framework.microants.components.kit.common.validate.Asserts;
 
 import java.io.*;
+import java.util.Map;
 
 /**
  * {@link FileKit}
@@ -155,8 +157,28 @@ public class FileKit {
         }
     }
 
-    public static void main(String[] args) {
-        InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("/Users/eliasyao/Desktop/microants-components/kits/report-kit/target/classes/js/echarts-util.js");
-        System.out.println(resourceAsStream);
+    public static void main(String[] args) throws IOException {
+//        Map<String, String> load = loadPackage("/Users/eliasyao/Desktop/raft-demo");
+//        System.out.println(load);
+        deleteFile("/Users/eliasyao/Desktop/aaa");
+    }
+
+    public static Map<String, String> loadPackage(String path) {
+        Map<String, String> f = Maps.newHashMap();
+        innerLoad(f, path);
+        return f;
+    }
+
+    private static void innerLoad(Map<String, String> f, String path) {
+        File file = new File(path);
+        if (file.exists() && file.isDirectory()) {
+            File[] files = file.listFiles();
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].isDirectory()) {
+                    f.putIfAbsent(files[i].getName(), files[i].getAbsolutePath());
+                    innerLoad(f, files[i].getAbsolutePath());
+                }
+            }
+        }
     }
 }

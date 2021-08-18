@@ -2,6 +2,7 @@ package yyc.open.framework.microants.components.kit.report;
 
 import com.google.common.collect.Maps;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import yyc.open.framework.microants.components.kit.common.uuid.UUIDsKit;
 import yyc.open.framework.microants.components.kit.common.validate.Asserts;
 import yyc.open.framework.microants.components.kit.common.validate.NonNull;
@@ -167,6 +168,11 @@ public class ReportMedataBuilder {
                 // dynamic generate catalogue.
                 builder.catalogue = dynamicGenerateCatalogue(builder.content);
             }
+            // Notice：there has two image that not generation but we need to handle it.
+            if (StringUtils.isNotEmpty(builder.title.getBackground())) {
+
+            }
+
             return new ReportMetadata(builder.reportId,
                     builder.reportName,
                     builder.reportType,

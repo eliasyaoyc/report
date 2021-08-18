@@ -31,6 +31,8 @@ public class ReportMetadata extends Task {
 
     private String templatePath;
 
+    private String path;
+
     /**
      * Report info.
      */
@@ -70,7 +72,7 @@ public class ReportMetadata extends Task {
     public static class ReportTitle {
         private String background;
         private String title;
-        private String description;
+        private String description = "";
     }
 
     /**

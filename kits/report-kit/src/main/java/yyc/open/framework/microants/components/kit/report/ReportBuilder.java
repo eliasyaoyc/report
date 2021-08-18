@@ -184,7 +184,17 @@ public class ReportBuilder {
             reportConfig.setOutputPath(reportConfig.getOutputPath() + File.separator);
         }
 
+        Report report = new Report(reportConfig, status);
+
+        // Register shutdown hook.
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                report.close();
+            }
+        });
+
         // Create report status.
-        return new Report(reportConfig, status);
+        return report;
     }
 }

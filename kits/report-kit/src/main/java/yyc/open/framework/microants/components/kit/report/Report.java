@@ -10,6 +10,8 @@ import yyc.open.framework.microants.components.kit.report.exceptions.ReportExcep
 import yyc.open.framework.microants.components.kit.report.handler.FileHandler;
 import yyc.open.framework.microants.components.kit.report.handler.ReportHandlerFactory;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +43,7 @@ public class Report {
         this.taskRegistry = ReportTaskRegistry
                 .ReportRegistryEnum
                 .INSTANCE
-                .getReportRegistry(status);
+                .getReportRegistry(status, config.getOutputPath());
     }
 
     /**
@@ -54,6 +56,19 @@ public class Report {
             FileHandler.convertToPdf(htmlPath, config);
         } catch (Exception e) {
             LOGGER.error("[Report] convert html to pdf failure {}", e);
+        }
+    }
+
+    /**
+     * Delete report all resource(image,report self and mapping in memory).
+     *
+     * @param reportId represent report identity id.
+     */
+    public void deleteReport(String reportId) {
+        try {
+            this.taskRegistry.deleteReport(reportId);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -88,6 +103,14 @@ public class Report {
 
         // 2. Create the task collections.
         reportEntities.stream().forEach(entity -> {
+
+            // Create report dir.
+            File outputPath = new File(config.getOutputPath() + entity.getReportId() + "/");
+            if (!outputPath.exists()) {
+                outputPath.mkdirs();
+            }
+            entity.setPath(outputPath.getAbsolutePath());
+
             // Check report type whether is null (type is required parameter).
             Asserts.check(entity.getReportType() != null, "[Constructor Report] the report type is must, please setup before build.");
 
@@ -113,7 +136,7 @@ public class Report {
                                     latch.countDown();
                                     // Add task result.
                                     entity.setSubTaskExecutionResult(taskId, result);
-                                    taskRegistry.updateChecksum(taskId, result);
+                                    taskRegistry.updateChecksum(entity.getReportId(), taskId, result);
                                     break;
                                 case COMPLETED:
                                     reportStatus.publishEvent(taskId, ReportEvent.EventType.COMPLETED);
@@ -171,5 +194,12 @@ public class Report {
      */
     boolean checkReportState() {
         return ReportContextProvider.INSTANCE.getContext().getReportStatus() == null;
+    }
+
+    void close() {
+        LOGGER.info("[Report] start closing.");
+        // Resource close.
+        this.threadPool.shutdown();
+        this.taskRegistry.close();
     }
 }

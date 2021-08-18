@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import yyc.open.framework.microants.components.kit.report.entity.ReportData;
 
 import java.text.DecimalFormat;
@@ -18,6 +19,7 @@ import java.util.*;
  */
 @Builder
 @Getter
+@Setter
 public class ReportTask extends Task {
     private String reportId;
     private String reportName;
@@ -25,6 +27,7 @@ public class ReportTask extends Task {
     private String taskId;
     private Integer priority;
     private String templatePath;
+    private Long checksum;
     private String data;
 
     public static String parseReportData(ReportData data) {
