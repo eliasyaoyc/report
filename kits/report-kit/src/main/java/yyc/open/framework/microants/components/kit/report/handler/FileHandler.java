@@ -12,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import yyc.open.framework.microants.components.kit.common.annotations.VisibleForTesting;
-import yyc.open.framework.microants.components.kit.common.file.FileKit;
 import yyc.open.framework.microants.components.kit.common.validate.Asserts;
 import yyc.open.framework.microants.components.kit.report.*;
 import yyc.open.framework.microants.components.kit.report.commons.Processor;
@@ -63,7 +62,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
                             .outputPath(metadata.getPath())
                             .fileName(metadata.getReportId() + ".docx");
                     if (!Objects.isNull(metadata.getTitle())) {
-                        builder.image(FileKit.readFileAsStream(metadata.getTitle().getBackground()), PictureType.suggestFileType(metadata.getTitle().getBackground()));
+                        builder.image(metadata.getTitle().getBackground(), PictureType.suggestFileType(metadata.getTitle().getBackground()));
                         builder.smallText(metadata.getTitle().getDescription(), true);
                         builder.text(metadata.getTitle().getTitle(), 48d, true);
                     }
@@ -74,7 +73,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
                         List<String> values = new ArrayList<>(labels.values());
                         builder.table(Arrays.asList(keys, values), true);
                         builder.blank();
-                        builder.image(FileKit.readFileAsStream(metadata.getTitle().getBackground()), PictureType.suggestFileType(metadata.getInfo().getImage()));
+                        builder.image(metadata.getTitle().getBackground(), PictureType.suggestFileType(metadata.getInfo().getImage()));
                     }
 
                     if (!Objects.isNull(metadata.getCatalogue())) {
