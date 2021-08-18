@@ -18,7 +18,7 @@
     <name>Microants Components</name>
 
     <properties>
-        <revision>1.0.6-Alpha</revision>
+        <revision>1.0.7-Alpha</revision>
         <java.version>1.8</java.version>
 
         <kryo.version>5.0.0-RC5</kryo.version>

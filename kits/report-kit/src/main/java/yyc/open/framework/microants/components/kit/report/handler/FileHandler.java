@@ -73,7 +73,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
                         List<String> values = new ArrayList<>(labels.values());
                         builder.table(Arrays.asList(keys, values), true);
                         builder.blank();
-                        builder.image(metadata.getTitle().getBackground(), PictureType.suggestFileType(metadata.getInfo().getImage()));
+                        builder.image(metadata.getInfo().getImage(), PictureType.suggestFileType(metadata.getInfo().getImage()));
                     }
 
                     if (!Objects.isNull(metadata.getCatalogue())) {

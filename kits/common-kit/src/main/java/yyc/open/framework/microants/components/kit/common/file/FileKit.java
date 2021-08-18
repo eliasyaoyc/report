@@ -79,6 +79,16 @@ public class FileKit {
         return getBase64FromInputStream(inputStream);
     }
 
+    public static String getBase64FromInputStream(String path) {
+        try {
+            FileInputStream fileInputStream = new FileInputStream(path);
+            return getBase64FromInputStream(fileInputStream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static String getBase64FromInputStream(InputStream in) {
         byte[] data = null;
         try {
@@ -191,7 +201,13 @@ public class FileKit {
     public static void main(String[] args) throws IOException {
 //        Map<String, String> load = loadPackage("/Users/eliasyao/Desktop/raft-demo");
 //        System.out.println(load);
-        deleteFile("/Users/eliasyao/Desktop/aaa");
+//        FileInputStream fileInputStream = new FileInputStream("/var/folders/5p/p31bwvsj21jckn1b_j26wrpc0000gn/T/img_background.png");
+//        String base64FromPath = getBase64FromInputStream(fileInputStream);
+//        System.out.println(base64FromPath);
+
+        File file = new File("/Users/eliasyao/Desktop/nta-parent/reports/1qjTWHsBgqP5XtlRekEG/1qjTWHsBgqP5XtlRekEG.pdf");
+        boolean exists = file.exists();
+        System.out.println(exists);
     }
 
     public static Map<String, String> loadPackage(String path) {
