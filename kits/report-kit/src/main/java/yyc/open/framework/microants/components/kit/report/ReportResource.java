@@ -18,6 +18,6 @@ import java.util.List;
 public class ReportResource {
     private String reportId;
     private List<String> taskId;
-    private List<Long> checksums;
+    private List<String> checksums;
     private String reportRootPath;
 }

@@ -35,8 +35,8 @@ public class ReportTaskRegistry {
     private Map<String, ReportResource /* reportId*/> reports;
     private Map<String, ReportTask> tasks;
     private Map<String, ReportTask> failTasks;
-    private Map<Long, String /*checksum, image file*/> paths;
-    private Map<Long, String /*checksum, image base64*/> base64Maps;
+    private Map<String, String /*checksum, image file*/> paths;
+    private Map<String, String /*checksum, image base64*/> base64Maps;
     private final String output;
 
     {
@@ -70,7 +70,22 @@ public class ReportTaskRegistry {
                 gson.fromJson(readJsonFile(this.output + METADATA_FILE + "/base64Maps.json"), ConcurrentHashMap.class);
     }
 
-    String readJsonFile(String fileName) {
+    static void test(String path) {
+        Gson gson = new GsonBuilder().create();
+        String s = readJsonFile("/Users/eliasyao/Desktop/nta-parent/reports/" + METADATA_FILE + "/paths.json");
+        ConcurrentHashMap concurrentHashMap = gson.fromJson(s, ConcurrentHashMap.class);
+        System.out.println(concurrentHashMap);
+
+//        this.base64Maps = gson.fromJson(readJsonFile(this.output + METADATA_FILE + "/base64Maps.json"), ConcurrentHashMap.class) == null ? new ConcurrentHashMap<>() :
+//                gson.fromJson(readJsonFile(this.output + METADATA_FILE + "/base64Maps.json"), ConcurrentHashMap.class);
+    }
+
+    public static void main(String[] args) {
+        test("");
+    }
+
+    static String readJsonFile(String fileName) {
+        Gson gson = new GsonBuilder().create();
         String jsonStr = "";
         try {
             File jsonFile = new File(fileName);
@@ -157,7 +172,7 @@ public class ReportTaskRegistry {
             ReportResource resource = this.reports.remove(reportId);
             FileKit.deleteFile(resource.getReportRootPath());
             List<String> taskId = resource.getTaskId();
-            List<Long> checksums = resource.getChecksums();
+            List<String> checksums = resource.getChecksums();
             taskId.stream().forEach(id -> {
                 this.tasks.remove(id);
                 this.failTasks.remove(id);
@@ -179,7 +194,7 @@ public class ReportTaskRegistry {
         if (task == null) {
             return;
         }
-        Long checksum = checksum(task);
+        String checksum = checksum(task);
         this.paths.putIfAbsent(checksum, path);
         this.base64Maps.putIfAbsent(checksum, imageToBase64ByLocal(path));
 
@@ -236,7 +251,7 @@ public class ReportTaskRegistry {
                     item.setTaskId(taskId);
 
                     // Calculate task checksum.
-                    Long checksum = checksum(task);
+                    String checksum = checksum(task);
                     if (this.paths.containsKey(checksum)) { // Must be exists.
                         task.setChecksum(checksum); // Used to clear resource.
                         String value = ""; // base64 if report type is pdf or html, otherwise url.
@@ -267,10 +282,10 @@ public class ReportTaskRegistry {
      * @param task
      * @return checksum.
      */
-    private Long checksum(ReportTask task) {
+    private String checksum(ReportTask task) {
         CRC32 crc32 = new CRC32();
         crc32.update(task.getData().getBytes(StandardCharsets.UTF_8), 0, task.getData().length());
-        return crc32.getValue();
+        return String.valueOf(crc32.getValue());
     }
 
     /**

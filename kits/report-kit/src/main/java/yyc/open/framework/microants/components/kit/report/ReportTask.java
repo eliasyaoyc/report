@@ -27,7 +27,7 @@ public class ReportTask extends Task {
     private String taskId;
     private Integer priority;
     private String templatePath;
-    private Long checksum;
+    private String checksum;
     private String data;
 
     public static String parseReportData(ReportData data) {
