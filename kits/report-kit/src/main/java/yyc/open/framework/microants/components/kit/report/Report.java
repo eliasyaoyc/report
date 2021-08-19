@@ -136,8 +136,7 @@ public class Report {
                                     reportStatus.publishEvent(taskId, result, ReportEvent.EventType.PARTIALLY_COMPLETED);
                                     latch.countDown();
                                     // Add task result.
-                                    entity.setSubTaskExecutionResult(taskId, result);
-                                    taskRegistry.updateChecksum(entity.getReportId(), taskId, result);
+                                    taskRegistry.updateChecksumAndTask(entity, taskId, result);
                                     break;
                                 case COMPLETED:
                                     reportStatus.publishEvent(taskId, ReportEvent.EventType.COMPLETED);

@@ -188,7 +188,7 @@ public class ReportTaskRegistry {
         this.reports.putIfAbsent(reportResource.getReportId(), reportResource);
     }
 
-    public void updateChecksum(String reportId, String taskId, String path) {
+    public void updateChecksumAndTask(ReportMetadata metadata, String taskId, String path) {
         // Notice：the partially completed event only scoped to echarts generation.
         ReportTask task = this.tasks.remove(taskId);
         if (task == null) {
@@ -196,9 +196,13 @@ public class ReportTaskRegistry {
         }
         String checksum = checksum(task);
         this.paths.putIfAbsent(checksum, path);
-        this.base64Maps.putIfAbsent(checksum, imageToBase64ByLocal(path));
 
-        ReportResource reportResource = this.reports.get(reportId);
+        String base64 = imageToBase64ByLocal(path);
+        this.base64Maps.putIfAbsent(checksum, base64);
+
+        metadata.setSubTaskExecutionResult(taskId, metadata.getReportType() != ReportEnums.WORD ? base64 : path);
+
+        ReportResource reportResource = this.reports.get(metadata.getReportId());
         if (reportResource != null) {
             reportResource.getChecksums().add(checksum);
         }
