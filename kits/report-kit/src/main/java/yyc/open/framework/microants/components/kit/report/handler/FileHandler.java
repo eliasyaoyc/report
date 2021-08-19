@@ -142,8 +142,6 @@ public class FileHandler<T> extends AbstractHandler<T> {
                         file.getParentFile().mkdirs();
                     }
 
-                    LOGGER.info("[FileHandler] write html json: {}", option);
-
                     writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
                     writer.write(option);
                     writer.flush();
