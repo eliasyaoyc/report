@@ -18,8 +18,6 @@
 
     <modules>
         <module>circuitbreaker-starter</module>
-        <module>elasticsearch-orm-starter</module>
-        <module>security-starter</module>
         <module>report-starter</module>
     </modules>
 

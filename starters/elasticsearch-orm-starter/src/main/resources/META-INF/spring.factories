@@ -1,2 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  yyc.open.framework.microants.components.starter.elasticsearch.autoconfigure.MicroantsElasticsearchAutoConfiguration

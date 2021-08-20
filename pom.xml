@@ -12,7 +12,6 @@
     <modules>
         <module>starters</module>
         <module>kits</module>
-        <module>enhance</module>
     </modules>
 
     <name>Microants Components</name>
