@@ -99,8 +99,10 @@ public enum ReportPlatforms {
                 Runtime.getRuntime().exec("chmod 777 " + path);
             }
             LOGGER.info("[PDF generation] generate pdf command : {}", command);
-            Runtime.getRuntime().exec(command);
-        } catch (IOException e) {
+            Process p = Runtime.getRuntime().exec(command);
+            p.waitFor();
+            p.destroy();
+        } catch (Exception e) {
             throw new ReportException(String.format("[Report Runtime] exec command: %s fail", command), e);
         }
     }
