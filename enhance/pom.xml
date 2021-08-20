@@ -21,7 +21,6 @@
         <module>collections-enhance</module>
         <module>io-enhance</module>
         <module>injector-enhance</module>
-        <module>raft-enhance</module>
         <module>elasticsearch-orm-enhance</module>
     </modules>
 
