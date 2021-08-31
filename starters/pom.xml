@@ -19,6 +19,7 @@
     <modules>
         <module>circuitbreaker-starter</module>
         <module>report-starter</module>
+      <module>audit-starter</module>
     </modules>
 
     <artifactId>microants-components-starters</artifactId>

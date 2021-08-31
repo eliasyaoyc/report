@@ -9,7 +9,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>audit-kit</artifactId>
+  <artifactId>microants-components-audit-kit</artifactId>
   <name>Microants Components Audit Kit</name>
 
 
