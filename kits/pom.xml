@@ -20,7 +20,6 @@
         <module>http-kit</module>
         <module>thirdparty-kit</module>
         <module>common-kit</module>
-        <module>audit-kit</module>
     </modules>
 
 
