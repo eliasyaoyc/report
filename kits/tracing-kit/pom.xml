@@ -9,8 +9,8 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>audit-kit</artifactId>
-  <name>Microants Component Audit Kit</name>
+  <artifactId>tracing-kit</artifactId>
+  <name>Microants Component Tracing Kit</name>
 
   <dependencies>
     <dependency>

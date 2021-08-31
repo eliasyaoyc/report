@@ -8,7 +8,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class AuditOptions {
+public class TracingOptions {
 
 	/**
 	 *
@@ -16,7 +16,7 @@ public class AuditOptions {
 	private int scatterNum;
 
 
-	public static AuditOptions createDefault() {
-		return new AuditOptions();
+	public static TracingOptions createDefault() {
+		return new TracingOptions();
 	}
 }

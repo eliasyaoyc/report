@@ -9,13 +9,13 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Elias (siran0611@gmail.com)
  */
-public class Audit {
+public class Tracing {
 
-	private static final Logger LOG = LoggerFactory.getLogger(Audit.class);
+	private static final Logger LOG = LoggerFactory.getLogger(Tracing.class);
 
 	private List<Scatter> scatters;
 
-	protected Audit(@Nonnull final AuditOptions options) {
+	protected Tracing(@Nonnull final TracingOptions options) {
 		// Constructor scatter.
 		this.scatters = Lists.newArrayListWithCapacity(options.getScatterNum());
 		for (int _i = 0; _i < options.getScatterNum(); _i++) {

@@ -1,6 +1,6 @@
-# Audit Kit
+# Tracing Kit
 
-This is an audit kit that support user custom tracking log, for example, user can know what a method dose and what data is being
+This is an tracing kit that support user custom tracking log, for example, user can know what a method dose and what data is being
 modified.
 
 # Design
