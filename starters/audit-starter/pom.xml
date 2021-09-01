@@ -5,7 +5,8 @@
   <parent>
     <artifactId>microants-components-starters</artifactId>
     <groupId>yyc.open.framework</groupId>
-    <version>1.0.9-Alpha</version>
+    <version>${revision}</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 

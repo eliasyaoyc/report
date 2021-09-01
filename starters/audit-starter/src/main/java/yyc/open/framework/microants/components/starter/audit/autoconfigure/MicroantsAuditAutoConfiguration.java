@@ -16,7 +16,7 @@ public class MicroantsAuditAutoConfiguration {
 
 	@Bean
 	@ConditionalOnClass(MicroantsAuditProperties.class)
-	public Audit report(MicroantsAuditProperties properties) {
+	public Audit audit(MicroantsAuditProperties properties) {
 		return AuditBuilder.newInstance()
 				.disruptorBufferSize(properties.getDisruptorBufferSize())
 				.build();
