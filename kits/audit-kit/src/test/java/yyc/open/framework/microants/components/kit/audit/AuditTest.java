@@ -19,7 +19,7 @@ public class AuditTest {
 
 	@Test
 	public void testAudit() {
-		audit.publishEvent(new TestEntity("yyc", "sys", "1.1.1.1", "添加", "添加用户", true, 121212121L, ""));
+		audit.publishEvent(new TestEntity("yyc"));
 	}
 
 
@@ -30,9 +30,8 @@ public class AuditTest {
 		private String name;
 		private Integer age;
 
-		public TestEntity(String userName, String userRole, String ip, String action, String content, Boolean isSuccess,
-				Long createTime, String module) {
-			super(userName, userRole, ip, action, content, isSuccess, createTime, module);
+		public TestEntity(String name) {
+			this.name = name;
 		}
 	}
 }
