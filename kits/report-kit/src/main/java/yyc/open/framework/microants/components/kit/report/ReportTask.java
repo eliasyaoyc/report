@@ -3,13 +3,18 @@ package yyc.open.framework.microants.components.kit.report;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import yyc.open.framework.microants.components.kit.report.entity.ReportData;
-
-import java.text.DecimalFormat;
-import java.util.*;
 
 /**
  * {@link ReportTask}
@@ -76,14 +81,15 @@ public class ReportTask extends Task {
                                     Object[] types,
                                     Object[] datas) {
         // Calculate sum.
-        double sum = Arrays.stream(datas).mapToDouble(item -> Double.valueOf(item.toString())).sum();
+        Long sum = Arrays.stream(datas).mapToLong(item -> Long.valueOf(item.toString())).sum();
 
         DecimalFormat df = new DecimalFormat(".00");
 
         for (int i = 0; i < types.length; i++) {
-            Double data = Double.valueOf(datas[i].toString());
-            String bfb = String.valueOf(df.format(data / sum * 100));
-            String typeParam = types[i] + ":" + datas[i] + "(" + bfb + "%)";
+            float v = new BigDecimal(Float.valueOf(datas[i].toString()) / Float.valueOf(sum) * 100)
+                .setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
+
+            String typeParam = types[i] + ":" + datas[i] + "(" + v + "%)";
 
             stringList.add(typeParam);
 
