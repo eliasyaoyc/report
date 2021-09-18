@@ -33,7 +33,7 @@ public abstract class AbstractHandler<T> implements Handler<T> {
             IOException, TemplateException {
         Asserts.notEmpty(data, "data is empty.");
 
-        String[] path = FileKit.splitWithSuffix(FileKit.tempFile(templatePath), '/');
+        String[] path = FileKit.splitWithSuffix(FileKit.tempFile(templatePath),File.separator);
         Asserts.isTrue(path.length == 2);
 
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_0);

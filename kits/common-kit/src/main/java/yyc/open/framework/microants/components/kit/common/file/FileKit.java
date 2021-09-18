@@ -35,6 +35,12 @@ public class FileKit {
         return new String[]{path.substring(0, i), path.substring(i + 1)};
     }
 
+    public static String[] splitWithSuffix(String path, String flag) {
+        Asserts.hasText(path);
+        int i = path.lastIndexOf(flag);
+        return new String[]{path.substring(0, i), path.substring(i + 1)};
+    }
+
     /**
      * Returns the resource path.
      *
