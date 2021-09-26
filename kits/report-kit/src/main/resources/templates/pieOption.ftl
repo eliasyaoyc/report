@@ -1,9 +1,9 @@
 {
-    "color": ["rgba(0, 116, 227, 1)",
-              "rgba(0, 116, 227, 0.8)",
-              "rgba(0, 116, 227, 0.6)",
-              "rgba(0, 116, 227, 0.4)",
-              "rgba(0, 116, 227, 0.2)"
+    "color": ["rgba(24, 144, 255, 1)",
+              "rgba(24, 144, 255, 0.8)",
+              "rgba(24, 144, 255, 0.6)",
+              "rgba(24, 144, 255, 0.4)",
+              "rgba(24, 144, 255, 0.2)"
     ],
     "calculable": true,
     "legend": {
@@ -11,7 +11,7 @@
         "orient": "vertical",
         "x": "left",
         "textStyle": {
-            "color": "blue",
+            "color": "#626262",
             "fontSize": 15,
             "fontWeight": "bolder"
         }
@@ -28,16 +28,14 @@
                 "show": true,
                 "position": "top",
                 "textStyle": {
-                    "color":"blue",
-                    "fontSize": "15",
-                    "fontWeight": "bold"
+                    "color":"#626262",
+                    "fontSize": "15"
                 }
             },
             "emphasis": {
                 "show": true,
                 "textStyle": {
-                    "fontSize": "20",
-                    "fontWeight": "bold"
+                    "fontSize": "20"
                 }
             }
         },
@@ -48,11 +46,12 @@
         }
     }],
     "title": {
+        "show":false,
         "subtext": "",
         "text": "${title}",
         "x": "center",
         "textStyle": {
-            "color": "green",
+            "color": "#626262",
             "fontSize": 20,
             "fontWeight": "bolder"
         }
@@ -66,32 +65,6 @@
                     "width": 2
                 },
                 "show": true
-            },
-            "dataView": {
-                "lang": ["数据视图", "关闭", "刷新"],
-                "readOnly": false,
-                "show": true,
-                "title": "数据视图"
-            },
-            "magicType": {
-                "show": true,
-                "title": {
-                    "bar": "柱形图切换",
-                    "stack": "堆积",
-                    "tiled": "平铺",
-                    "line": "折线图切换"
-                },
-                "type": ["pie", "funnel"]
-            },
-            "restore": {
-                "show": true,
-                "title": "还原"
-            },
-            "saveAsImage": {
-                "lang": ["点击保存"],
-                "show": true,
-                "title": "保存为图片",
-                "type": "png"
             }
         },
         "show": true

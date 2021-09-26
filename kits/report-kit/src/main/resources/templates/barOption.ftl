@@ -1,6 +1,7 @@
 {
-    "color": ["rgba(0, 116, 227, 0.8)"],
+    "color": ["rgba(27, 144, 255, 1)"],
     "title": {
+        "show":false,
         "text": "${title}",
         "textStyle": {
         "color": "#7f7f7f",
@@ -17,8 +18,9 @@
         "show": true
     },
     "legend": {
+        "show":false,
         "textStyle": {
-            "color": "#333333",
+            "color": "#f816eb",
             "fontSize": 15,
             "fontWeight": "bolder"
         },
@@ -30,14 +32,15 @@
             "show": true,
             "textStyle": {
                 "fontSize": 15,
-                "fontWeight": "bolder",
-				"color":"#7F7F7F"
-            }
+                "fontWeight": "bolder"
+            },
+            "interval": 0,
+            "rotate": 25
         },
         "axisLine":{
             "lineStyle":{
-                "color":'#7F7F7F',
-                "width":"3"
+                "color":"#999aa1",
+                "width":2
             }
         },
         "data": ${category}
@@ -48,14 +51,13 @@
             "show": true,
             "textStyle": {
                 "fontSize": 15,
-                "fontWeight": "bolder",
-				"color":"#7F7F7F"
+                "fontWeight": "bolder"
             }
         },
         "axisLine":{
-            "show":true,
+            "show":false,
             "lineStyle":{
-                "color":'#7F7F7F',
+                "color":"#7F7F7F",
                 "width":"3"
             }
         },
@@ -69,7 +71,7 @@
 		"barWidth": "30%",
         "label": {
             "normal": {
-                "color": "#3370FE",
+                "color": "#3590ff",
                 "show": true,
                 "position": "top",
 				"textStyle": {
