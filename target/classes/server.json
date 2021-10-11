@@ -1,0 +1,26 @@
+{
+  "port": 6666,
+  //  "watermark": "idss",
+  "horizontal": false,
+  "parallel": false,
+  "chart": true,
+  "maxTaskNum": 16,
+  "outputPath": "/Users/eliasyao/Desktop/",
+  "jsPath": "js/echarts-util.js",
+  "jsPdfPath": "js/html2pdf.js",
+  "execPath": "exec/",
+  "templatesPath": "templates/",
+  "colors": [
+    "rgba(0, 116, 227, 1)",
+    "rgba(0, 116, 227, 0.8)",
+    "rgba(0, 116, 227, 0.6)",
+    "rgba(0, 116, 227, 0.4)",
+    "rgba(0, 116, 227, 0.2)"
+  ],
+  "alarm": {
+    "enabled": false,
+    "type": "e-wechat",
+    "address": ""
+  }
+}
+

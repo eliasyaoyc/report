@@ -1,0 +1,72 @@
+{
+  "groups": [
+    {
+      "name": "microants.report",
+      "type": "yyc.open.component.report.autoconfigure.ReportProperties",
+      "sourceType": "yyc.open.component.report.autoconfigure.ReportProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "microants.report.colors",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "yyc.open.component.report.autoconfigure.ReportProperties"
+    },
+    {
+      "name": "microants.report.echart",
+      "type": "java.lang.Boolean",
+      "sourceType": "yyc.open.component.report.autoconfigure.ReportProperties"
+    },
+    {
+      "name": "microants.report.exec-path",
+      "type": "java.lang.String",
+      "sourceType": "yyc.open.component.report.autoconfigure.ReportProperties"
+    },
+    {
+      "name": "microants.report.horizontal",
+      "type": "java.lang.Boolean",
+      "sourceType": "yyc.open.component.report.autoconfigure.ReportProperties"
+    },
+    {
+      "name": "microants.report.js-path",
+      "type": "java.lang.String",
+      "sourceType": "yyc.open.component.report.autoconfigure.ReportProperties"
+    },
+    {
+      "name": "microants.report.js-pdf-path",
+      "type": "java.lang.String",
+      "sourceType": "yyc.open.component.report.autoconfigure.ReportProperties"
+    },
+    {
+      "name": "microants.report.max-task-num",
+      "type": "java.lang.Integer",
+      "sourceType": "yyc.open.component.report.autoconfigure.ReportProperties"
+    },
+    {
+      "name": "microants.report.output-path",
+      "type": "java.lang.String",
+      "sourceType": "yyc.open.component.report.autoconfigure.ReportProperties"
+    },
+    {
+      "name": "microants.report.parallel",
+      "type": "java.lang.Boolean",
+      "sourceType": "yyc.open.component.report.autoconfigure.ReportProperties"
+    },
+    {
+      "name": "microants.report.port",
+      "type": "java.lang.Integer",
+      "sourceType": "yyc.open.component.report.autoconfigure.ReportProperties"
+    },
+    {
+      "name": "microants.report.templates-path",
+      "type": "java.lang.String",
+      "sourceType": "yyc.open.component.report.autoconfigure.ReportProperties"
+    },
+    {
+      "name": "microants.report.watermark",
+      "type": "java.lang.String",
+      "sourceType": "yyc.open.component.report.autoconfigure.ReportProperties"
+    }
+  ],
+  "hints": []
+}
