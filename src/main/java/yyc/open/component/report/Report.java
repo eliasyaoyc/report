@@ -35,7 +35,7 @@ public class Report {
 	public Report(@NonNull ReportConfig config, @NonNull ReportStatus status) {
 		this.reportStatus = status;
 		this.config = config;
-		this.threadPool = new ReportThreadPool("yyc/open/component/report");
+		this.threadPool = new ReportThreadPool("report");
 		this.handlerFactory = ReportHandlerFactory
 				.HandlerFactoryEnum
 				.INSTANCE
@@ -55,7 +55,7 @@ public class Report {
 		try {
 			FileHandler.convertToPdf(htmlPath, config);
 		} catch (Exception e) {
-			LOGGER.error("[Report] convert html to pdf failure {}", e);
+			LOGGER.error("[Report] convert html to pdf failure.", e);
 		}
 	}
 

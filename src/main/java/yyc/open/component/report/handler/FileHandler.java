@@ -168,7 +168,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
 
 			callback.onReceived(metadata.getReportId(), fileName, ReportEvent.EventType.COMPLETED);
 		} catch (Exception e) {
-			LOGGER.error("[FileHandler] generate report encountered error: {}.", e);
+			LOGGER.error("[FileHandler] generate report encountered error.", e);
 			callback.onException(metadata.getReportId(), String.format("[FileHandler] generate report encountered error: %s.", e));
 		} finally {
 			try {
@@ -293,101 +293,6 @@ public class FileHandler<T> extends AbstractHandler<T> {
 
 		public static Content statistics(String index, String description, Map<String, Object> statistics, String statDescription) {
 			return new Content(index, description, null, null, null, null, statistics, statDescription);
-		}
-	}
-
-	@VisibleForTesting
-	public void generateHTML(ReportMetadata metadata) {
-		try {
-			String option = generateFreemarkerTemplateByDefault("templates/", metadata.getReportType().getTemplateName(),
-					assembleReportEntity(metadata));
-			System.out.println(option);
-			String html = "/Users/eliasyao/Desktop/" + metadata.getReportId() + ".html";
-			String pdf = "/Users/eliasyao/Desktop/" + metadata.getReportId() + ".pdf";
-			File file = new File(html);
-			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
-			writer.write(option);
-			writer.flush();
-			System.out.println(option);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	@VisibleForTesting
-	public void generateWord(ReportMetadata metadata) {
-		try {
-			FastWordKit.FastWordBuilder builder = FastWordKit.builder()
-					.outputPath("/Users/eliasyao/Desktop/")
-					.fileName(metadata.getReportName() + ".docx");
-			if (!Objects.isNull(metadata.getTitle())) {
-				builder.image(metadata.getTitle().getBackground(), PictureType.PNG);
-				builder.smallText(metadata.getTitle().getDescription(), true);
-				builder.text(metadata.getTitle().getTitle(), 48d, true);
-			}
-
-			if (!Objects.isNull(metadata.getInfo())) {
-				Map<String, String> labels = metadata.getInfo().getLabels();
-				List<String> keys = new ArrayList<>(labels.keySet());
-				List<String> values = new ArrayList<>(labels.values());
-				builder.table(Arrays.asList(keys, values), true);
-			}
-
-			if (!Objects.isNull(metadata.getCatalogue())) {
-				builder.blank();
-				builder.image("/Users/eliasyao/Desktop/img_directory.png", PictureType.PNG);
-				Map<String, List<String>> chapters = metadata.getCatalogue().getChapters();
-				chapters.entrySet().stream().forEach(chapter -> {
-					builder.bigText(chapter.getKey(), true);
-					chapter.getValue().stream().forEach(index -> {
-						builder.middleText(index, true);
-					});
-				});
-			}
-
-			if (!Objects.isNull(metadata.getContent())) {
-				ReportMetadata.ReportContent content = metadata.getContent();
-
-				for (int i = 0; i < content.getChapter().size(); i++) {
-					builder.blank();
-					builder.bigText(content.getChapter().get(i));
-
-					List<String> indices = content.getIndices().get(i);
-					List<String> description = content.getDescription().get(i);
-					List<ReportData> reportData = content.getData().get(i);
-
-					for (int j = 0; j < indices.size(); j++) {
-						builder.blank();
-						builder.middleText(indices.get(j));
-						if (description.size() > j) {
-							builder.text(description.get(j), "696969", "SimSun", 12d, false);
-						}
-
-						ReportData data = reportData.get(j);
-						if (CollectionUtils.isNotEmpty(data.getTables())) {
-							List<List<String>> tables = data.getTables();
-							builder.table(tables, false);
-
-						} else if (CollectionUtils.isNotEmpty(data.getTexts())) {
-							data.getTexts().stream().forEach(text -> {
-								builder.text(text);
-							});
-
-						} else if (StringUtils.isNotEmpty(data.getBase64())) {
-							builder.image(data.getBase64(), PictureType.PNG);
-
-						} else if (data.getStatistics() != null) {
-							Map<String, Object> statistics = data.getStatistics();
-							List<String> keys = new ArrayList<>(statistics.keySet());
-							List<String> values = statistics.values().stream().map(val -> val.toString()).collect(Collectors.toList());
-							builder.table(Arrays.asList(keys, values), false);
-						}
-					}
-				}
-			}
-			builder.build().create();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 }

@@ -14,6 +14,8 @@ import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.logging.log4j.util.Strings;
 import yyc.open.component.report.entity.ReportData;
 
 /**
@@ -40,6 +42,11 @@ public class ReportTask extends Task {
 		Objects.requireNonNull(data, "ReportData");
 		Gson gson = new GsonBuilder().create();
 		Map<String, Object> rest = Maps.newHashMap();
+
+		if (data.getYDatas() == null || CollectionUtils.isEmpty(data.getXdatas())) {
+			return Strings.EMPTY;
+		}
+
 		switch (data.getType()) {
 			case BAR:
 				rest.put("title", data.getTitle());
