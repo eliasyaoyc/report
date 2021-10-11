@@ -12,9 +12,6 @@
     <revision>1.0.9-Alpha</revision>
     <java.version>1.8</java.version>
 
-    <kryo.version>5.0.0-RC5</kryo.version>
-    <rocksdb.version>6.11.6</rocksdb.version>
-    <flink.version>1.11.1</flink.version>
     <spring.boot.version>2.2.2.RELEASE</spring.boot.version>
     <guava.version>20.0</guava.version>
     <commons-lang3.version>3.5</commons-lang3.version>
@@ -22,31 +19,11 @@
     <commons-net.version>3.5</commons-net.version>
     <commons-cli.version>1.4</commons-cli.version>
 
-    <netty.version>4.1.42.Final</netty.version>
-
-    <curator.version>4.1.0</curator.version>
-
-    <jackson.version>2.9.6</jackson.version>
-    <json4s.version>3.6.3</json4s.version>
-
-    <servlet.version>4.0.1</servlet.version>
-    <jetty.version>9.4.14.v20181114</jetty.version>
-    <akka.version>2.6.10</akka.version>
-    <scala.binary.version>2.13</scala.binary.version>
-
     <commons-logging.version>1.2</commons-logging.version>
     <commons-collections4.version>4.4</commons-collections4.version>
     <log4j.version>1.2.17</log4j.version>
     <slf4j.version>1.7.21</slf4j.version>
     <junit.version>4.12</junit.version>
-    <byte.buddy.version>1.10.17</byte.buddy.version>
-    <grpc.version>1.33.0</grpc.version>
-    <powermock.version>2.0.2</powermock.version>
-    <rocksdb.version>6.13.3</rocksdb.version>
-    <jctool.version>3.1.0</jctool.version>
-    <jetcd.version>0.5.0</jetcd.version>
-    <consul.version>1.4.0</consul.version>
-    <react.netty.version>1.0.0</react.netty.version>
     <lombok.version>1.18.20</lombok.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
