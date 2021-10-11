@@ -83,5 +83,8 @@
         },
         "data":${values},
         "itemStyle": "__itemStyle"
-    }]
+    }],
+    "grid": {
+      "right": "5%"
+    }
 }

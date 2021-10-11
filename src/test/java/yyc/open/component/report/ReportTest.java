@@ -50,6 +50,30 @@ public class ReportTest {
 		return ReportData.echarts("字母使用人数", ReportEnums.LINE, "字母图例", names, value);
 	}
 
+	private static ReportData lineEcharts1() {
+		Integer[] name = {12000000, 11000000, 8000000, 1000000, 5000000, 1796, 12000000};
+		List<Object[]> names = new ArrayList<>();
+		names.add(name);
+		String[] value = {"2021-04", "2021-05", "2021-06", "2021-07", "2021-08", "2021-09", "2021-10"};
+		return ReportData.echarts("字母使用人数", ReportEnums.LINE, "字母图例", names, value);
+	}
+
+	private static ReportData lineEcharts2() {
+		Integer[] name = {43364, 13899, 12000, 2181, 21798, 1796, 12000000};
+		List<Object[]> names = new ArrayList<>();
+		names.add(name);
+		String[] value = {"2021-04", "2021-05", "2021-06", "2021-07", "2021-08", "2021-09", "2021-10"};
+		return ReportData.echarts("字母使用人数", ReportEnums.LINE, "字母图例", names, value);
+	}
+
+	private static ReportData lineEcharts3() {
+		Integer[] name = {43364, 13899, 12000, 2181, 21798, 1796, 12000000};
+		List<Object[]> names = new ArrayList<>();
+		names.add(name);
+		String[] value = {"2021-04", "2021-05", "2021-06", "2021-07", "2021-08", "2021-09", "2021-10"};
+		return ReportData.echarts("字母使用人数", ReportEnums.LINE, "字母图例", names, value);
+	}
+
 	private static ReportData pieEcharts() {
 		String[] name = {"A", "B", "C", "D", "E", "F", "G"};
 		List<Object[]> names = new ArrayList<>();
@@ -236,7 +260,7 @@ public class ReportTest {
 				.content("第N 章 我是标题",
 						Arrays.asList("1.1 总计（多）", "1.2 总计", "1.3 echarts 图表"),
 						Arrays.asList("我是组件描述", "我是组件描述", "我是组件描述"),
-						Arrays.asList(lineEcharts())
+						Arrays.asList(lineEcharts1(),lineEcharts2(),lineEcharts3())
 				)
 				.build();
 

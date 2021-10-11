@@ -82,5 +82,8 @@
         },
         "data": ${values},
         "symbolSize": 5
-    }]
+    }],
+   "grid": {
+     "right": "5%"
+   }
 }
