@@ -45,8 +45,5 @@
         "data": ${values},
         "type": "bar",
         "barWidth": "30%"
-    },
-    "grid": {
-         "right": "5%"
     }
 }

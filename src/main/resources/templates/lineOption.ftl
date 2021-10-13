@@ -84,6 +84,9 @@
         "symbolSize": 5
     }],
    "grid": {
-     "right": "5%"
+        "left": "3%",
+        "bottom": "3%",
+        "right": "4%",
+        "containLabel": true
    }
 }
