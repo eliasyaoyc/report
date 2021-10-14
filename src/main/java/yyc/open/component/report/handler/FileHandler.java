@@ -4,8 +4,6 @@ package yyc.open.component.report.handler;
 import static yyc.open.component.report.commons.ReportConstants.FILE_HANDLE;
 import static yyc.open.component.report.commons.ReportConstants.HANDLER;
 
-import com.deepoove.poi.data.PictureType;
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Maps;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -33,9 +31,7 @@ import yyc.open.component.report.ReportEvent;
 import yyc.open.component.report.ReportMetadata;
 import yyc.open.component.report.ReportPlatforms;
 import yyc.open.component.report.ReportTask;
-import yyc.open.component.report.commons.FastWordKit;
 import yyc.open.component.report.commons.FastWordKitV2;
-import yyc.open.component.report.commons.FastWordKitV2.FastWordBuilder;
 import yyc.open.component.report.commons.Processor;
 import yyc.open.component.report.commons.ReportEnums;
 import yyc.open.component.report.commons.validate.Asserts;
@@ -73,23 +69,20 @@ public class FileHandler<T> extends AbstractHandler<T> {
 				case WORD:
 					fileName = metadata.getPath() + metadata.getReportId() + ".docx";
 
-					FastWordBuilder builder = FastWordKitV2.builder()
-							.outputPath(metadata.getPath())
-							.fileName(metadata.getReportId() + ".docx")
-							.autoGenerate();
-					if (!Objects.isNull(metadata.getTitle())) {
-						builder.image(metadata.getTitle().getBackground(), 500, 450);
-						builder.text(metadata.getTitle().getDescription(), "696969", 12, true);
-						builder.title(metadata.getTitle().getTitle());
-					}
-
-					if (!Objects.isNull(metadata.getInfo())) {
-						Map<String, String> labels = metadata.getInfo().getLabels();
-						List<String> keys = new ArrayList<>(labels.keySet());
-						List<String> values = new ArrayList<>(labels.values());
-						builder.blank();
-						builder.table(Arrays.asList(keys, values));
-					}
+					FastWordKitV2 builder = new FastWordKitV2(metadata, true);
+//					if (!Objects.isNull(metadata.getTitle())) {
+//						builder.image(metadata.getTitle().getBackground(), 500, 450);
+//						builder.text(metadata.getTitle().getDescription(), "696969", 12, true);
+//						builder.title(metadata.getTitle().getTitle());
+//					}
+//
+//					if (!Objects.isNull(metadata.getInfo())) {
+//						Map<String, String> labels = metadata.getInfo().getLabels();
+//						List<String> keys = new ArrayList<>(labels.keySet());
+//						List<String> values = new ArrayList<>(labels.values());
+//						builder.blank();
+//						builder.table(Arrays.asList(keys, values));
+//					}
 
 					if (!Objects.isNull(metadata.getCatalogue())) {
 						builder.mulu();
@@ -138,7 +131,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
 							}
 						}
 					}
-					builder.build().create();
+					builder.create();
 					break;
 
 				default:

@@ -21,12 +21,18 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.util.LocaleUtil;
 import org.apache.poi.util.Units;
@@ -77,7 +83,9 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTabJc;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTabTlc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import yyc.open.component.report.ReportMetadata;
 import yyc.open.component.report.commons.FastWordKit.FastWordBuilder;
+import yyc.open.component.report.commons.file.FileKit;
 import yyc.open.component.report.commons.validate.Asserts;
 import yyc.open.component.report.commons.validate.NonNull;
 
@@ -97,169 +105,151 @@ public class FastWordKitV2 {
 	private final String fileName;
 	private final boolean autoGenerate;
 
-	public FastWordKitV2(XWPFDocument document, String outputPath, String fileName, boolean autoGenerate) {
-		this.document = document;
-		this.outputPath = outputPath;
-		this.fileName = fileName;
+	public FastWordKitV2(ReportMetadata metadata, boolean autoGenerate) {
+		this.outputPath = metadata.getPath();
+		this.fileName = metadata.getReportId() + ".docx";
 		this.autoGenerate = autoGenerate;
+		this.document = init(metadata);
 	}
 
-	public static FastWordBuilder builder() {
-		return new FastWordBuilder();
-	}
+	private XWPFDocument init(ReportMetadata metadata) {
+		try {
+			File file = new File(outputPath + "/" + fileName);
 
-	public static class FastWordBuilder {
+			generateCover(file, metadata);
 
-		private XWPFDocument document;
-		private String outputPath;
-		private String fileName;
-		private boolean autoGenerate;
+			XWPFDocument document = new XWPFDocument(new FileInputStream(file));
 
-		public FastWordBuilder() {
-			XWPFDocument document = new XWPFDocument();
 			addCustomHeadingStyle(document, "Heading1", 1);
 			addCustomHeadingStyle(document, "Heading2", 2);
 			createDefaultFooter(document);
-			this.document = document;
+			return document;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		return null;
+	}
 
-		public FastWordBuilder title(String content) {
-			XWPFParagraph titleParagraph = document.createParagraph();
-			titleParagraph.setPageBreak(true);
-			titleParagraph.setAlignment(ParagraphAlignment.CENTER);
-			XWPFRun titleParagraphRun = titleParagraph.createRun();
-			titleParagraphRun.setText(content);
-			titleParagraphRun.setFontSize(36);
-			titleParagraphRun.setFontFamily(DEFAULT_FRONT);
-			return this;
-		}
 
-		public FastWordBuilder image(String url, int width, int height) {
-			XWPFParagraph firstParagraph = document.createParagraph();
-			XWPFRun run = firstParagraph.createRun();
-			try {
-				FileInputStream fileInputStream = new FileInputStream(url);
-				run.addPicture(new FileInputStream(url), 6, "Generated", Units.toEMU(width), Units.toEMU(height));
-			} catch (Exception e) {
-				e.printStackTrace();
+	private void generateCover(File file, ReportMetadata metadata) throws Exception {
+		Map<String, String> data = new HashMap<>();
+		data.put("title", metadata.getTitle().getTitle());
+		if (metadata.getInfo().getLabels() != null && metadata.getInfo().getLabels().size() == 2) {
+			int index = 1;
+			for (Entry<String, String> entry : metadata.getInfo().getLabels().entrySet()) {
+				data.put("createkey" + index, entry.getKey());
+				data.put("createvalue" + index, entry.getValue());
+				index++;
 			}
-			return this;
 		}
 
-		public FastWordBuilder mulu() {
-			XWPFParagraph xwpfParagraph = document.createParagraph();
-			xwpfParagraph.setPageBreak(true);
-			xwpfParagraph.setAlignment(ParagraphAlignment.CENTER);//居中
-			XWPFRun newParaRun = xwpfParagraph.createRun();
-			newParaRun.setText("目录");
-			newParaRun.setFontSize(28);
-			newParaRun.setFontFamily(DEFAULT_FRONT);
-			blank();
-			blank();
-			document.createParagraph().createRun().setText("toc");
-			return this;
+		String tmp = FileKit.tempFile("templates/cover.docx");
+
+		XWPFTemplate compile = XWPFTemplate.compile(new FileInputStream(tmp)).render(data);
+
+		if (!file.getParentFile().exists()) {
+			file.getParentFile().mkdirs();
 		}
 
-		public FastWordBuilder blank() {
-			XWPFParagraph xwpfParagraph = document.createParagraph();
-			xwpfParagraph.createRun().setText("");
-			return this;
+		OutputStream out = new FileOutputStream(file);
+		compile.write(out);
+		out.close();
+	}
+
+	public void title(String content) {
+		XWPFParagraph titleParagraph = document.createParagraph();
+		titleParagraph.setPageBreak(true);
+		titleParagraph.setAlignment(ParagraphAlignment.CENTER);
+		XWPFRun titleParagraphRun = titleParagraph.createRun();
+		titleParagraphRun.setText(content);
+		titleParagraphRun.setFontSize(36);
+		titleParagraphRun.setFontFamily(DEFAULT_FRONT);
+	}
+
+	public void image(String url, int width, int height) {
+		XWPFParagraph firstParagraph = document.createParagraph();
+		XWPFRun run = firstParagraph.createRun();
+		try {
+			run.addPicture(new FileInputStream(url), 6, "Generated", Units.toEMU(width), Units.toEMU(height));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void mulu() {
+		blank();
+		document.createParagraph().createRun().setText("toc");
+	}
+
+	public void blank() {
+		XWPFParagraph xwpfParagraph = document.createParagraph();
+		xwpfParagraph.createRun().setText("");
+	}
+
+	public void table(List<List<String>> rows) {
+		XWPFParagraph paragraph = document.createParagraph();
+		XmlCursor cursor = paragraph.getCTP().newCursor();
+		XWPFTable table = document.insertNewTbl(cursor);
+
+		// create first row.
+		List<String> firstCell = rows.get(0);
+		XWPFTableRow row = table.getRow(0);
+		XWPFTableCell cell1 = row.getCell(0);
+		cell1.setText(firstCell.get(0));
+		cell1.setColor("4472C4");
+		for (int i = 1; i < firstCell.size(); i++) {
+			XWPFTableCell cell = row.addNewTableCell();
+			cell.setText(firstCell.get(i));
+			cell.setColor("4472C4");
 		}
 
-		public FastWordBuilder table(List<List<String>> rows) {
-			XWPFParagraph paragraph = document.createParagraph();
-			XmlCursor cursor = paragraph.getCTP().newCursor();
-			XWPFTable table = document.insertNewTbl(cursor);
-
-			// create first row.
-			List<String> firstCell = rows.get(0);
-			XWPFTableRow row = table.getRow(0);
-			row.getCell(0).setText(firstCell.get(0));
-			for (int i = 1; i < firstCell.size(); i++) {
-				row.addNewTableCell().setText(firstCell.get(i));
+		for (int i = 1; i < rows.size(); i++) {
+			XWPFTableRow row1 = table.createRow();
+			List<String> cell = rows.get(i);
+			for (int j = 0; j < cell.size(); j++) {
+				row1.getCell(j).setText(cell.get(j));
 			}
-
-			for (int i = 1; i < rows.size(); i++) {
-				XWPFTableRow row1 = table.createRow();
-				List<String> cell = rows.get(i);
-				for (int j = 0; j < cell.size(); j++) {
-					row1.getCell(j).setText(cell.get(j));
-				}
-			}
-
-//			XWPFTableRow row_0 = table.getRow(0);
-//			row_0.getCell(0).setText("姓名");
-//			row_0.addNewTableCell().setText("年龄");
-//
-//			XWPFTableRow row_1 = table.createRow();
-//			row_1.getCell(0).setText("隔壁老王");
-//			row_1.getCell(1).setText("48");
-
-			setTableLocation(table, "center");
-			setCellLocation(table, "CENTER", "center");
-			document.removeBodyElement(document.getPosOfParagraph(paragraph));
-
-			return this;
 		}
 
-		public FastWordBuilder text(String content, String color, int size) {
-			return text(content, color, size, false);
+		setTableLocation(table, "center");
+		setCellLocation(table, "CENTER", "center");
+		document.removeBodyElement(document.getPosOfParagraph(paragraph));
+	}
+
+	public void text(String content, String color, int size) {
+		text(content, color, size, false);
+	}
+
+	public void text(String content, String color, int size, boolean isCenter) {
+		XWPFParagraph firstParagraph = document.createParagraph();
+		if (isCenter) {
+			firstParagraph.setAlignment(ParagraphAlignment.CENTER);
 		}
-
-		public FastWordBuilder text(String content, String color, int size, boolean isCenter) {
-			XWPFParagraph firstParagraph = document.createParagraph();
-			if (isCenter) {
-				firstParagraph.setAlignment(ParagraphAlignment.CENTER);
-			}
-			XWPFRun run = firstParagraph.createRun();
-			run.setText(content);
-			run.setFontFamily(DEFAULT_FRONT);
-			run.setColor(color);
-			run.setFontSize(size);
-			return this;
-		}
+		XWPFRun run = firstParagraph.createRun();
+		run.setText(content);
+		run.setFontFamily(DEFAULT_FRONT);
+		run.setColor(color);
+		run.setFontSize(size);
+	}
 
 
-		public FastWordBuilder heading1(String content) {
-			XWPFParagraph firstParagraph = document.createParagraph();
-			firstParagraph.setPageBreak(true);
-			firstParagraph.setStyle("Heading1");
-			XWPFRun run = firstParagraph.createRun();
-			run.setText(content);
-			run.setFontFamily(DEFAULT_FRONT);
-			run.setFontSize(22);
-			return this;
-		}
+	public void heading1(String content) {
+		XWPFParagraph firstParagraph = document.createParagraph();
+		firstParagraph.setPageBreak(true);
+		firstParagraph.setStyle("Heading1");
+		XWPFRun run = firstParagraph.createRun();
+		run.setText(content);
+		run.setFontFamily(DEFAULT_FRONT);
+		run.setFontSize(22);
+	}
 
-		public FastWordBuilder heading2(String content) {
-			XWPFParagraph firstParagraph = document.createParagraph();
-			firstParagraph.setStyle("Heading2");
-			XWPFRun run = firstParagraph.createRun();
-			run.setText(content);
-			run.setFontFamily(DEFAULT_FRONT);
-			run.setFontSize(15);
-			return this;
-		}
-
-		public FastWordBuilder outputPath(String outputPath) {
-			this.outputPath = outputPath;
-			return this;
-		}
-
-		public FastWordBuilder fileName(String fileName) {
-			this.fileName = fileName;
-			return this;
-		}
-
-		public FastWordBuilder autoGenerate() {
-			this.autoGenerate = true;
-			return this;
-		}
-
-		public FastWordKitV2 build() {
-			return new FastWordKitV2(document, outputPath, fileName, autoGenerate);
-		}
-
+	public void heading2(String content) {
+		XWPFParagraph firstParagraph = document.createParagraph();
+		firstParagraph.setStyle("Heading2");
+		XWPFRun run = firstParagraph.createRun();
+		run.setText(content);
+		run.setFontFamily(DEFAULT_FRONT);
+		run.setFontSize(15);
 	}
 
 	private static void setCellLocation(XWPFTable xwpfTable, String verticalLoction, String horizontalLocation) {
@@ -285,11 +275,11 @@ public class FastWordKitV2 {
 				}
 
 				// Sets the first row color.
-				if (isFirst) {
-					CTShd shd = ctppr.isSetShd() ? ctppr.getShd() : ctppr.addNewShd();
-					shd.setColor("auto");
-					shd.setFill("4472C4");
-				}
+//				if (isFirst) {
+//					CTShd shd = ctppr.isSetShd() ? ctppr.getShd() : ctppr.addNewShd();
+//					shd.setColor("auto");
+//					shd.setFill("4472C4");
+//				}
 
 				ctjc.setVal(STJc.Enum.forString(horizontalLocation)); //水平居中
 				cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.valueOf(verticalLoction));//垂直居中
@@ -297,20 +287,6 @@ public class FastWordKitV2 {
 			isFirst = false;
 		}
 	}
-
-//	if (null != cellStyle.getBackgroundColor()) {
-//		CTTc ctTc = cell.getCTTc();
-//		CTTcPr pr = ctTc.isSetTcPr() ? ctTc.getTcPr() : ctTc.addNewTcPr();
-//		CTShd shd = pr.isSetShd() ? pr.getShd() : pr.addNewShd();
-//		XWPFShadingPattern shadingPattern = cellStyle.getShadingPattern();
-//		if (null == shadingPattern) {
-//			shd.setVal(STShd.CLEAR);
-//		} else {
-//			shd.setVal(STShd.Enum.forInt(shadingPattern.getValue()));
-//		}
-//		shd.setColor("auto");
-//		shd.setFill(cellStyle.getBackgroundColor());
-//	}
 
 	private static void setTableLocation(XWPFTable xwpfTable, String location) {
 		CTTbl cttbl = xwpfTable.getCTTbl();
@@ -375,8 +351,7 @@ public class FastWordKitV2 {
 		policy.createFooter(STHdrFtr.DEFAULT, new XWPFParagraph[]{footer});
 	}
 
-
-	public void create() {
+	public void create() throws Exception {
 		Asserts.state(StringUtils.isNotEmpty(outputPath) && StringUtils.isNotEmpty(fileName), "OutputPath & FileName");
 		Asserts.state(fileName.contains(".docx") || fileName.contains(".doc"), "Word");
 		File file = new File(outputPath + "/" + fileName);
@@ -610,7 +585,7 @@ public class FastWordKitV2 {
 	}
 
 	private static int pageBreak(XWPFParagraph currentPar, String headTitle, List<IBodyElement> bodyElementList) {
-		int pageBreak = 1;
+		int pageBreak = 2;
 		boolean findFlag = false;
 		if (bodyElementList != null && bodyElementList.size() > 0) {
 			for (int i = 0; i < bodyElementList.size() && !findFlag; i++) {

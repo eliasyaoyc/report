@@ -1,5 +1,7 @@
 package yyc.open.component.report;
 
+import static yyc.open.component.report.commons.file.FileKit.tempFile;
+
 import com.deepoove.poi.XWPFTemplate;
 import com.deepoove.poi.config.Configure;
 import com.deepoove.poi.data.DocumentRenderData;
@@ -9,9 +11,19 @@ import com.deepoove.poi.data.Paragraphs;
 import com.deepoove.poi.data.Texts;
 import com.deepoove.poi.data.style.ParagraphStyle;
 import com.deepoove.poi.policy.DocumentRenderPolicy;
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +31,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.imageio.ImageIO;
+import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -41,6 +55,7 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.STHdrFtr;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STJc;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STStyleType;
 import yyc.open.component.report.commons.ReportEnums;
+import yyc.open.component.report.commons.file.FileKit;
 import yyc.open.component.report.entity.ReportData;
 
 /**
@@ -352,15 +367,76 @@ public class ReportTest {
 
 	@Test
 	public void test() throws IOException {
-//		Map<String, Object> data = new HashMap<>();
-//		data.put("title1", "2 标题1");
-//		data.put("subtitle1", "2.1 标题2");
-//
-//		XWPFTemplate.compile("/Users/eliasyao/Desktop/test.docx").render(data)
-//				.writeToFile("/Users/eliasyao/Desktop/out_example_certificate.docx");
-		writeTOC();
+		String s = tempFile("templates/cover.docx");
+		System.out.println(s);
+//		writeTOC();
 	}
 
+	@Test
+	public void testBg() throws Exception{
+		XWPFDocument document = new XWPFDocument();
+		XWPFParagraph paragraph = document.createParagraph();
+		XWPFRun text = paragraph.createRun();
+		text.setText("sad sad sad撒更好");
+		text.setFontSize(40);
+		text.addPicture(new FileInputStream("/Users/eliasyao/Desktop/背景图@1x.png"),6,"Generated", Units.toEMU(469),
+				Units.toEMU(649));
+//		XWPFRun run = paragraph.createRun();
+
+		FileOutputStream out = new FileOutputStream(new File("/Users/eliasyao/Desktop/create_toc.docx"));
+
+		document.write(out);
+		out.close();
+	}
+
+	void generateWatermark(String watermark, String path) {
+		InputStream is = null;
+		OutputStream os = null;
+
+		try {
+			// 1. File source.
+			Image srcImg = ImageIO.read(new File(path));
+
+			BufferedImage buffImg = new BufferedImage(srcImg.getWidth(null), srcImg.getHeight(null), BufferedImage.TYPE_INT_RGB);
+			// 2. Get the brush object.
+			Graphics2D g = buffImg.createGraphics();
+			// 3. Sets the jagged edge treatment for a line segment.
+			g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+			g.drawImage(srcImg.getScaledInstance(srcImg.getWidth(null), srcImg.getHeight(null), Image.SCALE_SMOOTH), 0, 0, null);
+			// 4. Sets the watermark rotation.
+			g.rotate(Math.toRadians(-15), buffImg.getWidth() / 2, buffImg.getHeight() / 2);
+			// 5. Sets the watermark color.
+			g.setColor(new Color(190, 190, 190));
+			// 6. Sets the watermark front.
+			g.setFont(new Font("宋体", Font.BOLD, buffImg.getHeight() / 6));
+			// 7. Sets the watermark text transparency.
+			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 0.15f));
+			// 8. The first parameter -> set the content, the last two parameters -> the coordinate position of the text on the image (x,y)
+			g.drawString(watermark, buffImg.getWidth() / 4, buffImg.getHeight() / 2);
+			// 9、Release resource.
+			g.dispose();
+			// 10. Generate.
+			os = new FileOutputStream(path);
+			ImageIO.write(buffImg, FileKit.suffix(path, '.'), os);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (null != is) {
+					is.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				if (null != os) {
+					os.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	public void writeTOC() throws IOException {
 		XWPFDocument document = new XWPFDocument();
