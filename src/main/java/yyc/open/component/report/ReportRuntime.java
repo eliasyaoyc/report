@@ -38,12 +38,12 @@ public class ReportRuntime implements AutoCloseable {
 			Gson gson = new GsonBuilder().create();
 			globalConfig = gson.fromJson(ret, ReportConfig.GlobalConfig.class);
 
-//			Runtime.getRuntime().addShutdownHook(new Thread() {
-//				@Override
-//				public void run() {
-//					close();
-//				}
-//			});
+			Runtime.getRuntime().addShutdownHook(new Thread() {
+				@Override
+				public void run() {
+					close();
+				}
+			});
 		} catch (IOException e) {
 			throw new ReportException("[Report Runtime] initialize fail", e);
 		}
