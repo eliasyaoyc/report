@@ -31,6 +31,7 @@ import yyc.open.component.report.commons.validate.NonNull;
  * @author <a href="mailto:siran0611@gmail.com">Elias.Yao</a>
  * @version ${project.version} - 2021/8/5
  */
+@Deprecated
 public class FastWordKit {
     private static final Logger LOGGER = LoggerFactory.getLogger(FastWordKit.class);
 

@@ -1,12 +1,61 @@
 package yyc.open.component.report;
 
+import static yyc.open.component.report.commons.file.FileKit.tempFile;
+
+import com.deepoove.poi.XWPFTemplate;
+import com.deepoove.poi.config.Configure;
+import com.deepoove.poi.data.DocumentRenderData;
+import com.deepoove.poi.data.Documents;
+import com.deepoove.poi.data.ParagraphRenderData;
+import com.deepoove.poi.data.Paragraphs;
+import com.deepoove.poi.data.Texts;
+import com.deepoove.poi.data.style.ParagraphStyle;
+import com.deepoove.poi.policy.DocumentRenderPolicy;
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.imageio.ImageIO;
+import org.apache.poi.util.Units;
+import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.XWPFStyle;
+import org.apache.poi.xwpf.usermodel.XWPFStyles;
 import org.junit.Test;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTDecimalNumber;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTOnOff;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPPr;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTR;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTRPr;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTString;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTStyle;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STFldCharType;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STHdrFtr;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STJc;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STStyleType;
 import yyc.open.component.report.commons.ReportEnums;
+import yyc.open.component.report.commons.file.FileKit;
 import yyc.open.component.report.entity.ReportData;
 
 /**
@@ -260,7 +309,7 @@ public class ReportTest {
 				.content("第N 章 我是标题",
 						Arrays.asList("1.1 总计（多）", "1.2 总计", "1.3 echarts 图表"),
 						Arrays.asList("我是组件描述", "我是组件描述", "我是组件描述"),
-						Arrays.asList(lineEcharts1(),lineEcharts2(),lineEcharts3())
+						Arrays.asList(lineEcharts1(), lineEcharts2(), lineEcharts3())
 				)
 				.build();
 
@@ -314,5 +363,232 @@ public class ReportTest {
 				.build();
 
 		report.generateReport(Arrays.asList(metadata));
+	}
+
+	@Test
+	public void test() throws IOException {
+		String s = tempFile("templates/cover.docx");
+		System.out.println(s);
+//		writeTOC();
+	}
+
+	@Test
+	public void testBg() throws Exception{
+		XWPFDocument document = new XWPFDocument();
+		XWPFParagraph paragraph = document.createParagraph();
+		XWPFRun text = paragraph.createRun();
+		text.setText("sad sad sad撒更好");
+		text.setFontSize(40);
+		text.addPicture(new FileInputStream("/Users/eliasyao/Desktop/背景图@1x.png"),6,"Generated", Units.toEMU(469),
+				Units.toEMU(649));
+//		XWPFRun run = paragraph.createRun();
+
+		FileOutputStream out = new FileOutputStream(new File("/Users/eliasyao/Desktop/create_toc.docx"));
+
+		document.write(out);
+		out.close();
+	}
+
+	void generateWatermark(String watermark, String path) {
+		InputStream is = null;
+		OutputStream os = null;
+
+		try {
+			// 1. File source.
+			Image srcImg = ImageIO.read(new File(path));
+
+			BufferedImage buffImg = new BufferedImage(srcImg.getWidth(null), srcImg.getHeight(null), BufferedImage.TYPE_INT_RGB);
+			// 2. Get the brush object.
+			Graphics2D g = buffImg.createGraphics();
+			// 3. Sets the jagged edge treatment for a line segment.
+			g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+			g.drawImage(srcImg.getScaledInstance(srcImg.getWidth(null), srcImg.getHeight(null), Image.SCALE_SMOOTH), 0, 0, null);
+			// 4. Sets the watermark rotation.
+			g.rotate(Math.toRadians(-15), buffImg.getWidth() / 2, buffImg.getHeight() / 2);
+			// 5. Sets the watermark color.
+			g.setColor(new Color(190, 190, 190));
+			// 6. Sets the watermark front.
+			g.setFont(new Font("宋体", Font.BOLD, buffImg.getHeight() / 6));
+			// 7. Sets the watermark text transparency.
+			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 0.15f));
+			// 8. The first parameter -> set the content, the last two parameters -> the coordinate position of the text on the image (x,y)
+			g.drawString(watermark, buffImg.getWidth() / 4, buffImg.getHeight() / 2);
+			// 9、Release resource.
+			g.dispose();
+			// 10. Generate.
+			os = new FileOutputStream(path);
+			ImageIO.write(buffImg, FileKit.suffix(path, '.'), os);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (null != is) {
+					is.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				if (null != os) {
+					os.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void writeTOC() throws IOException {
+		XWPFDocument document = new XWPFDocument();
+		createDefaultFooter(document);
+		addCustomHeadingStyle(document, "Heading1", 1);
+		addCustomHeadingStyle(document, "Heading2", 2);
+
+		//Write the Document in file system
+		FileOutputStream out = new FileOutputStream(new File("/Users/eliasyao/Desktop/create_toc.docx"));
+
+		//添加标题
+		XWPFParagraph titleParagraph = document.createParagraph();
+
+		//设置段落居中
+		titleParagraph.setAlignment(ParagraphAlignment.CENTER);
+
+		XWPFRun titleParagraphRun = titleParagraph.createRun();
+		titleParagraphRun.setText("Java PoI");
+		titleParagraphRun.setColor("000000");
+		titleParagraphRun.setFontSize(20);
+
+		XWPFParagraph mulu = document.createParagraph();
+		mulu.setPageBreak(true);
+		mulu.setAlignment(ParagraphAlignment.CENTER);
+		XWPFRun run2 = mulu.createRun();
+		run2.getCTR().addNewLastRenderedPageBreak();
+		run2.setText("目录");
+		run2.setColor("000000");
+		run2.setFontSize(20);
+
+		XWPFParagraph mulu1 = document.createParagraph();
+		XWPFRun run3 = mulu1.createRun();
+		run3.setText("toc");
+
+		//段落
+		XWPFParagraph firstParagraph = document.createParagraph();
+		firstParagraph.setPageBreak(true);
+		firstParagraph.setStyle("Heading1");
+		XWPFRun run = firstParagraph.createRun();
+		run.getCTR().addNewLastRenderedPageBreak();
+		run.setText("段落1。");
+		run.setFontFamily("微软雅黑");
+		run.setFontSize(22);
+
+		//段落
+		XWPFParagraph firstParagraph1 = document.createParagraph();
+		firstParagraph1.setStyle("Heading2");
+		XWPFRun run1 = firstParagraph1.createRun();
+		run1.setText("段落2");
+		run1.setFontFamily("微软雅黑");
+		run1.setFontSize(15);
+
+		//段落
+		XWPFParagraph twoParagraph = document.createParagraph();
+		twoParagraph.setPageBreak(true);
+		twoParagraph.setStyle("Heading1");
+		XWPFRun runa = twoParagraph.createRun();
+		runa.getCTR().addNewLastRenderedPageBreak();
+		runa.setText("段落2。");
+		runa.setFontFamily("微软雅黑");
+		runa.setFontSize(22);
+
+		for (int i = 0; i < 30; i++) {
+			XWPFParagraph twoParagraph1 = document.createParagraph();
+			twoParagraph1.setStyle("Heading2");
+			XWPFRun runa1 = twoParagraph1.createRun();
+			runa1.setText("段落2");
+			runa1.setFontFamily("微软雅黑");
+			runa1.setFontSize(15);
+		}
+
+
+		//段落
+		XWPFParagraph a = document.createParagraph();
+		a.setPageBreak(true);
+		a.setStyle("Heading1");
+		XWPFRun a1 = a.createRun();
+		a1.setText("段落1。");
+		a1.setFontFamily("微软雅黑");
+		a1.setFontSize(22);
+
+		for (int i = 0; i < 20; i++) {
+			XWPFParagraph b = document.createParagraph();
+			b.setStyle("Heading2");
+			XWPFRun b1 = b.createRun();
+			b1.setText("段落2");
+			b1.setFontFamily("微软雅黑");
+			b1.setFontSize(15);
+		}
+
+		document.write(out);
+		out.close();
+	}
+
+	/**
+	 * 增加自定义标题样式。这里用的是stackoverflow的源码
+	 *
+	 * @param docxDocument 目标文档
+	 * @param strStyleId   样式名称
+	 * @param headingLevel 样式级别
+	 */
+	private static void addCustomHeadingStyle(XWPFDocument docxDocument, String strStyleId, int headingLevel) {
+
+		CTStyle ctStyle = CTStyle.Factory.newInstance();
+		ctStyle.setStyleId(strStyleId);
+
+		CTString styleName = CTString.Factory.newInstance();
+		styleName.setVal(strStyleId);
+		ctStyle.setName(styleName);
+
+		CTDecimalNumber indentNumber = CTDecimalNumber.Factory.newInstance();
+		indentNumber.setVal(BigInteger.valueOf(headingLevel));
+
+		// lower number > style is more prominent in the formats bar
+		ctStyle.setUiPriority(indentNumber);
+
+		CTOnOff onoffnull = CTOnOff.Factory.newInstance();
+		ctStyle.setUnhideWhenUsed(onoffnull);
+
+		// style shows up in the formats bar
+		ctStyle.setQFormat(onoffnull);
+
+		// style defines a heading of the given level
+		CTPPr ppr = CTPPr.Factory.newInstance();
+		ppr.setOutlineLvl(indentNumber);
+		ctStyle.setPPr(ppr);
+
+		XWPFStyle style = new XWPFStyle(ctStyle);
+
+		// is a null op if already defined
+		XWPFStyles styles = docxDocument.createStyles();
+
+		style.setType(STStyleType.PARAGRAPH);
+		styles.addStyle(style);
+
+	}
+
+	public static void createDefaultFooter(final XWPFDocument docx) {
+		CTP pageNo = CTP.Factory.newInstance();
+		XWPFParagraph footer = new XWPFParagraph(pageNo, docx);
+		CTPPr begin = pageNo.addNewPPr();
+		begin.addNewPStyle().setVal("1");
+		begin.addNewJc().setVal(STJc.CENTER);
+		pageNo.addNewR().addNewFldChar().setFldCharType(STFldCharType.BEGIN);
+		pageNo.addNewR().addNewInstrText().setStringValue("PAGE   \\* MERGEFORMAT");
+		pageNo.addNewR().addNewFldChar().setFldCharType(STFldCharType.SEPARATE);
+		CTR end = pageNo.addNewR();
+		CTRPr endRPr = end.addNewRPr();
+		endRPr.addNewNoProof();
+		end.addNewFldChar().setFldCharType(STFldCharType.END);
+		CTSectPr sectPr = docx.getDocument().getBody().isSetSectPr() ? docx.getDocument().getBody().getSectPr() : docx.getDocument().getBody().addNewSectPr();
+		XWPFHeaderFooterPolicy policy = new XWPFHeaderFooterPolicy(docx, sectPr);
+		policy.createFooter(STHdrFtr.DEFAULT, new XWPFParagraph[] { footer });
 	}
 }
