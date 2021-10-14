@@ -211,7 +211,7 @@ public class FastWordKitV2 {
 			}
 		}
 
-		setTableLocation(table, "center");
+		setTableLocation(table, "left");
 		setCellLocation(table, "CENTER", "center");
 		document.removeBodyElement(document.getPosOfParagraph(paragraph));
 	}
@@ -274,17 +274,9 @@ public class FastWordKitV2 {
 					ctjc = ctppr.addNewJc();
 				}
 
-				// Sets the first row color.
-//				if (isFirst) {
-//					CTShd shd = ctppr.isSetShd() ? ctppr.getShd() : ctppr.addNewShd();
-//					shd.setColor("auto");
-//					shd.setFill("4472C4");
-//				}
-
 				ctjc.setVal(STJc.Enum.forString(horizontalLocation)); //水平居中
 				cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.valueOf(verticalLoction));//垂直居中
 			}
-			isFirst = false;
 		}
 	}
 
