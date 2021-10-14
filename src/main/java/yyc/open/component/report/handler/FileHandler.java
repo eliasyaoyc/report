@@ -34,6 +34,8 @@ import yyc.open.component.report.ReportMetadata;
 import yyc.open.component.report.ReportPlatforms;
 import yyc.open.component.report.ReportTask;
 import yyc.open.component.report.commons.FastWordKit;
+import yyc.open.component.report.commons.FastWordKitV2;
+import yyc.open.component.report.commons.FastWordKitV2.FastWordBuilder;
 import yyc.open.component.report.commons.Processor;
 import yyc.open.component.report.commons.ReportEnums;
 import yyc.open.component.report.commons.validate.Asserts;
@@ -71,40 +73,33 @@ public class FileHandler<T> extends AbstractHandler<T> {
 				case WORD:
 					fileName = metadata.getPath() + metadata.getReportId() + ".docx";
 
-					FastWordKit.FastWordBuilder builder = FastWordKit.builder()
+					FastWordBuilder builder = FastWordKitV2.builder()
 							.outputPath(metadata.getPath())
-							.fileName(metadata.getReportId() + ".docx");
+							.fileName(metadata.getReportId() + ".docx")
+							.autoGenerate();
 					if (!Objects.isNull(metadata.getTitle())) {
-						builder.image(metadata.getTitle().getBackground(), PictureType.suggestFileType(metadata.getTitle().getBackground()));
-						builder.smallText(metadata.getTitle().getDescription(), true);
-						builder.text(metadata.getTitle().getTitle(), 48d, true);
+						builder.image(metadata.getTitle().getBackground(), 500, 450);
+						builder.text(metadata.getTitle().getDescription(), "696969", 12, true);
+						builder.title(metadata.getTitle().getTitle());
 					}
 
 					if (!Objects.isNull(metadata.getInfo())) {
 						Map<String, String> labels = metadata.getInfo().getLabels();
 						List<String> keys = new ArrayList<>(labels.keySet());
 						List<String> values = new ArrayList<>(labels.values());
-						builder.table(Arrays.asList(keys, values), true);
 						builder.blank();
-						builder.image(metadata.getInfo().getImage(), PictureType.suggestFileType(metadata.getInfo().getImage()));
+						builder.table(Arrays.asList(keys, values));
 					}
 
 					if (!Objects.isNull(metadata.getCatalogue())) {
-						Map<String, List<String>> chapters = metadata.getCatalogue().getChapters();
-						chapters.entrySet().stream().forEach(chapter -> {
-							builder.bigText(chapter.getKey(), true);
-							chapter.getValue().stream().forEach(index -> {
-								builder.middleText(index, true);
-							});
-						});
+						builder.mulu();
 					}
 
 					if (!Objects.isNull(metadata.getContent())) {
 						ReportMetadata.ReportContent content = metadata.getContent();
 
 						for (int i = 0; i < content.getChapter().size(); i++) {
-							builder.blank();
-							builder.bigText(content.getChapter().get(i));
+							builder.heading1(content.getChapter().get(i));
 
 							List<String> indices = content.getIndices().get(i);
 							List<String> description = content.getDescription().get(i);
@@ -112,29 +107,33 @@ public class FileHandler<T> extends AbstractHandler<T> {
 
 							for (int j = 0; j < indices.size(); j++) {
 								builder.blank();
-								builder.middleText(indices.get(j));
+								builder.heading2(indices.get(j));
 								if (description.size() > j) {
-									builder.text(description.get(j), "696969", "SimSun", 12d, false);
+									builder.text(description.get(j), "696969", 12);
 								}
 
 								ReportData data = reportData.get(j);
 								if (CollectionUtils.isNotEmpty(data.getTables())) {
 									List<List<String>> tables = data.getTables();
-									builder.table(tables, false);
+									builder.blank();
+									builder.table(tables);
 
 								} else if (CollectionUtils.isNotEmpty(data.getTexts())) {
 									data.getTexts().stream().forEach(text -> {
-										builder.text(text);
+										builder.blank();
+										builder.text(text, "000000", 14);
 									});
 
 								} else if (StringUtils.isNotEmpty(data.getBase64())) {
-									builder.image(data.getBase64(), PictureType.PNG);
+									builder.blank();
+									builder.image(data.getBase64(), 500, 200);
 
 								} else if (!data.getStatistics().isEmpty()) {
 									Map<String, Object> statistics = data.getStatistics();
 									List<String> keys = new ArrayList<>(statistics.keySet());
 									List<String> values = statistics.values().stream().map(val -> val.toString()).collect(Collectors.toList());
-									builder.table(Arrays.asList(keys, values), false);
+									builder.blank();
+									builder.table(Arrays.asList(keys, values));
 								}
 							}
 						}
