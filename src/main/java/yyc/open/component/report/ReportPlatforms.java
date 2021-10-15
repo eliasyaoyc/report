@@ -53,7 +53,7 @@ public enum ReportPlatforms {
 		try {
 			String property = System.getProperty("os.name");
 			ReportPlatforms platforms = ReportPlatforms.getPlatforms(property);
-			String path = FileKit.tempFile(config.getExecPath() + platforms.getPath(),true);
+			String path = FileKit.tempFile(config.getExecPath() + platforms.getPath());
 
 			// Notice: we need to generation temp file /lib/jquery-3.2.1.min.js, /lib/echarts.min.js,/lib/china.js.
 			String newPath = FileKit.createDir(FileKit.tempPath() + "lib");
@@ -63,7 +63,7 @@ public enum ReportPlatforms {
 
 			command = new StringBuilder(path)
 					.append(" ")
-					.append(FileKit.tempFile(config.getJsPath(),true))
+					.append(FileKit.tempFile(config.getJsPath()))
 					.append(" -s -p ")
 					.append(config.getPort()).toString();
 
@@ -88,7 +88,7 @@ public enum ReportPlatforms {
 
 			command = new StringBuilder(path)
 					.append(" ")
-					.append(FileKit.tempFile(jsPdfPath,true))
+					.append(FileKit.tempFile(jsPdfPath))
 					.append(" " + htmlPath)
 					.append(" " + pdfName)
 					.append(" " + outputPath)
