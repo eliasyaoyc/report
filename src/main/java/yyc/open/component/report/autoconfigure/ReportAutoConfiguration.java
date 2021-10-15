@@ -24,6 +24,8 @@ import yyc.open.component.report.commons.beans.BeansKit;
 public class ReportAutoConfiguration {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReportAutoConfiguration.class);
+	private static final String[] TMPS = new String[]{"barOption.ftl", "crossBarOption.ftl", "lineOption.ftl", "pieOption.ftl",
+			"echarts-util.js"};
 
 	@Bean
 	@ConditionalOnClass(ReportProperties.class)
@@ -45,10 +47,23 @@ public class ReportAutoConfiguration {
 			reportConfig.setOutputPath(file.getAbsolutePath());
 		}
 
+		// remove tmp files.
+		for (String tmp : TMPS) {
+			String tempPath = System.getProperty("java.io.tmpdir").endsWith(File.separator) ?
+					System.getProperty("java.io.tmpdir") + tmp :
+					System.getProperty("java.io.tmpdir") + File.separator + tmp;
+			File file = new File(tempPath);
+			if (file.exists()) {
+				file.delete();
+			}
+		}
+
 		ReportRuntime reportRuntime = new ReportRuntime();
 		reportRuntime.start(properties.getEchart());
 		LOGGER.info("[ReportRuntime] start success.");
 
 		return ReportBuilder.builder().config(reportConfig).build();
 	}
+
+
 }

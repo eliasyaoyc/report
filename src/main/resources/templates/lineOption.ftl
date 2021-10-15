@@ -32,7 +32,7 @@
                 "fontWeight": "bolder"
             },
             "interval": ${interval},
-            "rotate": 25
+            "rotate": 15
         },
         "axisLine":{
             "lineStyle":{
