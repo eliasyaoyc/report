@@ -43,7 +43,7 @@ public class ReportTask extends Task {
 		Gson gson = new GsonBuilder().create();
 		Map<String, Object> rest = Maps.newHashMap();
 
-		if (data.getYDatas() == null || CollectionUtils.isEmpty(data.getXdatas())) {
+		if (data.getYDatas() == null || data.getYDatas().length <=0 || CollectionUtils.isEmpty(data.getXdatas())) {
 			return Strings.EMPTY;
 		}
 

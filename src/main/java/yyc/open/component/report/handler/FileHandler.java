@@ -119,7 +119,11 @@ public class FileHandler<T> extends AbstractHandler<T> {
 
 								} else if (StringUtils.isNotEmpty(data.getBase64())) {
 									builder.blank();
-									builder.image(data.getBase64(), 500, 200);
+									if (data.getBase64().endsWith("no_data.png")){
+										builder.image(data.getBase64(), 350, 200);
+									}else {
+										builder.image(data.getBase64(), 500, 200);
+									}
 
 								} else if (!data.getStatistics().isEmpty()) {
 									Map<String, Object> statistics = data.getStatistics();
