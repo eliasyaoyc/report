@@ -1,9 +1,11 @@
 package yyc.open.component.report;
 
 import com.google.common.collect.Maps;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import yyc.open.component.report.ReportMetadata.ReportCatalogueChild;
@@ -197,13 +199,23 @@ public class ReportMedataBuilder {
 				throw new ReportDynamicCatalogueException("Chapter and Indices both empty.");
 			}
 			ReportMetadata.ReportCatalogue catalogue = new ReportMetadata.ReportCatalogue();
-			Map<String, List<String>> val = Maps.newLinkedHashMap();
+			Map<String, ReportCatalogueFather> val = Maps.newLinkedHashMap();
 
+			int pageNum = 3;
 			for (int i = 0; i < chapter.size(); i++) {
-				val.put(chapter.get(i), indices.get(i));
+				List<ReportCatalogueChild> childs = new ArrayList<>();
+				int count = 0;
+				for (String indice : indices.get(i)) {
+					count++;
+					if (count >= 3) {
+						pageNum++;
+					}
+					childs.add(new ReportCatalogueChild(indice, pageNum));
+				}
+				val.put(chapter.get(i), new ReportCatalogueFather(pageNum, childs));
 			}
 
-//			catalogue.setChapters(val);
+			catalogue.setChapters(val);
 			return catalogue;
 		}
 	}

@@ -25,7 +25,7 @@ public class ReportAutoConfiguration {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReportAutoConfiguration.class);
 	private static final String[] TMPS = new String[]{"barOption.ftl", "crossBarOption.ftl", "lineOption.ftl", "pieOption.ftl",
-			"echarts-util.js"};
+			"echarts-util.js", "html2pdf.js", "html.ftl"};
 
 	@Bean
 	@ConditionalOnClass(ReportProperties.class)

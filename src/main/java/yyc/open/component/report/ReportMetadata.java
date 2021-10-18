@@ -101,6 +101,7 @@ public class ReportMetadata extends Task {
 	}
 
 	@Data
+	@AllArgsConstructor
 	public static class ReportCatalogueFather {
 		public int num;
 		public List<ReportCatalogueChild> childs;
