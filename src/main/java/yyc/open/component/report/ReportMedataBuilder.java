@@ -202,17 +202,20 @@ public class ReportMedataBuilder {
 			Map<String, ReportCatalogueFather> val = Maps.newLinkedHashMap();
 
 			int pageNum = 3;
+			int fatherNum = 3;
 			for (int i = 0; i < chapter.size(); i++) {
 				List<ReportCatalogueChild> childs = new ArrayList<>();
 				int count = 0;
 				for (String indice : indices.get(i)) {
 					count++;
 					if (count >= 3) {
+						count = 0;
 						pageNum++;
 					}
 					childs.add(new ReportCatalogueChild(indice, pageNum));
 				}
-				val.put(chapter.get(i), new ReportCatalogueFather(pageNum, childs));
+				val.put(chapter.get(i), new ReportCatalogueFather(fatherNum, childs));
+				fatherNum = pageNum;
 			}
 
 			catalogue.setChapters(val);

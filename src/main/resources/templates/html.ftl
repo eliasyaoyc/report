@@ -36,7 +36,7 @@
       width: 100%;
       height: 1754px;
 
-    <#if background?? && background != ""> background-image: url(${background});
+    <#if background?? && background != ""> background-image: url("${background}");
     </#if> background-repeat: no-repeat;
     }
 

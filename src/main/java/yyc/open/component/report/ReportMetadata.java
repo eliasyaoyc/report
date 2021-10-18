@@ -7,6 +7,7 @@ import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import yyc.open.component.report.commons.ReportEnums;
 import yyc.open.component.report.commons.uuid.UUIDsKit;
@@ -102,6 +103,7 @@ public class ReportMetadata extends Task {
 
 	@Data
 	@AllArgsConstructor
+	@NoArgsConstructor
 	public static class ReportCatalogueFather {
 		public int num;
 		public List<ReportCatalogueChild> childs;

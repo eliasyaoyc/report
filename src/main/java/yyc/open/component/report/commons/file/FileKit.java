@@ -124,7 +124,7 @@ public class FileKit {
 			}
 		}
 		BASE64Encoder encoder = new BASE64Encoder();
-		return "data:img/jpg;base64," + encoder.encode(data);
+		return ("data:img/jpg;base64," + encoder.encode(data)).replaceAll("\r\n|\r|\n", "");
 	}
 
 	/**
