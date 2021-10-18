@@ -91,7 +91,7 @@
 
     .main .top .catalogue .item {
       width: 80%;
-      margin: 40px auto 0 auto;
+      margin: 20px auto 0 auto;
       text-align: left;
       line-height: 40px;
     }
@@ -108,7 +108,7 @@
       font-weight: 600;
       white-space: nowrap;
       width: 740px;
-      overflow-y: hidden;
+      overflow-x: hidden;
       display: inline-block;
     }
 
