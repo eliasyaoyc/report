@@ -6,270 +6,290 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
     <title>${title}</title>
-    <style>
-        * {
-            padding: 0;
-            margin: 0;
-            list-style: none;
-        }
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
 
-        body {
-            font-family: "Microsoft YaHei", "PingFang SC", "Helvetica", "Arial", "黑体", "宋体", sans-serif;
-            line-height: 1.5;
-            color: #333;
-        }
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", "Helvetica", "Arial",
+      "黑体", "宋体", sans-serif;
+      line-height: 1.5;
+      color: #333;
+    }
 
-        .main {
-            max-width: 1000px;
-            width: 100%;
-            background: #fff;
-            margin: 0 auto;
-            padding-bottom: 40px;
-        }
+    .main {
+      max-width: 1000px;
+      width: 100%;
+      background: #fff;
+      margin: 0 auto;
+      padding-bottom: 40px;
+    }
 
-        .main .top {
-            width: 100%;
-        }
+    .main .top {
+      width: 100%;
+    }
+    .main .top .cover {
+      width: 100%;
+      height: 1780px;
 
-        .main .top img {
-            width: 100%;
-        }
+      <#if background?? && background != "">
+      background-image: url(${background});
+      </#if>
 
-        .main .top .title {
-            text-align: center;
-            font-weight: 600;
-            color: #2E2E2E;
-            letter-spacing: 3px;
-            margin-top: 30px;
-        }
+      background-repeat: no-repeat;
+    }
 
-        .main .top .title span {
-            font-size: 12px;
-            line-height: 24px;
-        }
+    .main .top img {
+      width: 100%;
+    }
 
-        .main .top .title p {
-            font-size: 50px;
-            line-height: 70px;
-        }
+    .main .top .title {
+      text-align: left;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: 3px;
+      padding-left: 30px;
+      padding-top: 45%;
+    }
 
-        .main .top .info {
-            width: 422px;
-            line-height: 48px;
-            border: 1px solid #B3B3B3;
-            border-bottom: 0;
-            font-size: 12px;
-            color: #333;
-            margin: 60px auto;
-        }
+    .main .top .title p {
+      font-size: 30px;
+      line-height: 70px;
+      font-weight: 600;
+    }
 
-        .main .top .info .item {
-            overflow: hidden;
-            border-bottom: 1px solid #B3B3B3;
-            text-align: center;
-        }
+    .main .top .info {
+      padding-left: 30px;
+      margin-top: 30px;
+      color: #fff;
+    }
 
-        .main .top .info .item .label {
-            float: left;
-            width: 140px;
-            box-sizing: border-box;
-            border-right: 1px solid #B3B3B3;
-        }
+    .main .top .info .item {
+      margin-top: 30px;
+    }
 
-        .main .top .info .item .value {
-            float: left;
-            width: 280px;
-        }
+    .main .top .info .label {
+      font-size: 14px;
+      font-weight: 400;
+    }
 
-        .main .top .catalogue {
-            margin-top: 300px;
-        }
+    .main .top .info .value {
+      font-size: 20px;
+      font-weight: 500;
+    }
 
-        .main .top .catalogue .item {
-            width: 80%;
-            margin: 40px auto 0 auto;
-            text-align: center;
-            line-height: 40px;
-        }
+    .main .top .catalogue {
+      margin-top: 70px;
+    }
 
-        .main .top .catalogue .item p {
-            font-size: 24px;
-            color: #333;
-            font-weight: 600;
-        }
+    .main .top .catalogue .item {
+      width: 80%;
+      margin: 40px auto 0 auto;
+      text-align: left;
+      line-height: 40px;
+    }
 
-        .main .top .catalogue .item li {
-            font-size: 18px;
-            color: #333;
-        }
+    .main .top .catalogue .item p {
+      font-size: 24px;
+      color: #333;
+      font-weight: 600;
+    }
+    .main .top .catalogue .page-symbol {
+      font-size: 24px;
+      color: #333;
+      font-weight: 600;
+      white-space: nowrap;
+      width: 740px;
+      overflow-y: hidden;
+      display: inline-block;
+    }
+    .main .top .catalogue .page-symbol label {
+      font-size: 18px;
+      color: #333;
+    }
+    .main .top .catalogue .page-num {
+      font-size: 20px;
+      padding-left: 10px;
+      float: right;
+      color: #333;
+      font-weight: 600;
+    }
 
-        .box-content {
-            margin-top: 120px;
-            padding: 24px;
-        }
+    .main .top .catalogue .item li {
+      font-size: 18px;
+      color: #333;
+    }
 
-        .box-content .temp-box {
-            margin-bottom: 40px;
-            overflow: hidden;
-        }
+    .box-content {
+      margin-top: 120px;
+      padding: 24px;
+    }
 
-        .box-content .temp-box .title {
-            font-size: 24px;
-            line-height: 26px;
-            font-weight: 500;
-            color: #333333;
-            margin-bottom: 16px;
-        }
+    .box-content .temp-box {
+      margin-bottom: 40px;
+      overflow: hidden;
+    }
 
-        .box-content .temp-box .title:before {
-            content: "";
-            display: inline-block;
-            width: 4px;
-            height: 18px;
-            color: #0074E3;
-            background: #0074E3;
-            margin-right: 8px;
-            vertical-align: middle;
-            margin-top: -4px;
-        }
+    .box-content .temp-box .title {
+      font-size: 24px;
+      line-height: 26px;
+      font-weight: 500;
+      color: #333333;
+      margin-bottom: 16px;
+    }
 
-        .box-content .temp-box .content {
-            padding: 0 12px;
-            margin-bottom: 24px;
-        }
+    .box-content .temp-box .title:before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 18px;
+      color: #0074e3;
+      background: #0074e3;
+      margin-right: 8px;
+      vertical-align: middle;
+      margin-top: -4px;
+    }
 
-        .box-content .temp-box .content .small-title {
-            font-size: 16px;
-            color: #333333;
-            line-height: 24px;
-            font-weight: 500;
-            margin-bottom: 4px;
-        }
+    .box-content .temp-box .content {
+      padding: 0 12px;
+      margin-bottom: 24px;
+    }
 
-        .box-content .temp-box .content .desc {
-            font-size: 14px;
-            color: #657085;
-            line-height: 22px;
-            margin-bottom: 16px;
-        }
+    .box-content .temp-box .content .small-title {
+      font-size: 16px;
+      color: #333333;
+      line-height: 24px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
 
-        .box-content .temp-box .content .table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: auto;
-            border: 1px solid #ebeff2;
-            font-size: 14px;
-        }
+    .box-content .temp-box .content .desc {
+      font-size: 14px;
+      color: #657085;
+      line-height: 22px;
+      margin-bottom: 16px;
+    }
 
-        .box-content .temp-box .content .table thead tr {
-            border-bottom: 1px solid #ebeff2;
-            height: 40px;
-        }
+    .box-content .temp-box .content .table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: auto;
+      border: 1px solid #ebeff2;
+      font-size: 14px;
+    }
 
-        .box-content .temp-box .content .table thead tr th {
-            background-color: #f8fafc;
-            padding: 0 24px;
-            border-right: 1px solid #ebeff2;
-            color: #657085;
-            font-weight: 400;
-            box-sizing: border-box;
-        }
+    .box-content .temp-box .content .table thead tr {
+      border-bottom: 1px solid #ebeff2;
+      height: 40px;
+    }
 
-        .box-content .temp-box .content .table tbody tr {
-            border-bottom: 1px solid #ebeff2;
-            height: 40px;
-        }
+    .box-content .temp-box .content .table thead tr th {
+      background-color: #f8fafc;
+      padding: 0 24px;
+      border-right: 1px solid #ebeff2;
+      color: #657085;
+      font-weight: 400;
+      box-sizing: border-box;
+    }
 
-        .box-content .temp-box .content .table tbody tr td {
-            padding: 0 24px;
-            border-right: 1px solid #ebeff2;
-            display: table-cell;
-            color: #333;
-            box-sizing: border-box;
-            text-align: center;
-        }
+    .box-content .temp-box .content .table tbody tr {
+      border-bottom: 1px solid #ebeff2;
+      height: 40px;
+    }
 
-        .box-content .temp-box .content .table-box {
-            line-height: 40px;
-            font-size: 14px;
-            overflow: hidden;
-            text-align: center;
-            border-top: 1px solid #ebeff2;
-            border-left: 1px solid #ebeff2;
-        }
+    .box-content .temp-box .content .table tbody tr td {
+      padding: 0 24px;
+      border-right: 1px solid #ebeff2;
+      display: table-cell;
+      color: #333;
+      box-sizing: border-box;
+      text-align: center;
+    }
 
-        .box-content .temp-box .content .table-box li {
-            float: left;
-            width: 33.3%;
-            box-sizing: border-box;
-            border: 1px solid #ebeff2;
-            border-top: 0;
-            border-left: 0;
-        }
+    .box-content .temp-box .content .table-box {
+      line-height: 40px;
+      font-size: 14px;
+      overflow: hidden;
+      text-align: center;
+      border-top: 1px solid #ebeff2;
+      border-left: 1px solid #ebeff2;
+    }
 
-        .box-content .temp-box .content .table-box li > p {
-            width: 60%;
-            float: left;
-            box-sizing: border-box;
-            border-right: 1px solid #ebeff2;
-            background-color: #f8fafc;
-            color: #657085;
-        }
+    .box-content .temp-box .content .table-box li {
+      float: left;
+      width: 33.3%;
+      box-sizing: border-box;
+      border: 1px solid #ebeff2;
+      border-top: 0;
+      border-left: 0;
+    }
 
-        .box-content .temp-box .content .table-box li > span {
-            width: 40%;
-            float: left;
-            color: #333;
-        }
+    .box-content .temp-box .content .table-box li > p {
+      width: 60%;
+      float: left;
+      box-sizing: border-box;
+      border-right: 1px solid #ebeff2;
+      background-color: #f8fafc;
+      color: #657085;
+    }
 
-        .box-content .temp-box .content .total-box {
-            width: 100%;
-            border: 1px solid #ebeff2;
-            padding: 24px 0;
-            text-align: center;
-            font-size: 12px;
-            color: #657085;
-        }
+    .box-content .temp-box .content .table-box li > span {
+      width: 40%;
+      float: left;
+      color: #333;
+    }
 
-        .box-content .temp-box .content .total-box p {
-            font-size: 16px;
-            font-weight: 500;
-            margin-bottom: 4px;
-        }
+    .box-content .temp-box .content .total-box {
+      width: 100%;
+      border: 1px solid #ebeff2;
+      padding: 24px 0;
+      text-align: center;
+      font-size: 12px;
+      color: #657085;
+    }
 
-        .box-content .temp-box .content .total-box p span {
-            color: #0074E3;
-        }
+    .box-content .temp-box .content .total-box p {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
 
-        .echarts-box {
-            width: 100%;
-            text-align: center;
-        }
+    .box-content .temp-box .content .total-box p span {
+      color: #0074e3;
+    }
 
-        .echarts-box img {
-            max-width: 100%;
-            max-height: 100%;
-        }
+    .echarts-box {
+      width: 100%;
+      text-align: center;
+    }
 
-        .text {
-            font-size: 14px;
-            color: #333;
-            line-height: 28px;
-            margin-top: 10px;
-        }
-    </style>
+    .echarts-box img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+    .text {
+      font-size: 14px;
+      color: #333;
+      line-height: 28px;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 
 <body>
 <div class="main">
     <div class="top">
-        <#if background?? && background != "">
-            <img src="${background}"/>
-        </#if>
+        <div class="cover">
+<#--        <#if background?? && background != "">-->
+<#--            <img src="${background}"/>-->
+<#--        </#if>-->
         <div class="title">
-            <#if titleDesc?? && titleDesc != "">
-                <span>${titleDesc}</span>
-            </#if>
+<#--            <#if titleDesc?? && titleDesc != "">-->
+<#--                <span>${titleDesc}</span>-->
+<#--            </#if>-->
             <#if title?? && title != "">
                 <p>${title}</p>
             </#if>
@@ -286,16 +306,24 @@
                 </div>
             </#list>
         </div>
+        </div>
         <div class="catalogue">
             <#if infoImage?? && infoImage != "">
                 <img src="${infoImage}"/>
             </#if>
             <#list catalogue?keys as key>
                 <div class="item">
-                    <p>${key}</p>
+                    <p>
+                      <label class="page-symbol">${key}........................................................................................................................</label>
+                      <label class="page-num">${catalogue[key].num}</label>
+                    </p>
                     <ul>
-                        <#list catalogue[key] as value>
-                            <li>${value}</li>
+                        <#list catalogue[key].childs as value>
+                          <p class="page-symbol">
+                            <label>${value.name}</label>
+                            ........................................................................................................................
+                          </p>
+                          <label class="page-num">${value.num}</label>
                         </#list>
                     </ul>
                 </div>

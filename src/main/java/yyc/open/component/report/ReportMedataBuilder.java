@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import yyc.open.component.report.ReportMetadata.ReportCatalogueChild;
+import yyc.open.component.report.ReportMetadata.ReportCatalogueFather;
 import yyc.open.component.report.commons.ReportEnums;
 import yyc.open.component.report.commons.uuid.UUIDsKit;
 import yyc.open.component.report.commons.validate.Asserts;
@@ -127,13 +129,8 @@ public class ReportMedataBuilder {
 			this.builder.catalogue = new ReportMetadata.ReportCatalogue();
 		}
 
-		public CatalogueBuilder catalogue(String chapter, List<String> indices) {
+		public CatalogueBuilder catalogue(String chapter, ReportCatalogueFather indices) {
 			this.builder.catalogue.getChapters().put(chapter, indices);
-			return this;
-		}
-
-		public CatalogueBuilder catalogue(LinkedHashMap<String, List<String>> catalogues) {
-			this.builder.catalogue.getChapters().putAll(catalogues);
 			return this;
 		}
 
@@ -206,7 +203,7 @@ public class ReportMedataBuilder {
 				val.put(chapter.get(i), indices.get(i));
 			}
 
-			catalogue.setChapters(val);
+//			catalogue.setChapters(val);
 			return catalogue;
 		}
 	}

@@ -70,19 +70,6 @@ public class FileHandler<T> extends AbstractHandler<T> {
 					fileName = metadata.getPath() + metadata.getReportId() + ".docx";
 
 					FastWordKitV2 builder = new FastWordKitV2(metadata, true);
-//					if (!Objects.isNull(metadata.getTitle())) {
-//						builder.image(metadata.getTitle().getBackground(), 500, 450);
-//						builder.text(metadata.getTitle().getDescription(), "696969", 12, true);
-//						builder.title(metadata.getTitle().getTitle());
-//					}
-//
-//					if (!Objects.isNull(metadata.getInfo())) {
-//						Map<String, String> labels = metadata.getInfo().getLabels();
-//						List<String> keys = new ArrayList<>(labels.keySet());
-//						List<String> values = new ArrayList<>(labels.values());
-//						builder.blank();
-//						builder.table(Arrays.asList(keys, values));
-//					}
 
 					if (!Objects.isNull(metadata.getCatalogue())) {
 						builder.mulu();

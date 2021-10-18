@@ -4,6 +4,8 @@ import com.google.common.collect.Maps;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import yyc.open.component.report.commons.ReportEnums;
@@ -94,7 +96,21 @@ public class ReportMetadata extends Task {
 	@Setter
 	public static class ReportCatalogue {
 
-		private Map<String, List<String>> chapters = Maps.newLinkedHashMap();
+		private Map<String, ReportCatalogueFather> chapters = Maps.newLinkedHashMap();
+
+	}
+
+	@Data
+	public static class ReportCatalogueFather {
+		public int num;
+		public List<ReportCatalogueChild> childs;
+	}
+
+	@Data
+	@AllArgsConstructor
+	public static class ReportCatalogueChild{
+		public String name;
+		public int num;
 	}
 
 	/**
