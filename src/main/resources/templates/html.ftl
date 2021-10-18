@@ -33,7 +33,7 @@
     }
     .main .top .cover {
       width: 100%;
-      height: 1780px;
+      height: 1754px;
 
       <#if background?? && background != "">
       background-image: url(${background});
@@ -82,7 +82,7 @@
     }
 
     .main .top .catalogue {
-      margin-top: 70px;
+      height: 1754px;
     }
 
     .main .top .catalogue .item {
@@ -124,8 +124,7 @@
     }
 
     .box-content {
-      margin-top: 120px;
-      padding: 24px;
+      padding:0 24px;
     }
 
     .box-content .temp-box {
