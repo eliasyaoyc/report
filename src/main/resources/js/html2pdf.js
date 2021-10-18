@@ -27,7 +27,7 @@ page.open(address, function (status) {
 
             if ("complete" === readyState) {
 
-                page.paperSize = {width: '1240px', height: '1754px', orientation: 'portrait', border: '0.5cm'};
+                page.paperSize = {width: '1240px', height: '1754px', orientation: 'portrait', border: '0.2cm'};
                 var timestamp = Date.parse(new Date());
                 var outpathstr = outputPath + "/" + filename;
                 page.render(outpathstr);

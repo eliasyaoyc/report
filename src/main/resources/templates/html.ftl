@@ -2,10 +2,10 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-    <title>${title}</title>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>${title}</title>
   <style>
     * {
       padding: 0;
@@ -31,15 +31,13 @@
     .main .top {
       width: 100%;
     }
+
     .main .top .cover {
       width: 100%;
       height: 1754px;
 
-      <#if background?? && background != "">
-      background-image: url(${background});
-      </#if>
-
-      background-repeat: no-repeat;
+    <#if background?? && background != ""> background-image: url(${background});
+    </#if> background-repeat: no-repeat;
     }
 
     .main .top img {
@@ -82,7 +80,13 @@
     }
 
     .main .top .catalogue {
-      height: 1754px;
+
+    }
+
+    @media print {
+      .main .top .catalogue {
+        height: 1780px;
+      }
     }
 
     .main .top .catalogue .item {
@@ -97,6 +101,7 @@
       color: #333;
       font-weight: 600;
     }
+
     .main .top .catalogue .page-symbol {
       font-size: 24px;
       color: #333;
@@ -106,10 +111,12 @@
       overflow-y: hidden;
       display: inline-block;
     }
+
     .main .top .catalogue .page-symbol label {
       font-size: 18px;
       color: #333;
     }
+
     .main .top .catalogue .page-num {
       font-size: 20px;
       padding-left: 10px;
@@ -124,12 +131,19 @@
     }
 
     .box-content {
-      padding:0 24px;
+      padding: 0 24px;
     }
 
     .box-content .temp-box {
+      margin-top: 40px;
       margin-bottom: 40px;
       overflow: hidden;
+    }
+
+    @media print {
+      .box-content .temp-box {
+        margin-top: 0;
+      }
     }
 
     .box-content .temp-box .title {
@@ -269,6 +283,7 @@
       max-width: 100%;
       max-height: 100%;
     }
+
     .text {
       font-size: 14px;
       color: #333;
@@ -280,126 +295,127 @@
 
 <body>
 <div class="main">
-    <div class="top">
-        <div class="cover">
-<#--        <#if background?? && background != "">-->
-<#--            <img src="${background}"/>-->
-<#--        </#if>-->
-        <div class="title">
-<#--            <#if titleDesc?? && titleDesc != "">-->
-<#--                <span>${titleDesc}</span>-->
-<#--            </#if>-->
-            <#if title?? && title != "">
-                <p>${title}</p>
-            </#if>
-        </div>
-        <div class="info">
-            <#list info?keys as key>
-                <div class="item">
-                    <div class="label">
-                        ${key}
-                    </div>
-                    <div class="value">
-                        ${info[key]}
-                    </div>
-                </div>
-            </#list>
-        </div>
-        </div>
-        <div class="catalogue">
-            <#if infoImage?? && infoImage != "">
-                <img src="${infoImage}"/>
-            </#if>
-            <#list catalogue?keys as key>
-                <div class="item">
-                    <p>
-                      <label class="page-symbol">${key}........................................................................................................................</label>
-                      <label class="page-num">${catalogue[key].num}</label>
-                    </p>
-                    <ul>
-                        <#list catalogue[key].childs as value>
-                          <p class="page-symbol">
-                            <label>${value.name}</label>
-                            ........................................................................................................................
-                          </p>
-                          <label class="page-num">${value.num}</label>
+  <div class="top">
+    <div class="cover">
+        <#--        <#if background?? && background != "">-->
+        <#--            <img src="${background}"/>-->
+        <#--        </#if>-->
+      <div class="title">
+          <#--            <#if titleDesc?? && titleDesc != "">-->
+          <#--                <span>${titleDesc}</span>-->
+          <#--            </#if>-->
+          <#if title?? && title != "">
+            <p>${title}</p>
+          </#if>
+      </div>
+      <div class="info">
+          <#list info?keys as key>
+            <div class="item">
+              <div class="label">
+                  ${key}
+              </div>
+              <div class="value">
+                  ${info[key]}
+              </div>
+            </div>
+          </#list>
+      </div>
+    </div>
+    <div class="catalogue">
+        <#if infoImage?? && infoImage != "">
+          <img src="${infoImage}"/>
+        </#if>
+        <#list catalogue?keys as key>
+          <div class="item">
+            <p>
+              <label class="page-symbol">${key}
+                ........................................................................................................................</label>
+              <label class="page-num">${catalogue[key].num}</label>
+            </p>
+            <ul>
+                <#list catalogue[key].childs as value>
+                  <p class="page-symbol">
+                    <label>${value.name}</label>
+                    ........................................................................................................................
+                  </p>
+                  <label class="page-num">${value.num}</label>
+                </#list>
+            </ul>
+          </div>
+        </#list>
+    </div>
+  </div>
+  <div class="box-content">
+    <div class="temp-box">
+        <#list content?keys as key>
+          <div class="title">${key}</div>
+            <#assign item = content[key]>
+            <#list item as value>
+              <div class="content">
+                  <#if value.index?? && value.index != "">
+                    <div class="small-title">${value.index}</div>
+                  </#if>
+                  <#if value.description?? && value.description != "">
+                    <div class="desc">${value.description}</div>
+                  </#if>
+                  <#if value.stat?? && (value.stat?size > 1)>
+                    <ul class="table-box">
+                        <#list value.stat?keys as key>
+                          <li>
+                            <p>${key}</p><span>${value.stat[key]}</span>
+                          </li>
                         </#list>
                     </ul>
-                </div>
-            </#list>
-        </div>
-    </div>
-    <div class="box-content">
-        <div class="temp-box">
-            <#list content?keys as key>
-                <div class="title">${key}</div>
-                <#assign item = content[key]>
-                <#list item as value>
-                    <div class="content">
-                        <#if value.index?? && value.index != "">
-                            <div class="small-title">${value.index}</div>
-                        </#if>
-                        <#if value.description?? && value.description != "">
-                            <div class="desc">${value.description}</div>
-                        </#if>
-                        <#if value.stat?? && (value.stat?size > 1)>
-                            <ul class="table-box">
-                                <#list value.stat?keys as key>
-                                    <li>
-                                        <p>${key}</p><span>${value.stat[key]}</span>
-                                    </li>
-                                </#list>
-                            </ul>
-                        </#if>
-                        <#if value.stat??&&(value.stat?size = 1)>
-                            <ul class="total-box">
-                                <#list value.stat?keys as key>
-                                    <li>
-                                        <p>${key}<span>${value.stat[key]}</span></p>
-                                        <#if value.statDescription?? && value.statDescription != "">
-                                            ${value.statDescription}
-                                        </#if>
-                                    </li>
-                                </#list>
-                            </ul>
-                        </#if>
-                        <#if value.base64?? && value.base64 != "">
-                            <div class="echarts-box">
-                                <img src="${value.base64}"/>
-                            </div>
-                        </#if>
-                        <#if value.texts?? && (value.texts?size > 0)>
-                            <div class="text">
-                                <#list value.texts as t>
-                                    <p>${t}</p>
-                                </#list>
-                            </div>
-                        </#if>
-                        <#if value.tablesTitle?? && (value.tablesTitle?size > 0)>
-                            <table class="table">
-                                <tbody>
-                                <tr>
-                                    <#list value.tablesTitle as tt>
-                                        <th>${tt}</th>
-                                    </#list>
-                                </tr>
-                                </tbody>
-                                <tbody>
-                                <#list value.tablesValue as t1>
-                                    <tr>
-                                        <#list t1 as tv>
-                                            <td>${tv}</td>
-                                        </#list>
-                                    </tr>
-                                </#list>
-                                </tbody>
-                            </table>
-                        </#if>
+                  </#if>
+                  <#if value.stat??&&(value.stat?size = 1)>
+                    <ul class="total-box">
+                        <#list value.stat?keys as key>
+                          <li>
+                            <p>${key}<span>${value.stat[key]}</span></p>
+                              <#if value.statDescription?? && value.statDescription != "">
+                                  ${value.statDescription}
+                              </#if>
+                          </li>
+                        </#list>
+                    </ul>
+                  </#if>
+                  <#if value.base64?? && value.base64 != "">
+                    <div class="echarts-box">
+                      <img src="${value.base64}"/>
                     </div>
-                </#list>
+                  </#if>
+                  <#if value.texts?? && (value.texts?size > 0)>
+                    <div class="text">
+                        <#list value.texts as t>
+                          <p>${t}</p>
+                        </#list>
+                    </div>
+                  </#if>
+                  <#if value.tablesTitle?? && (value.tablesTitle?size > 0)>
+                    <table class="table">
+                      <tbody>
+                      <tr>
+                          <#list value.tablesTitle as tt>
+                            <th>${tt}</th>
+                          </#list>
+                      </tr>
+                      </tbody>
+                      <tbody>
+                      <#list value.tablesValue as t1>
+                        <tr>
+                            <#list t1 as tv>
+                              <td>${tv}</td>
+                            </#list>
+                        </tr>
+                      </#list>
+                      </tbody>
+                    </table>
+                  </#if>
+              </div>
             </#list>
-        </div>
+        </#list>
     </div>
+  </div>
 </div>
 </body>
 
