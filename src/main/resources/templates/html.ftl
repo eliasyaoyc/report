@@ -227,7 +227,6 @@
       font-size: 14px;
       overflow: hidden;
       text-align: center;
-      border-top: 1px solid #ebeff2;
       border-left: 1px solid #ebeff2;
     }
 
@@ -236,7 +235,6 @@
       width: 33.3%;
       box-sizing: border-box;
       border: 1px solid #ebeff2;
-      border-top: 0;
       border-left: 0;
     }
 
