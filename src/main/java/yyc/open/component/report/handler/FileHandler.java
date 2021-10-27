@@ -5,6 +5,8 @@ import static yyc.open.component.report.commons.ReportConstants.FILE_HANDLE;
 import static yyc.open.component.report.commons.ReportConstants.HANDLER;
 
 import com.google.common.collect.Maps;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -207,6 +209,9 @@ public class FileHandler<T> extends AbstractHandler<T> {
 
 		// Verity content.
 		ReportMetadata.ReportContent content = entity.getContent();
+		Gson gson = new GsonBuilder().create();
+		LOGGER.info("[Report Content] {}",gson.toJson(content));
+
 		Map<String, List<Content>> cont = Maps.newLinkedHashMap();
 		for (int i = 0; i < content.getChapter().size(); i++) {
 
