@@ -54,7 +54,7 @@
     }
 
     .main .top .title p {
-      font-size: 30px;
+      font-size: 38px;
       line-height: 70px;
       font-weight: 600;
     }
