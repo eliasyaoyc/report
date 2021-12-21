@@ -10,9 +10,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Base64;
+import java.util.Base64.Encoder;
 import java.util.Map;
 import org.apache.commons.io.IOUtils;
-import sun.misc.BASE64Encoder;
 import yyc.open.component.report.commons.validate.Asserts;
 
 /**
@@ -123,8 +124,8 @@ public class FileKit {
 				}
 			}
 		}
-		BASE64Encoder encoder = new BASE64Encoder();
-		return ("data:img/jpg;base64," + encoder.encode(data)).replaceAll("\r\n|\r|\n", "");
+		Encoder encoder = Base64.getEncoder();
+		return ("data:img/jpg;base64," + encoder.encodeToString(data)).replaceAll("\r\n|\r|\n", "");
 	}
 
 	/**
