@@ -14,7 +14,7 @@
     }
 
     body {
-      font-family: "Microsoft YaHei", "PingFang SC", "Helvetica", "Arial",
+      font-family: "Source Han Sans CN", "PingFang SC", "Helvetica", "Arial",
       "黑体", "宋体", sans-serif;
       line-height: 1.5;
       color: #333;

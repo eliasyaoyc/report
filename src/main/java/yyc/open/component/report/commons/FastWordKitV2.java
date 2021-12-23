@@ -99,7 +99,7 @@ public class FastWordKitV2 {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(FastWordKitV2.class);
 
-	private static final String DEFAULT_FRONT = "微软雅黑";
+	private static final String DEFAULT_FRONT = "思源黑体";
 	private final XWPFDocument document;
 	private final String outputPath;
 	private final String fileName;
