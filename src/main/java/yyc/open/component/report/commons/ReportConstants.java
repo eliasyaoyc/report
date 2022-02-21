@@ -31,6 +31,9 @@ public interface ReportConstants {
          * Pie chart.
          */
         String PIE = "pie";
+
+        String MULTIPIE = "multipie";
+
         /**
          * Hollow pie chart.
          */

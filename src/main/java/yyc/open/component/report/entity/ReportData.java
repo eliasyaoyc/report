@@ -45,6 +45,11 @@ public class ReportData {
 
 	private Object[] yDatas;
 
+	/**
+	 * Only scope for multi pie.
+	 */
+	private Object[] subDatas;
+
 	private List<String> texts;
 
 	private List<List<String>> tables;

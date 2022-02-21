@@ -47,6 +47,12 @@ public enum ReportEnums implements ReportEnumsInterface {
             return "pieOption.ftl";
         }
     },
+    MULTIPIE(Charts.MULTIPIE){
+        @Override
+        public String getTemplateName() {
+            return "multiPieOption.ftl";
+        }
+    },
     HOLLOW_PIE(Charts.HOLLOW_PIE) {
         @Override
         public String getTemplateName() {
