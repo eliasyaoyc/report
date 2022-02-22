@@ -85,7 +85,7 @@
 
     @media print {
       .main .top .catalogue {
-        height: 1780px;
+        height: 3560px;
       }
     }
 
