@@ -59,7 +59,7 @@ public class ReportAutoConfiguration {
 		}
 
 		ReportRuntime reportRuntime = new ReportRuntime();
-		reportRuntime.start(properties.getEchart());
+		reportRuntime.start(properties.getEchart(),reportConfig);
 		LOGGER.info("[ReportRuntime] start success.");
 
 		return ReportBuilder.builder().config(reportConfig).build();

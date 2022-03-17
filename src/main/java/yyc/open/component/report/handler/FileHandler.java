@@ -176,7 +176,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
 
 		String newName = file.getName().replace(".html", ".pdf");
 		String filePath = file.getParent();
-		ReportPlatforms.pdfConvertCommand(htmlPath, newName, filePath, config.getExecPath(), config.getJsPdfPath());
+		ReportPlatforms.pdfConvertCommand(htmlPath, newName, filePath, config);
 		return htmlPath.replace(".html", ".pdf");
 	}
 

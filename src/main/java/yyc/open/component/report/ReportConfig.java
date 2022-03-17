@@ -26,6 +26,7 @@ public class ReportConfig {
 	private String execPath;
 	private String templatesPath;
 	private String jsPdfPath;
+	private Boolean notUseTemp;
 
 	@Getter
 	@Setter
