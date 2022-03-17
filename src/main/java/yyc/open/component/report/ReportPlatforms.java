@@ -78,17 +78,47 @@ public enum ReportPlatforms {
 		}
 	}
 
-	public static void pdfConvertCommand(String htmlPath, String pdfName, String outputPath, String execPath, String jsPdfPath) {
+	public static void runPhantomStartCommand(ReportConfig config) {
+		String command = "";
+		try {
+			String property = System.getProperty("os.name");
+
+			// Notice: we need to generation temp file /lib/jquery-3.2.1.min.js, /lib/echarts.min.js,/lib/china.js.
+			String newPath = FileKit.createDir(FileKit.tempPath() + "lib");
+			FileKit.tempFile("js/lib/jquery-3.2.1.min.js", newPath);
+			FileKit.tempFile("js/lib/echarts.min.js", newPath);
+			FileKit.tempFile("js/lib/china.js", newPath);
+
+			command = new StringBuilder(config.getExecPath())
+					.append(" ")
+					.append(FileKit.tempFile(config.getJsPath()))
+					.append(" -s -p ")
+					.append(config.getPort()).toString();
+
+			LOGGER.info("[ReportPlatforms] command: {}", command);
+
+			if (!property.contains(WINDOWS.getName())) {
+				Runtime.getRuntime().exec("chmod 777 " + config.getExecPath());
+			}
+			Runtime.getRuntime().exec(command);
+		} catch (IOException e) {
+			throw new ReportException(String.format("[Report Runtime] exec command: %s fail", command), e);
+		}
+	}
+
+	public static void pdfConvertCommand(String htmlPath, String pdfName, String outputPath, ReportConfig config) {
 		String command = "";
 		String property = System.getProperty("os.name");
 		ReportPlatforms platforms = ReportPlatforms.getPlatforms(property);
 
 		try {
-			String path = FileKit.tempFile(execPath + platforms.getPath());
-
+			String path = FileKit.tempFile(config.getExecPath() + platforms.getPath());
+			if (config.getNotUseTemp()) {
+				path = config.getExecPath();
+			}
 			command = new StringBuilder(path)
 					.append(" ")
-					.append(FileKit.tempFile(jsPdfPath))
+					.append(FileKit.tempFile(config.getJsPath()))
 					.append(" " + htmlPath)
 					.append(" " + pdfName)
 					.append(" " + outputPath)

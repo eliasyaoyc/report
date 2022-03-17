@@ -33,4 +33,5 @@ public class ReportProperties {
 	private String execPath;
 	private String templatesPath;
 	private String jsPdfPath;
+	private Boolean notUseTemp;
 }

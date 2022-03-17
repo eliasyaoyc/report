@@ -23,7 +23,7 @@ public class ReportTest {
 
 	{
 		runtime = new ReportRuntime();
-		runtime.start(true);
+		runtime.start(true,null);
 	}
 
 	private static ReportData barEcharts() {
