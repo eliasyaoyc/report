@@ -118,7 +118,7 @@ public enum ReportPlatforms {
 			}
 			command = new StringBuilder(path)
 					.append(" ")
-					.append(FileKit.tempFile(config.getJsPath()))
+					.append(FileKit.tempFile(config.getJsPdfPath()))
 					.append(" " + htmlPath)
 					.append(" " + pdfName)
 					.append(" " + outputPath)
