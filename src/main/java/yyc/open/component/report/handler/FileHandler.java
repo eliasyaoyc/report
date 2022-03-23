@@ -60,7 +60,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
 		}
 
 		ReportMetadata metadata = (ReportMetadata) task;
-		LOGGER.info("[FileHandler] handle the report: {}, metadata: {} .", metadata.getReportId(), metadata);
+		LOGGER.debug("[FileHandler] handle the report: {}, metadata: {} .", metadata.getReportId(), metadata);
 
 		BufferedWriter writer = null;
 		try {
@@ -210,7 +210,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
 		// Verity content.
 		ReportMetadata.ReportContent content = entity.getContent();
 		Gson gson = new GsonBuilder().create();
-		LOGGER.info("[Report Content] {}",gson.toJson(content));
+		LOGGER.debug("[Report Content] {}",gson.toJson(content));
 
 		Map<String, List<Content>> cont = Maps.newLinkedHashMap();
 		for (int i = 0; i < content.getChapter().size(); i++) {
