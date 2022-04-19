@@ -134,9 +134,10 @@ public class Report {
 								case PARTIALLY_COMPLETED:
 									// todo move follow code into this.
 									reportStatus.publishEvent(taskId, result, ReportEvent.EventType.PARTIALLY_COMPLETED);
-									latch.countDown();
 									// Add task result.
 									taskRegistry.updateChecksumAndTask(entity, taskId, result);
+
+									latch.countDown();
 									break;
 								case COMPLETED:
 									reportStatus.publishEvent(taskId, ReportEvent.EventType.COMPLETED);

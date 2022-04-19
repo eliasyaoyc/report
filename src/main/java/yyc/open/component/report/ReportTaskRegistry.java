@@ -217,7 +217,9 @@ public class ReportTaskRegistry {
 		this.paths.putIfAbsent(checksum, path);
 
 		String base64 = imageToBase64ByLocal(path);
-		this.base64Maps.putIfAbsent(checksum, base64);
+		if (base64 != null) {
+			this.base64Maps.putIfAbsent(checksum, base64);
+		}
 
 		metadata.setSubTaskExecutionResult(taskId, metadata.getReportType() != ReportEnums.WORD ? base64 : path);
 
@@ -283,6 +285,12 @@ public class ReportTaskRegistry {
 							value = this.paths.get(checksum);
 						} else if (entity.getReportType() == ReportEnums.HTML || entity.getReportType() == ReportEnums.PDF) {
 							value = this.base64Maps.get(checksum);
+							if (value == null) {
+								// Must exist, reCalculated base64 and insert map.
+								String path = this.paths.get(checksum);
+								value = imageToBase64ByLocal(path);
+								this.base64Maps.putIfAbsent(checksum, value);
+							}
 						}
 						entity.setSubTaskExecutionResult(taskId, value);
 					} else {
@@ -335,8 +343,17 @@ public class ReportTaskRegistry {
 	 */
 	static String imageToBase64ByLocal(String imgFile) {
 		if (!new File(imgFile).exists()) {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		if (!new File(imgFile).exists()) {
 			return null;
 		}
+
 		InputStream in = null;
 		byte[] data = null;
 
