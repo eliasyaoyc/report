@@ -253,7 +253,7 @@ public class FastWordKitV2 {
 	}
 
 	private static void setCellLocation(XWPFTable xwpfTable, String verticalLoction, String horizontalLocation) {
-		xwpfTable.setWidth(6000);
+		xwpfTable.setWidth(60000);
 		List<XWPFTableRow> rows = xwpfTable.getRows();
 		boolean isFirst = false;
 		if (rows.size() > 1) {
