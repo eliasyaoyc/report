@@ -61,6 +61,7 @@ public interface ReportConstants {
 
 
     String CHART_HANDLE = "chartHandler";
+    String CHART_SW_HANDLE = "chartSwHandler";
     String FILE_HANDLE = "fileHandler";
     String ALARM_LISTENER = "alarmListener";
     String DEFAULT_LISTENER = "defaultListener";

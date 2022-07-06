@@ -22,6 +22,7 @@ public class ReportProperties {
 	protected static final String MICROANTS_FILE = "microants.report";
 
 	private Boolean echart = false;
+	private Boolean sw = false;
 	private List<String> colors;
 	private String watermark;
 	private Boolean horizontal;

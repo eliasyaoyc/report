@@ -2,6 +2,7 @@ package yyc.open.component.report.handler;
 
 
 import static yyc.open.component.report.commons.ReportConstants.CHART_HANDLE;
+import static yyc.open.component.report.commons.ReportConstants.CHART_SW_HANDLE;
 import static yyc.open.component.report.commons.ReportConstants.FILE_HANDLE;
 
 import com.google.common.collect.Maps;
@@ -88,9 +89,14 @@ public class ReportHandlerFactory {
      */
     private <T> Handler chooseHandler(T task) {
         Task t = (Task) task;
-        return ReportEnums.isCharts(t.getReportType()) ?
-                this.handlers.get(CHART_HANDLE) :
-                this.handlers.get(FILE_HANDLE);
+        if (!ReportEnums.isCharts(t.getReportType())){
+            return this.handlers.get(FILE_HANDLE);
+        }
+        if (this.config.getSw()) {
+            return this.handlers.get(CHART_SW_HANDLE);
+        }
+
+				return this.handlers.get(CHART_HANDLE);
     }
 
     public enum HandlerFactoryEnum {

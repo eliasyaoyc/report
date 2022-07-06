@@ -57,11 +57,16 @@ public class ReportRuntime implements AutoCloseable {
 			return;
 		}
 
-		if (echarts) {
+		// Feat(sw): support sw os.
+		if (echarts && !reportConfig.getSw()) {
 			if (reportConfig != null && reportConfig.getNotUseTemp()) {
 				ReportPlatforms.runPhantomStartCommand(reportConfig);
 			}
 			ReportPlatforms.runPhantomStartCommand(globalConfig);
+		}
+
+		if (reportConfig.getSw()) {
+			this.globalConfig.sw = true;
 		}
 
 		ReportContextProvider.INSTANCE.setContext(this.constructContext());

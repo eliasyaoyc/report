@@ -15,6 +15,7 @@ import lombok.Setter;
 public class ReportConfig {
 
 	private List<String> colors;
+	private Boolean sw = false;
 	private String watermark;
 	private Boolean horizontal;
 	private Integer port;
@@ -33,6 +34,7 @@ public class ReportConfig {
 	public static class GlobalConfig {
 
 		Integer port;
+		Boolean sw;
 		String watermark;
 		Boolean horizontal;
 		Boolean parallel;
