@@ -49,7 +49,7 @@ public class ChartSwHandler<T> extends AbstractHandler<T> {
 								gson.fromJson(t.getData(), Map.class));
 
 				// Generate html
-				java.io.File temp = java.io.File.createTempFile(t.getTaskId(), ".txt");
+				java.io.File temp = java.io.File.createTempFile(t.getTaskId(), ".html");
 				temp.deleteOnExit();
 				BufferedWriter out = new BufferedWriter(new FileWriter(temp));
 				out.write(option);
@@ -65,10 +65,10 @@ public class ChartSwHandler<T> extends AbstractHandler<T> {
 						.append(" ")
 						.append(imageName).toString();
 
+				LOGGER.info("[SW ChartHandler] command {}", command);
 				Runtime.getRuntime().exec(command);
-
 				// Clear.
-				temp.deleteOnExit();
+//				temp.deleteOnExit();
 			}
 			callback.onReceived(t.getTaskId(), imageName, ReportEvent.EventType.PARTIALLY_COMPLETED);
 		} catch (Exception e) {
