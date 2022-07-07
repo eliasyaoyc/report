@@ -62,6 +62,7 @@ public class ChartSwHandler<T> extends AbstractHandler<T> {
 						.append(FileKit.tempFile("js/sw.js"))
 						.append(" ")
 						.append(temp.getAbsolutePath())
+						.append(" ")
 						.append(imageName).toString();
 
 				Runtime.getRuntime().exec(command);
