@@ -135,4 +135,24 @@ public enum ReportPlatforms {
 			throw new ReportException(String.format("[Report Runtime] exec command: %s fail", command), e);
 		}
 	}
+
+	public static void pdfConvertCommandSw(String htmlPath, String pdfName, String outputPath) {
+		String command = "";
+		try {
+			command = new StringBuilder("node")
+					.append(" ")
+					.append(FileKit.tempFile("js/sw-pdf.js"))
+					.append(" " + htmlPath)
+					.append(" " + outputPath + "/" + pdfName)
+					.toString();
+
+			LOGGER.info("[PDF generation] generate pdf command : {}", command);
+			Process p = Runtime.getRuntime().exec(command);
+			p.waitFor();
+			p.destroy();
+		} catch (Exception e) {
+			throw new ReportException(String.format("[Report Runtime] exec command: %s fail", command), e);
+		}
+	}
 }
+

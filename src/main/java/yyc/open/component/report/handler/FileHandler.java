@@ -108,9 +108,9 @@ public class FileHandler<T> extends AbstractHandler<T> {
 
 								} else if (StringUtils.isNotEmpty(data.getBase64())) {
 									builder.blank();
-									if (data.getBase64().endsWith("no_data.png")){
+									if (data.getBase64().endsWith("no_data.png")) {
 										builder.image(data.getBase64(), 350, 200);
-									}else {
+									} else {
 										builder.image(data.getBase64(), 500, 200);
 									}
 
@@ -176,7 +176,12 @@ public class FileHandler<T> extends AbstractHandler<T> {
 
 		String newName = file.getName().replace(".html", ".pdf");
 		String filePath = file.getParent();
-		ReportPlatforms.pdfConvertCommand(htmlPath, newName, filePath, config);
+
+		if (config.getSw()) {
+			ReportPlatforms.pdfConvertCommandSw(htmlPath, newName, filePath);
+		} else {
+			ReportPlatforms.pdfConvertCommand(htmlPath, newName, filePath, config);
+		}
 		return htmlPath.replace(".html", ".pdf");
 	}
 
@@ -210,7 +215,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
 		// Verity content.
 		ReportMetadata.ReportContent content = entity.getContent();
 		Gson gson = new GsonBuilder().create();
-		LOGGER.debug("[Report Content] {}",gson.toJson(content));
+		LOGGER.debug("[Report Content] {}", gson.toJson(content));
 
 		Map<String, List<Content>> cont = Maps.newLinkedHashMap();
 		for (int i = 0; i < content.getChapter().size(); i++) {
