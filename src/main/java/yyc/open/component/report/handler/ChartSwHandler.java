@@ -66,7 +66,9 @@ public class ChartSwHandler<T> extends AbstractHandler<T> {
 						.append(imageName).toString();
 
 				LOGGER.info("[SW ChartHandler] command {}", command);
-				Runtime.getRuntime().exec(command);
+				Process process = Runtime.getRuntime().exec(command);
+				process.waitFor();
+
 				// Clear.
 //				temp.deleteOnExit();
 			}

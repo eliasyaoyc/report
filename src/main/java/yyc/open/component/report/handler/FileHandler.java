@@ -60,7 +60,7 @@ public class FileHandler<T> extends AbstractHandler<T> {
 		}
 
 		ReportMetadata metadata = (ReportMetadata) task;
-		LOGGER.debug("[FileHandler] handle the report: {}, metadata: {} .", metadata.getReportId(), metadata);
+		LOGGER.info("[FileHandler] handle the report: {}, metadata: {} .", metadata.getReportId(), metadata);
 
 		BufferedWriter writer = null;
 		try {
