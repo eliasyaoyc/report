@@ -220,18 +220,25 @@
   </dependencies>
 
   <distributionManagement>
+
     <repository>
       <id>phantom-maven2</id>
-      <name>phantom-maven2</name>
-      <url>http://172.23.12.66:8081/repository/phantom-maven2/</url>
+      <name>Internal Releases</name>
+      <url>http://10.88.104.242:8081/repository/phantom-maven2</url>
     </repository>
+
+    <snapshotRepository>
+      <id>phantom-maven2</id>
+      <name>Internal Releases</name>
+      <url>http://10.88.104.242:8081/repository/phantom-maven2/</url>
+    </snapshotRepository>
   </distributionManagement>
 
   <repositories>
     <repository>
-      <id>public</id>
-      <name>Public Repositories</name>
-      <url>http://172.23.12.66:8081/repository/maven-public/</url>
+      <id>phantom-maven2</id>
+      <name>phantom-maven2</name>
+      <url>http://10.88.104.242:8081/repository/maven-public/</url>
       <releases>
         <enabled>true</enabled>
       </releases>
@@ -240,12 +247,11 @@
       </snapshots>
     </repository>
   </repositories>
-
   <pluginRepositories>
     <pluginRepository>
-      <id>public</id>
-      <name>Public Repositories</name>
-      <url>http://172.23.12.66:8081/repository/maven-public</url>
+      <id>phantom-maven2</id>
+      <name>phantom-maven2</name>
+      <url>http://10.88.104.242:8081/repository/maven-public</url>
       <releases>
         <enabled>true</enabled>
       </releases>
