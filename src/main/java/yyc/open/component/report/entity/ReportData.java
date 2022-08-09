@@ -2,6 +2,7 @@ package yyc.open.component.report.entity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -54,7 +55,7 @@ public class ReportData {
 
 	private List<List<String>> tables;
 
-	private Map<String, Object> statistics;
+	private Map<String, Object> statistics = new HashMap<>();
 
 	private String statDescription;
 
